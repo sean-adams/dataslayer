@@ -1,0 +1,13 @@
+{
+  "manifest_version": 2,
+
+  "name": "dataslayer",
+  "description": "Monitor the dataLayer",
+  "version": "0.3",
+
+  "icons":{"16":"i16.png","48":"i48.png","128":"i128.png"},
+
+  "devtools_page": "devtools.html",
+  
+  "permissions": [ "tabs", "http://*/*" ]
+}
