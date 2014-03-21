@@ -3,7 +3,7 @@
 
   "name": "dataslayer",
   "description": "Monitor the dataLayer",
-  "version": "0.3",
+  "version": "0.4",
 
   "icons":{"48":"i48.png","128":"i128.png"},
 
