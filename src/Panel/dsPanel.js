@@ -57,8 +57,15 @@ function newPageLoad(newurl){
   window.lastURL[window.numDL] = newurl;
 }
 
+// newRequest: called on a new network request of any kind
+// request arrives in HAR format: http://www.softwareishard.com/blog/har-12-spec/
+function newRequest(request){
+
+}
+
 setInterval(testDL,100);
 
 chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
+chrome.devtools.network.onRequestFinished.addListener();
