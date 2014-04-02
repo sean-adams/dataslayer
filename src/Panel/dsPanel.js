@@ -1,22 +1,24 @@
 
 function updateUI() {
   $('#datalayeritems').html('');
-  dL = window.lastDL;
-  $.each(window.lastDL,function(a,dL){
-  $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul></div>\n');
-  $('#datalayeritems').append('\n');    
-  $.each(dL,function(i,v){
-    therow = '';
-    $.each(v,function(k,x){
-      // $('#datalayeritems ul').prepend('<li class="event submenu dlnum'+a+'"><b>'+k+'</b>: '+x+'</li>\n');
-      therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
-    }); 
-     $('#sub'+a+' ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
-     $('#sub'+a+' ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
-  });
-  $('#sub'+a+' ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
 
-});
+  dL = window.lastDL;
+
+  $.each(window.lastDL,function(a,dL){
+    $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul></div>\n');
+    $('#datalayeritems').append('\n');    
+
+    $.each(dL,function(i,v){
+      therow = '';
+      $.each(v,function(k,x){
+        therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
+      }); 
+      $('#sub'+a+' ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
+      $('#sub'+a+' ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+    });
+
+    $('#sub'+a+' ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
+  });
 
   for (var i=0;i<window.lastDL.length-1;i++){
     $('.dlnum'+i).toggleClass('submenu-hidden');
@@ -25,11 +27,10 @@ function updateUI() {
   }
 
 
- $('a.newpage').click(function(){
-  $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
-  $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
- });
-
+  $('a.newpage').click(function(){
+    $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
+    $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
+  });
 }
 
 var lastDL = [[]];
@@ -47,9 +48,9 @@ function testDL() {
     }
   }
   chrome.devtools.inspectedWindow.eval('dataLayer', onEval);
-
 }
 
+// newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
   window.numDL = window.numDL + 1;
   window.lastDL[window.numDL] = [];
