@@ -59,8 +59,41 @@ function newPageLoad(newurl){
 
 // newRequest: called on a new network request of any kind
 // request arrives in HAR format: http://www.softwareishard.com/blog/har-12-spec/
+// GA requests:
+// classic: __utm.gif
+// UA: www.google-analytics.com/collect
 function newRequest(request){
+  if (/__utm.gif/i.test(request.request.url)){
+    //GA classic request
+    var reqType = 'classic';
+  }
+  else if (/google-analytics.com\/collect/i.test(request.request.url)){
+    //universal analytics request
+    var reqType = 'universal';
+  }
+  else return;
 
+  // parse query string into key/value pairs
+  var queryParams = {};
+  request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
+  var testParams = ['tid','t','dl','dt','ea','ec','ev','el','_utmz'];
+
+  // var wantedParams = queryParams.filter(function(value,index){return ($.inArray(index,testParams)>=0);});
+
+  $.each(queryParams,function(k,v){if ($.inArray(k,testParams)>=0){$('body').prepend(k+':'+v+'<br>\n');};});
+  // $.each(wantedParams,function(k,v){$('body').prepend(k+':'+v+'<br>\n');});
+
+  //UA params we want:
+  // tid: UA-id
+  // t: event/pageview/etc
+  // dl: URL
+  // dt: page title
+  // ea: event action
+  // ec: event category
+  // el: event label
+  // ev: event value
+  // _utmz: acqusition etc cookie
+  // more for ecom
 }
 
 setInterval(testDL,100);
@@ -68,4 +101,4 @@ setInterval(testDL,100);
 chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
-chrome.devtools.network.onRequestFinished.addListener();
+chrome.devtools.network.onRequestFinished.addListener(newRequest);
