@@ -63,3 +63,4 @@ visibility: visible !important;
 .pure-menu ul {position:static !important;}
 
 td.utm, td.dlt {vertical-align:top !important;}
+td.dlt {border-right: 1px dashed black;}
