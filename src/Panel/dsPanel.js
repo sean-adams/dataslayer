@@ -5,7 +5,7 @@ function updateUI() {
   // dL = window.lastDL;
 
   $.each(window.lastDL,function(a,dL){
-    $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul></div>\n');
+    $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
     $('#datalayeritems').append('\n');    
 
     $.each(dL,function(i,v){
@@ -13,11 +13,61 @@ function updateUI() {
       $.each(v,function(k,x){
         therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
       }); 
-      $('#sub'+a+' ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
-      $('#sub'+a+' ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+      $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
+      $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     });
 
-    $('#sub'+a+' ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
+    $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
+  });
+
+  $.each(window.lastUTM,function(a,dL){
+    $.each(dL,function(i,v){
+      therow = '';
+
+      //UA params we want:
+      // tid:   UA-id
+      // t:     event/pageview/etc
+      // dl:    URL
+      // dt:    page title
+      // ea:    event action
+      // ec:    event category
+      // el:    event label
+      // ev:    event value
+      // _utmz: acqusition etc cookie
+      // more for ecom
+
+      //GA params:
+      // utmac: UA-id
+      // utmcc: cookie
+      // utme:  events/CV
+      // utmhn: hostname
+      // utmdt: page title
+      // utmp:  URL
+      // more for ecom
+
+      switch(v.reqType){
+        case 'classic':
+          therow = '<tr><td></td><td><b>'+v.utmac+'</b> (Classic)</td></tr>';
+          therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';
+          break;
+        case 'universal':
+          therow = '<tr><td></td><td><b>'+v.tid+'</b> (Universal)</td></tr>';
+          if (v.t=='event'){
+            therow = therow + '\n<tr><td><b>event</b></td><td>'+v.ec+' <b>/</b> '+v.ea+' <b>/</b> '+v.el+' <b>/</b> '+'</td></tr>';
+          }
+          else
+          if (v.t=='pageview'){
+            therow = therow + '\n<tr><td><b>url</b></td><td>'+v.dl+'</td></tr>';
+          }
+          break;
+        default:
+
+          break;
+      }
+
+      $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
+      $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+    });
   });
 
   for (var i=0;i<window.lastDL.length-1;i++){
@@ -27,6 +77,8 @@ function updateUI() {
   }
 
 
+
+
   $('a.newpage').click(function(){
     $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
     $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
@@ -34,6 +86,7 @@ function updateUI() {
 }
 
 var lastDL = [[]];
+var lastUTM = [[]];
 var numDL = 0;
 var lastURL = [];
 
@@ -55,6 +108,8 @@ function newPageLoad(newurl){
   window.numDL = window.numDL + 1;
   window.lastDL[window.numDL] = [];
   window.lastURL[window.numDL] = newurl;
+  window.lastUTM[window.numDL] = [];
+  updateUI();
 }
 
 // newRequest: called on a new network request of any kind
@@ -76,24 +131,14 @@ function newRequest(request){
   // parse query string into key/value pairs
   var queryParams = {};
   request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
-  var testParams = ['tid','t','dl','dt','ea','ec','ev','el','_utmz'];
+  var testParams = ['tid','t','dl','dt','ea','ec','ev','el','_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp'];
 
-  // var wantedParams = queryParams.filter(function(value,index){return ($.inArray(index,testParams)>=0);});
+  var utmParams = {reqType:reqType};
+  $.each(queryParams,function(k,v){if ($.inArray(k,testParams)>=0){utmParams[k]=v;}});
+  if (utmParams) { window.lastUTM[window.numDL].push(utmParams); }
+  console.log(window.lastUTM[window.numDL]);
 
-  $.each(queryParams,function(k,v){if ($.inArray(k,testParams)>=0){$('body').prepend(k+':'+v+'<br>\n');};});
-  // $.each(wantedParams,function(k,v){$('body').prepend(k+':'+v+'<br>\n');});
-
-  //UA params we want:
-  // tid: UA-id
-  // t: event/pageview/etc
-  // dl: URL
-  // dt: page title
-  // ea: event action
-  // ec: event category
-  // el: event label
-  // ev: event value
-  // _utmz: acqusition etc cookie
-  // more for ecom
+  updateUI();
 }
 
 setInterval(testDL,100);
