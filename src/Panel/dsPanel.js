@@ -48,12 +48,25 @@ function updateUI() {
       switch(v.reqType){
         case 'classic':
           therow = '<tr><td></td><td><b>'+v.utmac+'</b> (Classic)</td></tr>';
-          therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';
+          if (v.utmt=='event'){
+            // Google Analytics uses the value of the utme parameter to track events in the form of 5(object*action*label)(value):
+            // CV: 8(2!Abandoned Cart*User ID)9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)11(2!1*1)
+            //     8 is variable, 9 is value, 11 is scope
+            var eventdata = v.utme.split(')')[0].substring(2).split('*');
+            therow = therow + '\n<tr><td><b>category</b></td><td>'+eventdata[0]+'</td></tr>\n<tr><td><b>action</b></td><td>'+eventdata[1]+'</td></tr>\n<tr><td><b>label</b></td><td>'+eventdata[2]+'</td></tr>';  
+            if (eventdata[3]) {therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';  }
+
+          }
+          else{
+            therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
+          }
+          
           break;
         case 'universal':
           therow = '<tr><td></td><td><b>'+v.tid+'</b> (Universal)</td></tr>';
           if (v.t=='event'){
-            therow = therow + '\n<tr><td><b>event</b></td><td>'+v.ec+' <b>/</b> '+v.ea+' <b>/</b> '+v.el+' <b>/</b> '+'</td></tr>';
+            therow = therow + '\n<tr><td><b>category</b></td><td>'+v.ec+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.ea+'</td></tr>\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';
+            if (v.ev) {therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';  }  
           }
           else
           if (v.t=='pageview'){
