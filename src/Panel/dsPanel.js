@@ -2,7 +2,7 @@
 function updateUI() {
   $('#datalayeritems').html('');
 
-  dL = window.lastDL;
+  // dL = window.lastDL;
 
   $.each(window.lastDL,function(a,dL){
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul></div>\n');
