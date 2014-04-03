@@ -149,7 +149,7 @@ function newRequest(request){
   // parse query string into key/value pairs
   var queryParams = {};
   request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
-  var testParams = ['tid','t','dl','dt','ea','ec','ev','el','_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp'];
+  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt'];
 
   var utmParams = {reqType:reqType};
   $.each(queryParams,function(k,v){if ($.inArray(k,testParams)>=0){utmParams[k]=v;}});
