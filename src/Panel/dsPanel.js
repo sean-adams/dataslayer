@@ -70,7 +70,12 @@ function updateUI() {
           }
           else
           if (v.t=='pageview'){
+            if (v.dp) {
+              therow = therow + '\n<tr><td><b>path</b></td><td>'+v.dp+'</td></tr>';
+            }
+            else {
             therow = therow + '\n<tr><td><b>url</b></td><td>'+v.dl+'</td></tr>';
+            }
           }
           break;
         default:
