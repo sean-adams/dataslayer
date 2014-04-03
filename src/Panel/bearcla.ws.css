@@ -2,9 +2,6 @@
 body,
 .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: Georgia, Times, "Times New Roman", serif; margin: 10px; }
 
-body { background-image: url(../img/100-58-2.png); }
-
-
 .pure-menu a { transition: all 0.2s; -webkit-transition: all 0.2s; white-space: normal; padding: 0px;}
 /*.pure-menu a[href]:hover, .pure-menu a[href]:focus { text-shadow: 0 -2px 0 rgb(50,50,50) !important;}*/
 /*.pure-menu ul li a:hover, .pure-menu ul li a:focus { background: rgba(0,0,0,.3) !important; }*/
@@ -56,3 +53,13 @@ li.eventbreak {text-align:left; border:1px dashed lightgrey;}
 .pure-menu.pure-menu-open {
 width: auto !important;
 }
+
+.pure-menu-open ul {
+left: 0;
+top: 0;
+visibility: visible !important;
+}
+
+.pure-menu ul {position:static !important;}
+
+td.utm, td.dlt {vertical-align:top !important;}
