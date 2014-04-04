@@ -115,7 +115,7 @@ function updateUI() {
               // cu: currency code
               if (!v.cu) v.cu='';
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
-              if(v.iq) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.iq+'x) '+v.in+'</td></tr>\n';
+              if(v.in) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.iq+'x) '+v.in+'</td></tr>\n';
               if(v.ic) therow = therow + '<tr><td><b>sku</b></td><td>'+v.ic+'</td></tr>\n';
               if(v.iv) therow = therow + '<tr><td><b>category</b></td><td>'+v.iv+'</td></tr>\n';
               if(v.ip) therow = therow + '<tr><td><b>price</b></td><td>'+v.ip+v.cu+'</td></tr>\n';
