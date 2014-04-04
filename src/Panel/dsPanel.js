@@ -63,6 +63,25 @@ function updateUI() {
               therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
               break;
             }
+          if (v.utme.indexOf('8(')>=0) { //we have CVs here
+            var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
+            //gaCVs 0: variable name, 1 value, 2 scope
+            // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
+            
+            $.each(gaCVs,function(i,d){
+              gaCVs[i]=gaCVs[i].match(/[^\*|^\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
+            });
+            console.log(gaCVs);
+            $.each(gaCVs[0],function(i,d){
+              if (d.substring(d.length-1)=='!'){
+                gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
+              }
+              else {
+                gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
+                therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></td></tr>\n';
+              }
+            })
+          }
           break;
         case 'universal':
           therow = '<tr><td></td><td><b>'+v.tid+'</b> (Universal)</td></tr>';
