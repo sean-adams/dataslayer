@@ -24,30 +24,8 @@ function updateUI() {
     $.each(dL,function(i,v){
       therow = '';
 
-      //UA params we want:
-      // tid:   UA-id
-      // t:     event/pageview/etc
-      // dl:    URL
-      // dt:    page title
-
-      // _utmz: acqusition etc cookie
-
-      //UA custom:
-      // cd20
-      // cm20
-
-      // uid
-      // 
-
-
       //GA params:
-      // utmac: UA-id
       // utmcc: cookie
-      // utme:  events/CV
-      // utmhn: hostname
-      // utmdt: page title
-      // utmp:  URL
-      // more for ecom
 
       switch(v.reqType){
         case 'classic':
