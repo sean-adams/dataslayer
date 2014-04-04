@@ -29,36 +29,12 @@ function updateUI() {
       // t:     event/pageview/etc
       // dl:    URL
       // dt:    page title
-      // ea:    event action
-      // ec:    event category
-      // el:    event label
-      // ev:    event value
+
       // _utmz: acqusition etc cookie
 
-      //UA ecom:
-      //transaction hit type:
-      // ti: transaction ID
-      // ta: transaction affil
-      // tr: transaction revenue
-      // ts: transaction shipping
-      // tt: transaction tax
-      //item hit type:
-      // in: item name
-      // ip: item price
-      // iq: item quantity
-      // ic: item code (sku)
-      // iv: item category
-      //transaction & item hit types:
-      // cu: currency code
-
-      //UA social:
-      // sn: network
-      // sa: action
-      // st: target (i.e. url)
-
       //UA custom:
-      // cd20*
-      // cm20* 
+      // cd20
+      // cm20
 
       // uid
       // 
@@ -159,21 +135,17 @@ function newPageLoad(newurl){
 }
 
 // newRequest: called on a new network request of any kind
-// request arrives in HAR format: http://www.softwareishard.com/blog/har-12-spec/
-// GA requests:
-// classic: __utm.gif
-// UA: www.google-analytics.com/collect
+// we use this to capture tags for parsing
 function newRequest(request){
   if (/__utm.gif/i.test(request.request.url)){
-    //GA classic request
+    //classic request
     var reqType = 'classic';
   }
   else if (/google-analytics.com\/collect/i.test(request.request.url)){
-    //universal analytics request
+    //universal request
     var reqType = 'universal';
   }
-  else return;
-
+  else return;  //break out if it's not a tag we're looking for, else...
   // parse query string into key/value pairs
   var queryParams = {};
   request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
