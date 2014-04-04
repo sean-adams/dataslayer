@@ -99,11 +99,11 @@ function updateUI() {
               // tt: transaction tax
               // cu: currency code
               if (!v.cu) v.cu='';
-              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n'+
-                      '<tr><td><b>affiliation</b></td><td>'+v.ta+'</td></tr>\n'+
-                      '<tr><td><b>revenue</b></td><td>'+v.tr+v.cu+'</td></tr>\n'+
-                      '<tr><td><b>shipping</b></td><td>'+v.ts+v.cu+'</td></tr>\n'+
-                      '<tr><td><b>tax</b></td><td>'+v.tt+v.cu+'</td></tr>\n';
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
+              if(v.tr) therow = therow + '<tr><td><b>revenue</b></td><td>'+v.tr+' '+v.cu+'</td></tr>\n';
+              if(v.ts) therow = therow + '<tr><td><b>shipping</b></td><td>'+v.ts+' '+v.cu+'</td></tr>\n';
+              if(v.tt) therow = therow + '<tr><td><b>tax</b></td><td>'+v.tt+' '+v.cu+'</td></tr>\n';
+              if(v.ta) therow = therow + '<tr><td><b>affiliation</b></td><td>'+v.ta+'</td></tr>\n';
               break;
             case 'item':
               //item hit type:
@@ -114,11 +114,11 @@ function updateUI() {
               // iv: item category
               // cu: currency code
               if (!v.cu) v.cu='';
-              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n'+
-                      '<tr><td><b>item/qty</b></td><td>('+iq+'x) '+v.in+'</td></tr>\n'+
-                      '<tr><td><b>sku</b></td><td>'+v.ic+'</td></tr>\n'+
-                      '<tr><td><b>category</b></td><td>'+v.iv+'</td></tr>\n'+
-                      '<tr><td><b>price</b></td><td>'+v.ip+v.cu+'</td></tr>\n';
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
+              if(v.iq) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.iq+'x) '+v.in+'</td></tr>\n';
+              if(v.ic) therow = therow + '<tr><td><b>sku</b></td><td>'+v.ic+'</td></tr>\n';
+              if(v.iv) therow = therow + '<tr><td><b>category</b></td><td>'+v.iv+'</td></tr>\n';
+              if(v.ip) therow = therow + '<tr><td><b>price</b></td><td>'+v.ip+v.cu+'</td></tr>\n';
               break;
           }
           $.each(v.utmCD,function(k,val){
