@@ -75,6 +75,12 @@ function updateUI() {
               if(v.utmiva) therow = therow + '<tr><td><b>category</b></td><td>'+v.utmiva+'</td></tr>\n';
               if(v.utmipr) therow = therow + '<tr><td><b>price</b></td><td>'+v.utmipr+'</td></tr>\n';
               break;
+            case 'social':
+              // utmsn:network
+              // utmsa:action
+              // utmsid:target
+              therow = therow + '\n<tr><td><b>network</b></td><td>'+v.utmsn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.utmsa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.utmsid+'</td></tr>';
+              break;
             default:  //pageview
               therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
               break;
