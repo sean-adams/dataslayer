@@ -71,7 +71,7 @@ function updateUI() {
             $.each(gaCVs,function(i,d){
               gaCVs[i]=gaCVs[i].match(/[^\*|^\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
             });
-            console.log(gaCVs);
+            // console.log(gaCVs);
             $.each(gaCVs[0],function(i,d){
               if (d.substring(d.length-1)=='!'){
                 gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
@@ -231,7 +231,7 @@ function newRequest(request){
   if (utmCM!={}) utmParams['utmCM']=utmCM;
   if (utmCD!={}) utmParams['utmCD']=utmCD;
   if (utmParams) window.lastUTM[window.numDL].push(utmParams);
-  console.log(window.lastUTM[window.numDL]);
+  // console.log(window.lastUTM[window.numDL]);
 
   updateUI();
 }
