@@ -62,7 +62,11 @@ function updateUI() {
               if (eventdata[3]) {therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';  }
               break;
             case 'transaction':
-
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
+              if(v.utmtto) therow = therow + '<tr><td><b>revenue</b></td><td>'+v.utmtto+'</td></tr>\n';
+              if(v.utmtsp) therow = therow + '<tr><td><b>shipping</b></td><td>'+v.utmtsp+'</td></tr>\n';
+              if(v.utmttx) therow = therow + '<tr><td><b>tax</b></td><td>'+v.utmttx+'</td></tr>\n';
+              if(v.utmtst) therow = therow + '<tr><td><b>affiliation</b></td><td>'+v.utmtst+'</td></tr>\n';
               break;
             case 'item':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
