@@ -34,7 +34,35 @@ function updateUI() {
       // el:    event label
       // ev:    event value
       // _utmz: acqusition etc cookie
-      // more for ecom
+
+      //UA ecom:
+      //transaction hit type:
+      // ti: transaction ID
+      // ta: transaction affil
+      // tr: transaction revenue
+      // ts: transaction shipping
+      // tt: transaction tax
+      //item hit type:
+      // in: item name
+      // ip: item price
+      // iq: item quantity
+      // ic: item code (sku)
+      // iv: item category
+      //transaction & item hit types:
+      // cu: currency code
+
+      //UA social:
+      // sn: network
+      // sa: action
+      // st: target (i.e. url)
+
+      //UA custom:
+      // cd20*
+      // cm20* 
+
+      // uid
+      // 
+
 
       //GA params:
       // utmac: UA-id
