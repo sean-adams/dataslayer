@@ -29,7 +29,10 @@ function updateUI() {
 
       switch(v.reqType){
         case 'classic':
-          therow = '<tr><td></td><td><b>'+v.utmac+'</b> (Classic)</td></tr>';
+          var allParams = '';
+          for (var i in v.allParams)
+            allParams = allParams + i + ': ' + v.allParams[i]+'\n';
+          therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.utmac+'</b> (Classic)</td></tr>';
           switch(v.utmt){
             case 'event':
               // Google Analytics uses the value of the utme parameter to track events in the form of 5(object*action*label)(value):
@@ -84,7 +87,10 @@ function updateUI() {
           }
           break;
         case 'universal':
-          therow = '<tr><td></td><td><b>'+v.tid+'</b> (Universal)</td></tr>';
+          var allParams = '';
+          for (var i in v.allParams)
+            allParams = allParams + i + ': ' + v.allParams[i] + '\n';
+          therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.tid+'</b> (Universal)</td></tr>';
           switch(v.t) {  //what type of hit is it?
             case 'event':
               // ea:    event action
@@ -216,7 +222,7 @@ function newRequest(request){
                     '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn','utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn','utmiqt','utmipc','utmiva','utmipr'  //classic
                     ];
 
-  var utmParams = {reqType:reqType};
+  var utmParams = {reqType:reqType,allParams:queryParams};
   var utmCM = {};
   var utmCD = {};
   $.each(queryParams,function(k,v){
