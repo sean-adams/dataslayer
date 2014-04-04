@@ -64,6 +64,13 @@ function updateUI() {
             case 'transaction':
 
               break;
+            case 'item':
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
+              if(v.utmipn) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.utmiqt+'x) '+v.utmipn+'</td></tr>\n';
+              if(v.utmipc) therow = therow + '<tr><td><b>sku</b></td><td>'+v.utmipc+'</td></tr>\n';
+              if(v.utmiva) therow = therow + '<tr><td><b>category</b></td><td>'+v.utmiva+'</td></tr>\n';
+              if(v.utmipr) therow = therow + '<tr><td><b>price</b></td><td>'+v.utmipr+'</td></tr>\n';
+              break;
             default:  //pageview
               therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
               break;
