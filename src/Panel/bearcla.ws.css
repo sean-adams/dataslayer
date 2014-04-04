@@ -44,7 +44,7 @@ li.submenu-hidden.eventbreak {border:0;}
 ul li table {margin-left: 30px;}
 ul li table td {padding-right: 30px;}
 
-.pure-menu-open>ul {border: 1px blue !important; margin-left: 20px !important;}
+.pure-menu-open>ul {border: 1px blue !important; margin-left: 20px !important; overflow:hidden;}
 
 .pure-menu { margin: 20px;}
 
@@ -64,3 +64,14 @@ visibility: visible !important;
 
 td.utm, td.dlt {vertical-align:top !important;}
 td.dlt ul li {border-right: 1px dashed black;}
+
+li.newpage :after {
+content: '';
+position: absolute;
+top: 0;
+right: 0;
+width: 10%;
+height: 100%;
+pointer-events: none;
+background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255, 1) 100%);
+}
