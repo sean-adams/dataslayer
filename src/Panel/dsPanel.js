@@ -63,7 +63,7 @@ function updateUI() {
               therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
               break;
             }
-          if (v.utme.indexOf('8(')>=0) { //we have CVs here
+          if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             //gaCVs 0: variable name, 1 value, 2 scope
             // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
