@@ -59,33 +59,77 @@ function updateUI() {
             var eventdata = v.utme.split(')')[0].substring(2).split('*');
             therow = therow + '\n<tr><td><b>category</b></td><td>'+eventdata[0]+'</td></tr>\n<tr><td><b>action</b></td><td>'+eventdata[1]+'</td></tr>\n<tr><td><b>label</b></td><td>'+eventdata[2]+'</td></tr>';  
             if (eventdata[3]) {therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';  }
-
           }
           else{
             therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
           }
-          
           break;
         case 'universal':
           therow = '<tr><td></td><td><b>'+v.tid+'</b> (Universal)</td></tr>';
-          if (v.t=='event'){
-            therow = therow + '\n<tr><td><b>category</b></td><td>'+v.ec+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.ea+'</td></tr>\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';
-            if (v.ev) {therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';  }  
+          switch(v.t) {  //what type of hit is it?
+            case 'event':
+              // ea:    event action
+              // ec:    event category
+              // el:    event label
+              // ev:    event value            
+              therow = therow + '\n<tr><td><b>category</b></td><td>'+v.ec+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.ea+'</td></tr>';
+              if (v.el) {therow = therow + '\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';  }  
+              if (v.ev) {therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';  }  
+              break;
+            case 'pageview':
+              if (v.dp) {  // for virtual pageview, show virtual path
+                therow = therow + '\n<tr><td><b>path</b></td><td>'+v.dp+'</td></tr>';
+              }
+              else {
+                therow = therow + '\n<tr><td><b>url</b></td><td>'+v.dl+'</td></tr>';
+              }
+              break;
+            case 'social':
+              // sn: network
+              // sa: action
+              // st: target (i.e. url)
+              therow = therow + '\n<tr><td><b>network</b></td><td>'+v.sn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.sa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.st+'</td></tr>';
+              break;
+            case 'transaction':
+              //transaction hit type:
+              // ti: transaction ID
+              // ta: transaction affil
+              // tr: transaction revenue
+              // ts: transaction shipping
+              // tt: transaction tax
+              // cu: currency code
+              if (!v.cu) v.cu='';
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n'+
+                      '<tr><td><b>affiliation</b></td><td>'+v.ta+'</td></tr>\n'+
+                      '<tr><td><b>revenue</b></td><td>'+v.tr+v.cu+'</td></tr>\n'+
+                      '<tr><td><b>shipping</b></td><td>'+v.ts+v.cu+'</td></tr>\n'+
+                      '<tr><td><b>tax</b></td><td>'+v.tt+v.cu+'</td></tr>\n';
+              break;
+            case 'item':
+              //item hit type:
+              // in: item name
+              // ip: item price
+              // iq: item quantity
+              // ic: item code (sku)
+              // iv: item category
+              // cu: currency code
+              if (!v.cu) v.cu='';
+              therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n'+
+                      '<tr><td><b>item/qty</b></td><td>('+iq+'x) '+v.in+'</td></tr>\n'+
+                      '<tr><td><b>sku</b></td><td>'+v.ic+'</td></tr>\n'+
+                      '<tr><td><b>category</b></td><td>'+v.iv+'</td></tr>\n'+
+                      '<tr><td><b>price</b></td><td>'+v.ip+v.cu+'</td></tr>\n';
+              break;
           }
-          else
-          if (v.t=='pageview'){
-            if (v.dp) {
-              therow = therow + '\n<tr><td><b>path</b></td><td>'+v.dp+'</td></tr>';
-            }
-            else {
-            therow = therow + '\n<tr><td><b>url</b></td><td>'+v.dl+'</td></tr>';
-            }
-          }
+          $.each(v.utmCD,function(k,val){
+            therow = therow + '<tr><td><b>dimension '+k+'</b></td><td>'+val+'</td></tr>\n';
+          });
+          $.each(v.utmCM,function(k,val){
+            therow = therow + '<tr><td><b>metric '+k+'</b></td><td>'+val+'</td></tr>\n';
+          });
+          
           break;
-        default:
-
-          break;
-      }
+        }
 
       $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
@@ -149,11 +193,25 @@ function newRequest(request){
   // parse query string into key/value pairs
   var queryParams = {};
   request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
-  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt'];
+  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt','in','ip','iq','ic','iv','cu','sn','sa','st','uid',   //UA
+                    '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt'  //classic
+                    ];
 
   var utmParams = {reqType:reqType};
-  $.each(queryParams,function(k,v){if ($.inArray(k,testParams)>=0){utmParams[k]=v;}});
-  if (utmParams) { window.lastUTM[window.numDL].push(utmParams); }
+  var utmCM = {};
+  var utmCD = {};
+  $.each(queryParams,function(k,v){
+    if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
+    else if (k.substring(0,2)=='cd'){
+      utmCD[k.substring(2)]=v;
+    }
+    else if (k.substring(0,2)=='cm'){
+      utmCM[k.substring(2)]=v;
+    }
+  });
+  if (utmCM!={}) utmParams['utmCM']=utmCM;
+  if (utmCD!={}) utmParams['utmCD']=utmCD;
+  if (utmParams) window.lastUTM[window.numDL].push(utmParams);
   console.log(window.lastUTM[window.numDL]);
 
   updateUI();
