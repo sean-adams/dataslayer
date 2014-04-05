@@ -11,10 +11,14 @@ function updateUI() {
       $.each(v,function(k,x){
         if(typeof x == 'object'){
           for (var q in x){
-            for (var z in x[q]) {
-              therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td>'+x[q][z]+'</td></tr>';
+            if(typeof q == 'object'){
+              for (var z in x[q])
+                therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td>'+x[q][z]+'</td></tr>';
             }
-          }
+            else{
+              therow = therow + '\n' + '<tr><td><b>'+k+'['+q+']</b></td><td>'+x[q]+'</td></tr>';
+            }
+          }          
         }
         else
           therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
