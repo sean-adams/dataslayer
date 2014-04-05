@@ -11,7 +11,15 @@ function updateUI() {
     $.each(dL,function(i,v){
       therow = '';
       $.each(v,function(k,x){
-        therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
+        if(typeof x == 'object'){
+          for (var q in x){
+            for (var z in x[q]) {
+              therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td>'+x[q][z]+'</td></tr>';
+            }
+          }
+        }
+        else
+          therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
       }); 
       $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
