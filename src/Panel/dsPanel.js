@@ -2,8 +2,6 @@
 function updateUI() {
   $('#datalayeritems').html('');
 
-  // dL = window.lastDL;
-
   $.each(window.lastDL,function(a,dL){
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
     $('#datalayeritems').append('\n');    
@@ -118,9 +116,6 @@ function updateUI() {
               }
               break;
             case 'social':
-              // sn: network
-              // sa: action
-              // st: target (i.e. url)
               therow = therow + '\n<tr><td><b>network</b></td><td>'+v.sn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.sa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.st+'</td></tr>';
               break;
             case 'transaction':
