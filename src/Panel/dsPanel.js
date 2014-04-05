@@ -82,7 +82,7 @@ function updateUI() {
             // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
             
             $.each(gaCVs,function(i,d){
-              gaCVs[i]=gaCVs[i].match(/[^\*|^\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
+              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
             });
             // console.log(gaCVs);
             $.each(gaCVs[0],function(i,d){
