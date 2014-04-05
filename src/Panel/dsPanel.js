@@ -10,20 +10,21 @@ function updateUI() {
     $.each(dL,function(i,v){
       therow = '';
       $.each(v,function(k,x){
-        if(typeof x == 'object'){
-          for (var q in x){
-            if(typeof q == 'object'){
-              for (var z in x[q])
-                therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td>'+x[q][z]+'</td></tr>';
-            }
-            else{
-              therow = therow + '\n' + '<tr><td><b>'+k+'['+q+']</b></td><td>'+x[q]+'</td></tr>';
-            }
-          }          
+          if(typeof x == 'object'){
+            for (var q in x){
+              if(typeof q == 'object'){
+                for (var z in x[q])
+                  therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td>'+x[q][z]+'</td></tr>';
+              }
+              else{
+                therow = therow + '\n' + '<tr><td><b>'+k+'['+q+']</b></td><td>'+x[q]+'</td></tr>';
+              }
+            }          
+          }
+          else
+            therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
         }
-        else
-          therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td>'+x+'</td></tr>';
-      }); 
+      ); 
       $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     });
@@ -46,12 +47,9 @@ function updateUI() {
           therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.utmac+'</b> (Classic)</td></tr>';
           switch(v.utmt){
             case 'event':
-              // Google Analytics uses the value of the utme parameter to track events in the form of 5(object*action*label)(value):
-              // CV: 8(2!Abandoned Cart*User ID)9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)11(2!1*1)
-              //     8 is variable, 9 is value, 11 is scope
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
               therow = therow + '\n<tr><td><b>category</b></td><td>'+eventdata[0]+'</td></tr>\n<tr><td><b>action</b></td><td>'+eventdata[1]+'</td></tr>\n<tr><td><b>label</b></td><td>'+eventdata[2]+'</td></tr>';  
-              if (eventdata[3]) {therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';  }
+              if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
               break;
             case 'transaction':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
@@ -79,22 +77,26 @@ function updateUI() {
             }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
+            // CV: 8(2!Abandoned Cart*User ID)9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)11(2!1*1)
+            //     8 is variable, 9 is value, 11 is scope
             //gaCVs 0: variable name, 1 value, 2 scope
             // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
             
             $.each(gaCVs,function(i,d){
-              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
-            });
+                gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
+              }
+            );
             // console.log(gaCVs);
             $.each(gaCVs[0],function(i,d){
-              if (d.substring(d.length-1)=='!'){
-                gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
+                if (d.substring(d.length-1)=='!'){
+                  gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
+                }
+                else {
+                  gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
+                  therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></td></tr>\n';
+                }
               }
-              else {
-                gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
-                therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></td></tr>\n';
-              }
-            });
+            );
           }
           break;
         case 'universal':
@@ -106,16 +108,11 @@ function updateUI() {
               // el:    event label
               // ev:    event value            
               therow = therow + '\n<tr><td><b>category</b></td><td>'+v.ec+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.ea+'</td></tr>';
-              if (v.el) {therow = therow + '\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';  }  
-              if (v.ev) {therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';  }  
+              if (v.el) therow = therow + '\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';
+              if (v.ev) therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';
               break;
             case 'pageview':
-              if (v.dp) {  // for virtual pageview, show virtual path
-                therow = therow + '\n<tr><td><b>path</b></td><td>'+v.dp+'</td></tr>';
-              }
-              else {
-                therow = therow + '\n<tr><td><b>url</b></td><td>'+v.dl+'</td></tr>';
-              }
+              therow = therow + '\n<tr><td><b>' + (v.dp ? 'path' : 'url') + '</b></td><td>' + (v.dp ? v.dp : v.dl) + '</td></tr>';
               break;
             case 'social':
               therow = therow + '\n<tr><td><b>network</b></td><td>'+v.sn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.sa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.st+'</td></tr>';
@@ -163,14 +160,16 @@ function updateUI() {
 
       $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
-    });
-  });
+    }
+    );
+  }
+  );
 
   for (var i=0;i<window.lastDL.length-1;i++){
-    $('.dlnum'+i).toggleClass('submenu-hidden');
-    $('.dlnum'+i).toggleClass('submenu');
-    $('.page'+i).toggleClass('currentpage');
-  }
+      $('.dlnum'+i).toggleClass('submenu-hidden');
+      $('.dlnum'+i).toggleClass('submenu');
+      $('.page'+i).toggleClass('currentpage');
+    }
 
   $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
   $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
@@ -181,9 +180,10 @@ function updateUI() {
 
 
   $('a.newpage').click(function(){
-    $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
-    $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
-  });
+      $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
+      $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
+    }
+  );
 }
 
 var lastDL = [[]];
@@ -228,7 +228,12 @@ function newRequest(request){
   else return;  //break out if it's not a tag we're looking for, else...
   // parse query string into key/value pairs
   var queryParams = {};
-  request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); });
+  request.request.url.split('?')[1].split('&').
+                                    forEach(function(pair){
+                                      pair = pair.split('=');
+                                      queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+                                    }
+  );
   var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt','in','ip','iq','ic','iv','cu','sn','sa','st','uid',   //UA
                     '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn','utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn','utmiqt','utmipc','utmiva','utmipr'  //classic
                     ];
@@ -237,14 +242,15 @@ function newRequest(request){
   var utmCM = {};
   var utmCD = {};
   $.each(queryParams,function(k,v){
-    if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
-    else if (k.substring(0,2)=='cd'){
-      utmCD[k.substring(2)]=v;
+      if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
+      else if (k.substring(0,2)=='cd'){
+        utmCD[k.substring(2)]=v;
+      }
+      else if (k.substring(0,2)=='cm'){
+        utmCM[k.substring(2)]=v;
+      }
     }
-    else if (k.substring(0,2)=='cm'){
-      utmCM[k.substring(2)]=v;
-    }
-  });
+  );
   if (utmCM!={}) utmParams.utmCM=utmCM;
   if (utmCD!={}) utmParams.utmCD=utmCD;
   if (utmParams) window.lastUTM[window.numDL].push(utmParams);
