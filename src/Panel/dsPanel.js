@@ -32,12 +32,12 @@ function updateUI() {
 
       //GA params:
       // utmcc: cookie
+      var allParams = '';
+      for (var param in v.allParams)
+        allParams = allParams + param + ': ' + v.allParams[param]+'\n';
 
       switch(v.reqType){
         case 'classic':
-          var allParams = '';
-          for (var i in v.allParams)
-            allParams = allParams + i + ': ' + v.allParams[i]+'\n';
           therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.utmac+'</b> (Classic)</td></tr>';
           switch(v.utmt){
             case 'event':
@@ -89,13 +89,10 @@ function updateUI() {
                 gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
                 therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></td></tr>\n';
               }
-            })
+            });
           }
           break;
         case 'universal':
-          var allParams = '';
-          for (var i in v.allParams)
-            allParams = allParams + i + ': ' + v.allParams[i] + '\n';
           therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.tid+'</b> (Universal)</td></tr>';
           switch(v.t) {  //what type of hit is it?
             case 'event':
