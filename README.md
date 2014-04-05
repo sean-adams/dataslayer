@@ -18,3 +18,7 @@ If requests are made to Google Analytics, they will appear on the right side of 
 All items are in reverse chronological order (newest on top).
 
 To collapse and expand page groups, simply click the URL associated with each page.
+
+Misc
+----
+dataslayer relies on [Pure](http://purecss.io/) and [jQuery](http://jquery.com/).
