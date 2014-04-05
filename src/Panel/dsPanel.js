@@ -29,6 +29,11 @@ function updateUI() {
       $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     });
 
+    if(window.lastGTM[a]){
+      $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2><tr><td></td><td><u>'+window.lastGTM[a]+'</u></td></tr></table></li>\n');
+      $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+    }
+
     $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
   });
 
@@ -184,10 +189,13 @@ function updateUI() {
       $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
     }
   );
+
+  //document.querySelector('script[src*=googletagmanager\\.com]').getAttribute('src').match(/GTM.*/);
 }
 
 var lastDL = [[]];
 var lastUTM = [[]];
+var lastGTM = [];
 var numDL = 0;
 var lastURL = [];
 
@@ -197,6 +205,7 @@ function testDL() {
       if (JSON.stringify(window.lastDL[window.numDL])!=JSON.stringify(isLoaded)){
         window.lastDL[numDL]=isLoaded;
         chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
+        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',function(gtm,error){window.lastGTM[numDL]=gtm;});
         updateUI();
       }
     }
@@ -262,6 +271,7 @@ function newRequest(request){
 setInterval(testDL,100);
 
 chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
+chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',function(gtm,error){window.lastGTM[numDL]=gtm;});
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
