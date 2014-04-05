@@ -44,35 +44,35 @@ function updateUI() {
 
       switch(v.reqType){
         case 'classic':
-          therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.utmac+'</b> (Classic)</td></tr>';
+          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+' (classic)</u></td></tr>';
           switch(v.utmt){
             case 'event':
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
-              therow = therow + '\n<tr><td><b>category</b></td><td>'+eventdata[0]+'</td></tr>\n<tr><td><b>action</b></td><td>'+eventdata[1]+'</td></tr>\n<tr><td><b>label</b></td><td>'+eventdata[2]+'</td></tr>';  
+              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
               if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
               break;
             case 'transaction':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
-              if(v.utmtto) therow = therow + '<tr><td><b>revenue</b></td><td>'+v.utmtto+'</td></tr>\n';
-              if(v.utmtsp) therow = therow + '<tr><td><b>shipping</b></td><td>'+v.utmtsp+'</td></tr>\n';
-              if(v.utmttx) therow = therow + '<tr><td><b>tax</b></td><td>'+v.utmttx+'</td></tr>\n';
-              if(v.utmtst) therow = therow + '<tr><td><b>affiliation</b></td><td>'+v.utmtst+'</td></tr>\n';
+              if(v.utmtto) therow = therow + '<tr><td><b>revenue</b></td><td><span>'+v.utmtto+'</span></td></tr>\n';
+              if(v.utmtsp) therow = therow + '<tr><td><b>shipping</b></td><td><span>'+v.utmtsp+'</span></td></tr>\n';
+              if(v.utmttx) therow = therow + '<tr><td><b>tax</b></td><td><span>'+v.utmttx+'</span></td></tr>\n';
+              if(v.utmtst) therow = therow + '<tr><td><b>affiliation</b></td><td><span>'+v.utmtst+'</span></td></tr>\n';
               break;
             case 'item':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
-              if(v.utmipn) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.utmiqt+'x) '+v.utmipn+'</td></tr>\n';
-              if(v.utmipc) therow = therow + '<tr><td><b>sku</b></td><td>'+v.utmipc+'</td></tr>\n';
-              if(v.utmiva) therow = therow + '<tr><td><b>category</b></td><td>'+v.utmiva+'</td></tr>\n';
-              if(v.utmipr) therow = therow + '<tr><td><b>price</b></td><td>'+v.utmipr+'</td></tr>\n';
+              if(v.utmipn) therow = therow + '<tr><td><b>item/qty</b></td><td><span>('+v.utmiqt+'x) '+v.utmipn+'</span></td></tr>\n';
+              if(v.utmipc) therow = therow + '<tr><td><b>sku</b></td><td><span>'+v.utmipc+'</span></td></tr>\n';
+              if(v.utmiva) therow = therow + '<tr><td><b>category</b></td><td><span>'+v.utmiva+'</span></td></tr>\n';
+              if(v.utmipr) therow = therow + '<tr><td><b>price</b></td><td><span>'+v.utmipr+'</span></td></tr>\n';
               break;
             case 'social':
               // utmsn:network
               // utmsa:action
               // utmsid:target
-              therow = therow + '\n<tr><td><b>network</b></td><td>'+v.utmsn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.utmsa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.utmsid+'</td></tr>';
+              therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.utmsn+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.utmsa+'</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
               break;
             default:  //pageview
-              therow = therow + '\n<tr><td><b>url</b></td><td>'+v.utmhn+v.utmp+'</td></tr>';  
+              therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';  
               break;
             }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
@@ -93,29 +93,29 @@ function updateUI() {
                 }
                 else {
                   gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
-                  therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></td></tr>\n';
+                  therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></span></td></tr>\n';
                 }
               }
             );
           }
           break;
         case 'universal':
-          therow = '<tr><td></td><td title="'+allParams+'"><b>'+v.tid+'</b> (Universal)</td></tr>';
+          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+' (Universal)</u></td></tr>';
           switch(v.t) {  //what type of hit is it?
             case 'event':
               // ea:    event action
               // ec:    event category
               // el:    event label
               // ev:    event value            
-              therow = therow + '\n<tr><td><b>category</b></td><td>'+v.ec+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.ea+'</td></tr>';
-              if (v.el) therow = therow + '\n<tr><td><b>label</b></td><td>'+v.el+'</td></tr>';
-              if (v.ev) therow = therow + '\n<tr><td><b>value</b></td><td>'+v.ev+'</td></tr>';
+              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.ea+'</span></td></tr>';
+              if (v.el) therow = therow + '\n<tr><td><b>label</b></td><td><span>'+v.el+'</span></td></tr>';
+              if (v.ev) therow = therow + '\n<tr><td><b>value</b></td><td><span>'+v.ev+'</span></td></tr>';
               break;
             case 'pageview':
-              therow = therow + '\n<tr><td><b>' + (v.dp ? 'path' : 'url') + '</b></td><td>' + (v.dp ? v.dp : v.dl) + '</td></tr>';
+              therow = therow + '\n<tr><td><b>' + (v.dp ? 'path' : 'url') + '</b></td><td><span>' + (v.dp ? v.dp : v.dl) + '</span></td></tr>';
               break;
             case 'social':
-              therow = therow + '\n<tr><td><b>network</b></td><td>'+v.sn+'</td></tr>\n<tr><td><b>action</b></td><td>'+v.sa+'</td></tr>\n<tr><td><b>target</b></td><td>'+v.st+'</td></tr>';
+              therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.sn+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.sa+'</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.st+'</span></td></tr>';
               break;
             case 'transaction':
               //transaction hit type:
@@ -127,10 +127,10 @@ function updateUI() {
               // cu: currency code
               if (!v.cu) v.cu='';
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
-              if(v.tr) therow = therow + '<tr><td><b>revenue</b></td><td>'+v.tr+' '+v.cu+'</td></tr>\n';
-              if(v.ts) therow = therow + '<tr><td><b>shipping</b></td><td>'+v.ts+' '+v.cu+'</td></tr>\n';
-              if(v.tt) therow = therow + '<tr><td><b>tax</b></td><td>'+v.tt+' '+v.cu+'</td></tr>\n';
-              if(v.ta) therow = therow + '<tr><td><b>affiliation</b></td><td>'+v.ta+'</td></tr>\n';
+              if(v.tr) therow = therow + '<tr><td><b>revenue</b></td><td><span>'+v.tr+' '+v.cu+'</span></td></tr>\n';
+              if(v.ts) therow = therow + '<tr><td><b>shipping</b></td><td><span>'+v.ts+' '+v.cu+'</span></td></tr>\n';
+              if(v.tt) therow = therow + '<tr><td><b>tax</b></td><td><span>'+v.tt+' '+v.cu+'</span></td></tr>\n';
+              if(v.ta) therow = therow + '<tr><td><b>affiliation</b></td><td><span>'+v.ta+'</span></td></tr>\n';
               break;
             case 'item':
               //item hit type:
@@ -142,17 +142,17 @@ function updateUI() {
               // cu: currency code
               if (!v.cu) v.cu='';
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
-              if(v.in) therow = therow + '<tr><td><b>item/qty</b></td><td>('+v.iq+'x) '+v.in+'</td></tr>\n';
-              if(v.ic) therow = therow + '<tr><td><b>sku</b></td><td>'+v.ic+'</td></tr>\n';
-              if(v.iv) therow = therow + '<tr><td><b>category</b></td><td>'+v.iv+'</td></tr>\n';
-              if(v.ip) therow = therow + '<tr><td><b>price</b></td><td>'+v.ip+v.cu+'</td></tr>\n';
+              if(v.in) therow = therow + '<tr><td><b>item/qty</b></td><td><span>('+v.iq+'x) '+v.in+'</span></td></tr>\n';
+              if(v.ic) therow = therow + '<tr><td><b>sku</b></td><td><span>'+v.ic+'</span></td></tr>\n';
+              if(v.iv) therow = therow + '<tr><td><b>category</b></td><td><span>'+v.iv+'</span></td></tr>\n';
+              if(v.ip) therow = therow + '<tr><td><b>price</b></td><td><span>'+v.ip+v.cu+'</span></td></tr>\n';
               break;
           }
           $.each(v.utmCD,function(k,val){
-            therow = therow + '<tr><td><b>dimension '+k+'</b></td><td>'+val+'</td></tr>\n';
+            therow = therow + '<tr><td><b>dimension '+k+'</b></td><td><span>'+val+'</span></td></tr>\n';
           });
           $.each(v.utmCM,function(k,val){
-            therow = therow + '<tr><td><b>metric '+k+'</b></td><td>'+val+'</td></tr>\n';
+            therow = therow + '<tr><td><b>metric '+k+'</b></td><td><span>'+val+'</span></td></tr>\n';
           });
           
           break;
