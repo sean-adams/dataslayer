@@ -2,7 +2,7 @@
   "manifest_version": 2,
 
   "name": "dataslayer",
-  "description": "Debug and test Google Tag Manager and Analytics implementations",
+  "description": "Debug and test Google Tag Manager and Google Analytics implementations.",
   "version": "0.6",
 
   "icons":{"48":"i48.png","128":"i128.png"},
