@@ -175,7 +175,12 @@ function updateUI() {
     $('.page'+i).toggleClass('currentpage');
   }
 
-
+  $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
+  $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
+  $('.pure-menu').not($('.pure-menu').has('td.dlt li')).find('td.utm').has('li').css('border-left','none');
+  $('.pure-menu').not($('.pure-menu').has('td.utm li')).find('td.dlt').has('li').css('border-right','none');
+  $('td.dlt').not($('td.dlt').has('li')).css('width','0');
+  $('td.utm').not($('td.utm').has('li')).css('width','0');
 
 
   $('a.newpage').click(function(){
