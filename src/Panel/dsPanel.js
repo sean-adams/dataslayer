@@ -211,18 +211,19 @@ function newPageLoad(newurl){
 // newRequest: called on a new network request of any kind
 // we use this to capture tags for parsing
 function newRequest(request){
+  var reqType = '';
   if (/__utm.gif/i.test(request.request.url)){
     //classic request
-    var reqType = 'classic';
+    reqType = 'classic';
   }
   else if (/google-analytics.com\/collect/i.test(request.request.url)){
     //universal request
-    var reqType = 'universal';
+    reqType = 'universal';
   }
   else return;  //break out if it's not a tag we're looking for, else...
   // parse query string into key/value pairs
   var queryParams = {};
-  request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); })
+  request.request.url.split('?')[1].split('&').forEach(function(pair){pair = pair.split('='); queryParams[pair[0]] = decodeURIComponent(pair[1] || ''); });
   var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt','in','ip','iq','ic','iv','cu','sn','sa','st','uid',   //UA
                     '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn','utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn','utmiqt','utmipc','utmiva','utmipr'  //classic
                     ];
