@@ -1,11 +1,20 @@
+// dsPanel.js
+// this is where the magic happens
+
+var dataslayer = {};
+dataslayer.datalayers = [[]];
+dataslayer.tags = [[]];
+dataslayer.gtmIDs = [];
+dataslayer.activeIndex = 0;
+dataslayer.urls = [];
 
 // updateUI: called whenever dataLayer changes or a new tag fires
-// parses lastUTM and lastGTM arrays and displays them
+// parses dataslayer.tags and dataslayer.datalayers arrays and displays them
 function updateUI() {
   $('#datalayeritems').html('');
   var therow = '';
 
-  $.each(window.lastDL,function(a,dL){
+  $.each(dataslayer.datalayers,function(a,dL){
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
     $('#datalayeritems').append('\n');    
 
@@ -31,19 +40,19 @@ function updateUI() {
       $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     });
 
-    if(window.lastGTM[a]){
-      $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2><tr><td></td><td><u>'+window.lastGTM[a]+'</u></td></tr></table></li>\n');
+    if(dataslayer.gtmIDs[a]){
+      $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[a]+'</u></td></tr></table></li>\n');
       $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     }
 
-    $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+window.lastURL[a]+'</a></li>\n');
+    $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n');
   });
 
-  $.each(window.lastUTM,function(a,dL){
+  $.each(dataslayer.tags,function(a,dL){
     $.each(dL,function(i,v){
       therow = '';
 
-      //GA params:
+      // GA params:
       // utmcc: cookie
       var allParams = '';
       for (var param in v.allParams)
@@ -86,14 +95,14 @@ function updateUI() {
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             // CV: 8(2!Abandoned Cart*User ID)9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)11(2!1*1)
             //     8 is variable, 9 is value, 11 is scope
-            //gaCVs 0: variable name, 1 value, 2 scope
+            // gaCVs 0: variable name, 1 value, 2 scope
             // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
             
             $.each(gaCVs,function(i,d){
                 gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
               }
             );
-            // console.log(gaCVs);
+
             $.each(gaCVs[0],function(i,d){
                 if (d.substring(d.length-1)=='!'){
                   gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
@@ -108,13 +117,10 @@ function updateUI() {
           break;
         case 'universal':
           therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+' (Universal)</u></td></tr>';
-          switch(v.t) {  //what type of hit is it?
+          switch(v.t) {  // what type of hit is it?
             case 'event':
-              // ea:    event action
-              // ec:    event category
-              // el:    event label
-              // ev:    event value            
-              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.ea+'</span></td></tr>';
+              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
+                                '\n<tr><td><b>action</b></td><td><span>'+v.ea+'</span></td></tr>';
               if (v.el) therow = therow + '\n<tr><td><b>label</b></td><td><span>'+v.el+'</span></td></tr>';
               if (v.ev) therow = therow + '\n<tr><td><b>value</b></td><td><span>'+v.ev+'</span></td></tr>';
               break;
@@ -125,14 +131,7 @@ function updateUI() {
               therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.sn+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.sa+'</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.st+'</span></td></tr>';
               break;
             case 'transaction':
-              //transaction hit type:
-              // ti: transaction ID
-              // ta: transaction affil
-              // tr: transaction revenue
-              // ts: transaction shipping
-              // tt: transaction tax
-              // cu: currency code
-              if (!v.cu) v.cu='';
+              if(!v.cu) v.cu='';  // if no currency code set, blank it for display purposes
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
               if(v.tr) therow = therow + '<tr><td><b>revenue</b></td><td><span>'+v.tr+' '+v.cu+'</span></td></tr>\n';
               if(v.ts) therow = therow + '<tr><td><b>shipping</b></td><td><span>'+v.ts+' '+v.cu+'</span></td></tr>\n';
@@ -140,26 +139,21 @@ function updateUI() {
               if(v.ta) therow = therow + '<tr><td><b>affiliation</b></td><td><span>'+v.ta+'</span></td></tr>\n';
               break;
             case 'item':
-              //item hit type:
-              // in: item name
-              // ip: item price
-              // iq: item quantity
-              // ic: item code (sku)
-              // iv: item category
-              // cu: currency code
-              if (!v.cu) v.cu='';
+              if(!v.cu) v.cu='';  // if no currency code set, blank it for display purposes
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.ti+'</b></td></tr>\n';
               if(v.in) therow = therow + '<tr><td><b>item/qty</b></td><td><span>('+v.iq+'x) '+v.in+'</span></td></tr>\n';
               if(v.ic) therow = therow + '<tr><td><b>sku</b></td><td><span>'+v.ic+'</span></td></tr>\n';
-              if(v.iv) therow = therow + '<tr><td><b>category</b></td><td><span>'+v.iv+'</span></td></tr>\n';
+              if(v.iv) therow = therow + '<tr><td><b>variation</b></td><td><span>'+v.iv+'</span></td></tr>\n';
               if(v.ip) therow = therow + '<tr><td><b>price</b></td><td><span>'+v.ip+v.cu+'</span></td></tr>\n';
               break;
           }
-          $.each(v.utmCD,function(k,val){
-            therow = therow + '<tr><td><b>dimension '+k+'</b></td><td><span>'+val+'</span></td></tr>\n';
+
+          // enumerate custom dimensions and metrics
+          $.each(v.utmCD,function(cd,cdv){
+            therow = therow + '<tr><td><b>dimension '+cd+'</b></td><td><span>'+cdv+'</span></td></tr>\n';
           });
-          $.each(v.utmCM,function(k,val){
-            therow = therow + '<tr><td><b>metric '+k+'</b></td><td><span>'+val+'</span></td></tr>\n';
+          $.each(v.utmCM,function(cm,cmv){
+            therow = therow + '<tr><td><b>metric '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
           });
           
           break;
@@ -172,7 +166,7 @@ function updateUI() {
   }
   );
 
-  for (var i=0;i<window.lastDL.length-1;i++){
+  for (var i=0;i<dataslayer.datalayers.length-1;i++){
       $('.dlnum'+i).toggleClass('submenu-hidden');
       $('.dlnum'+i).toggleClass('submenu');
       $('.page'+i).toggleClass('currentpage');
@@ -191,23 +185,24 @@ function updateUI() {
       $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
     }
   );
-
-  //document.querySelector('script[src*=googletagmanager\\.com]').getAttribute('src').match(/GTM.*/);
 }
 
-var lastDL = [[]];
-var lastUTM = [[]];
-var lastGTM = [];
-var numDL = 0;
-var lastURL = [];
 
 function testDL() {
   function onEval(isLoaded, isException) {
     if (isLoaded) {
-      if (JSON.stringify(window.lastDL[window.numDL])!=JSON.stringify(isLoaded)){
-        window.lastDL[numDL]=isLoaded;
-        chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
-        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',function(gtm,error){window.lastGTM[numDL]=gtm;});
+      if (JSON.stringify(dataslayer.datalayers[dataslayer.activeIndex])!=JSON.stringify(isLoaded)){
+        dataslayer.datalayers[dataslayer.activeIndex]=isLoaded;
+
+        // get the current URL and grab it
+        chrome.devtools.inspectedWindow.eval('window.location.href',
+          function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+          );
+
+        // find first GTM tag and get its ID
+        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+          function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+          );
         updateUI();
       }
     }
@@ -217,10 +212,10 @@ function testDL() {
 
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
-  window.numDL = window.numDL + 1;
-  window.lastDL[window.numDL] = [];
-  window.lastURL[window.numDL] = newurl;
-  window.lastUTM[window.numDL] = [];
+  dataslayer.activeIndex = dataslayer.activeIndex + 1;
+  dataslayer.datalayers[dataslayer.activeIndex] = [];
+  dataslayer.urls[dataslayer.activeIndex] = newurl;
+  dataslayer.tags[dataslayer.activeIndex] = [];
   updateUI();
 }
 
@@ -264,16 +259,19 @@ function newRequest(request){
   );
   if (utmCM!={}) utmParams.utmCM=utmCM;
   if (utmCD!={}) utmParams.utmCD=utmCD;
-  if (utmParams) window.lastUTM[window.numDL].push(utmParams);
-  // console.log(window.lastUTM[window.numDL]);
+  if (utmParams) dataslayer.tags[dataslayer.activeIndex].push(utmParams);
 
   updateUI();
 }
 
 setInterval(testDL,100);
 
-chrome.devtools.inspectedWindow.eval('window.location.href',function(url,error){window.lastURL[numDL]=url;});
-chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',function(gtm,error){window.lastGTM[numDL]=gtm;});
+chrome.devtools.inspectedWindow.eval('window.location.href',
+  function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+  );
+chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+  );
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
