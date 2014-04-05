@@ -1,6 +1,7 @@
 
 function updateUI() {
   $('#datalayeritems').html('');
+  var therow = '';
 
   $.each(window.lastDL,function(a,dL){
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
@@ -244,8 +245,8 @@ function newRequest(request){
       utmCM[k.substring(2)]=v;
     }
   });
-  if (utmCM!={}) utmParams['utmCM']=utmCM;
-  if (utmCD!={}) utmParams['utmCD']=utmCD;
+  if (utmCM!={}) utmParams.utmCM=utmCM;
+  if (utmCD!={}) utmParams.utmCD=utmCD;
   if (utmParams) window.lastUTM[window.numDL].push(utmParams);
   // console.log(window.lastUTM[window.numDL]);
 
