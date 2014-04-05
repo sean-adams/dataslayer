@@ -1,5 +1,7 @@
 body,
 .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: Georgia, Times, "Times New Roman", serif; margin: 10px; }
+body {font-size:80%;}
+table {font-size:1em;}
 
 .pure-menu a { transition: all 0.2s; -webkit-transition: all 0.2s; white-space: normal; padding: 0px;}
 
@@ -75,3 +77,4 @@ background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255,
 .pure-menu a, .pure-menu .pure-menu-heading {line-height: normal !important;}
 
 /*li.event tr>td:first-child {text-align: right;}*/
+li td {overflow: hidden;}
