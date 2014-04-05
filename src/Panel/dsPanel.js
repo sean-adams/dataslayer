@@ -1,4 +1,6 @@
 
+// updateUI: called whenever dataLayer changes or a new tag fires
+// parses lastUTM and lastGTM arrays and displays them
 function updateUI() {
   $('#datalayeritems').html('');
   var therow = '';
