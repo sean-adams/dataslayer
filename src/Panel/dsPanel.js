@@ -60,7 +60,7 @@ function updateUI() {
 
       switch(v.reqType){
         case 'classic':
-          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+' (classic)</u></td></tr>';
+          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+'</u> (classic)</td></tr>';
           switch(v.utmt){
             case 'event':
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
@@ -116,7 +116,7 @@ function updateUI() {
           }
           break;
         case 'universal':
-          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+' (Universal)</u></td></tr>';
+          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+'</u> (Universal)</td></tr>';
           switch(v.t) {  // what type of hit is it?
             case 'event':
               therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
