@@ -82,10 +82,9 @@ function updateUI() {
               if(v.utmipr) therow = therow + '<tr><td><b>price</b></td><td><span>'+v.utmipr+'</span></td></tr>\n';
               break;
             case 'social':
-              // utmsn:network
-              // utmsa:action
-              // utmsid:target
-              therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.utmsn+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.utmsa+'</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
+              therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.utmsn+
+                      '</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.utmsa+
+                      '</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
               break;
             default:  //pageview
               therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';  
@@ -93,13 +92,10 @@ function updateUI() {
             }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
-            // CV: 8(2!Abandoned Cart*User ID)9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)11(2!1*1)
-            //     8 is variable, 9 is value, 11 is scope
-            // gaCVs 0: variable name, 1 value, 2 scope
-            // ["8(2!Abandoned Cart*User ID)", "9(2!13*8aaf21b4-22de-4a7b-a737-d74755ef976d)", "11(2!1*1)"] 
             
             $.each(gaCVs,function(i,d){
-                gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); //split on * separators or ! that lets us know nothing was set or ) for the end
+              //split on * separators or ! that lets us know nothing was set or ) for the end
+              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); 
               }
             );
 
@@ -234,17 +230,23 @@ function newRequest(request){
   else return;  //break out if it's not a tag we're looking for, else...
   // parse query string into key/value pairs
   var queryParams = {};
-  request.request.url.split('?')[1].split('&').
-                                    forEach(function(pair){
-                                      pair = pair.split('=');
-                                      queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
-                                    }
-  );
-  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt','in','ip','iq','ic','iv','cu','sn','sa','st','uid',   //UA
-                    '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn','utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn','utmiqt','utmipc','utmiva','utmipr'  //classic
+  if ((reqType == 'classic') || (reqType == 'universal')){
+    request.request.url.split('?')[1].split('&').
+                                      forEach(function(pair){
+                                        pair = pair.split('=');
+                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+                                      }
+    );
+  }
+  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
+                    'in','ip','iq','ic','iv','cu','sn','sa','st','uid',                     //UA
+                    '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
+                    'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
+                    'utmiqt','utmipc','utmiva','utmipr',                                    //classic
                     ];
 
   var utmParams = {reqType:reqType,allParams:queryParams};
+  
   var utmCM = {};
   var utmCD = {};
   $.each(queryParams,function(k,v){
@@ -259,6 +261,7 @@ function newRequest(request){
   );
   if (utmCM!={}) utmParams.utmCM=utmCM;
   if (utmCD!={}) utmParams.utmCD=utmCD;
+
   if (utmParams) dataslayer.tags[dataslayer.activeIndex].push(utmParams);
 
   updateUI();
