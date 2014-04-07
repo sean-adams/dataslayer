@@ -13,6 +13,7 @@ dataslayer.urls = [];
 function updateUI() {
   $('#datalayeritems').html('');
   var therow = '';
+  if (!dataslayer.options) {dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};}
 
   $.each(dataslayer.datalayers,function(a,dL){
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
@@ -313,7 +314,7 @@ function newRequest(request){
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    if (Object.getOwnPropertyNames(items).length > 0)
+    if (items.hasOwnProperty('showUniversal')
       dataslayer.options = items;
     else
       dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
