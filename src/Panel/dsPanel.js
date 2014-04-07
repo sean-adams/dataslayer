@@ -31,26 +31,38 @@ function updateUI() {
   var therow = '';
   if (!dataslayer.options) {dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};}
 
-  $.each(dataslayer.datalayers,function(a,dL){
+  $.each(dataslayer.datalayers,function(a,dL){  //iterate each page's dataLayer
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');
     $('#datalayeritems').append('\n');    
 
-    $.each(dL,function(i,v){
+    $.each(dL,function(i,v){ //iterate each push group on the page
       therow = '';
-      $.each(v,function(k,x){
+      $.each(v,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
           if(typeof x == 'object'){
-            for (var q in x){
-              if(typeof q == 'object'){
-                for (var z in x[q])
-                  therow = therow + '\n' + '<tr><td><b>'+k+'['+q+'].'+z+'</b></td><td><span>'+x[q][z]+'</span></td></tr>';
+            for (var k2 in x){
+              if(typeof x[k2] == 'object'){
+                for (var k3 in x[k2]) {
+                  if (typeof x[k2][k3] == 'object'){
+                    for (var k4 in x[k2][k3]){
+                      if (typeof x[k2][k3][k4] == 'object'){
+                        for (var k5 in x[k2][k3][k4]){
+                          therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'.'+k4+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
+                        }
+                      }
+                      else
+                        therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
+                    }
+                  }
+                  else
+                    therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
+                }
               }
-              else{
-                therow = therow + '\n' + '<tr><td><b>'+k+'['+q+']</b></td><td><span>'+x[q]+'</span></td></tr>';
-              }
+              else
+                therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
             }          
           }
           else
-            therow = therow + '\n' + '<tr><td><b>'+k+'</b></td><td><span>'+x+'</span></td></tr>';
+            therow = therow + '\n' + '<tr><td><b>'+k1+'</b></td><td><span>'+x+'</span></td></tr>';
         }
       ); 
       $('#sub'+a+' td.dlt ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
