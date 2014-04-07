@@ -7,6 +7,7 @@ dataslayer.tags = [[]];
 dataslayer.gtmIDs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
+dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
 
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
