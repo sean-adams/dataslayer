@@ -174,10 +174,10 @@ function updateUI() {
 
           // enumerate custom dimensions and metrics
           $.each(v.utmCD,function(cd,cdv){
-            therow = therow + '<tr><td><b>dimension '+cd+'</b></td><td><span>'+cdv+'</span></td></tr>\n';
+            therow = therow + '<tr><td><b>CD '+cd+'</b></td><td><span>'+cdv+'</span></td></tr>\n';
           });
           $.each(v.utmCM,function(cm,cmv){
-            therow = therow + '<tr><td><b>metric '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
+            therow = therow + '<tr><td><b>CM '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
           });
           
           break;
