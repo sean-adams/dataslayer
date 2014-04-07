@@ -311,7 +311,7 @@ function newRequest(request){
   updateUI();
 }
 
-setInterval(testDL,100);
+setInterval(testDL,150);
 
 chrome.devtools.inspectedWindow.eval('window.location.href',
   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
