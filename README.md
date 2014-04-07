@@ -13,6 +13,8 @@ Use
 ---
 A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each dataLayer.push appearing in a subgroup.
 
+![](http://i.imgur.com/2H2t85K.png)
+
 If requests are made to Google Analytics or a Floodlight tag, they will appear on the right side of the page group, with dataLayer information on the left side. Note that vertical alignment does not necessarily indicate a tie between dataLayer items and tags fired. Hover over the UA ID to see all parameters in the request, in case the parameter you're looking for is not pulled out.
 
 All items are in reverse chronological order (newest on top).
