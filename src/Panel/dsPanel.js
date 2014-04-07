@@ -253,13 +253,13 @@ function newPageLoad(newurl){
 // we use this to capture tags for parsing
 function newRequest(request){
   var reqType = '';
-  if (/__utm.gif/i.test(request.request.url)){
+  if (/__utm\.gif/i.test(request.request.url)){
     reqType = 'classic';
   }
-  else if (/google-analytics.com\/collect/i.test(request.request.url)){
+  else if (/google-analytics\.com\/collect/i.test(request.request.url)){
     reqType = 'universal';
   }
-  else if (/.fls.doubleclick.net\/activity/i.test(request.request.url)){
+  else if (/\.fls\.doubleclick\.net\/activity/i.test(request.request.url)){
     reqType = 'floodlight';
   }
   else return;  //break out if it's not a tag we're looking for, else...
