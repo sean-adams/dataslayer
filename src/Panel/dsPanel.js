@@ -314,7 +314,7 @@ function newRequest(request){
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    if (items.hasOwnProperty('showUniversal')
+    if (items.hasOwnProperty('showUniversal'))
       dataslayer.options = items;
     else
       dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
