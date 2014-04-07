@@ -24,7 +24,7 @@ div.content ul {visibility:hidden; opacity:0;}
 div.content-visible {max-height:500px; opacity:1; visibility:visible; z-index:100;}
 div.content-visible ul {visibility:visible; opacity:1;}
 
-.submenu a {font-size: 75%}
+/*.submenu a {font-size: 75%}*/
 li.submenu {opacity: 1; transition: all 1s ease; -webkit-transition: all 1s ease; overflow:hidden;}
 li.submenu-hidden {opacity:0; max-height:0;}
 li.submenu-hidden a {visibility: hidden; height: 0; max-height: 0; opacity: 0; transition: all 0.5s ease; -webkit-transition: all 0.5s ease; }
