@@ -49,7 +49,7 @@ function updateUI() {
   });
 
   $.each(dataslayer.tags,function(a,dL){
-    $.each(dL,function(i,v){
+    $.each(dL,function(q,v){
       therow = '';
 
       // GA params:
@@ -187,7 +187,7 @@ function updateUI() {
           }
 
       $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
-      $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+      if (q<(dataslayer.tags[a].length-1)) $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     }
     );
   }
