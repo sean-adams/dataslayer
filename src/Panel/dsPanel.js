@@ -9,6 +9,21 @@ dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
 
+// loadSettings:
+function loadSettings(){
+  chrome.storage.sync.get(null,function(items){
+    if (items.hasOwnProperty('showUniversal')) {
+      dataslayer.options = items;
+      // console.info('dataslayer settings loaded from chrome');
+    }
+    else{
+      dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
+      // console.info('dataslayer settings set to default');
+    }
+  });
+
+}
+
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
 function updateUI() {
@@ -188,8 +203,10 @@ function updateUI() {
             therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
           }
 
-      $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
-      if (q<(dataslayer.tags[a].length-1)) $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+      if (therow != ''){
+        $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
+        if (q<(dataslayer.tags[a].length-1)) $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
+      }
     }
     );
   }
@@ -312,16 +329,7 @@ function newRequest(request){
   updateUI();
 }
 
-// loadSettings:
-function loadSettings(){
-  chrome.storage.sync.get(null,function(items){
-    if (items.hasOwnProperty('showUniversal'))
-      dataslayer.options = items;
-    else
-      dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
-  });
 
-}
 
 setInterval(testDL,150);
 
