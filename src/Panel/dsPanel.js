@@ -218,10 +218,10 @@ function updateUI() {
 
 
 function testDL() {
-  function onEval(isLoaded, isException) {
-    if (isLoaded) {
-      if (JSON.stringify(dataslayer.datalayers[dataslayer.activeIndex])!=JSON.stringify(isLoaded)){
-        dataslayer.datalayers[dataslayer.activeIndex]=isLoaded;
+  function onEval(result, isException) {
+    if (result) {
+      if (JSON.stringify(dataslayer.datalayers[dataslayer.activeIndex])!=JSON.stringify(result)){
+        dataslayer.datalayers[dataslayer.activeIndex]=result;
 
         // get the current URL and grab it
         chrome.devtools.inspectedWindow.eval('window.location.href',
