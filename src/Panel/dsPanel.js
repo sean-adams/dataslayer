@@ -239,6 +239,7 @@ function testDL() {
 
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
+  loadSettings();
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
   dataslayer.datalayers[dataslayer.activeIndex] = [];
   dataslayer.urls[dataslayer.activeIndex] = newurl;
