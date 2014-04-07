@@ -316,7 +316,6 @@ function loadSettings(){
       dataslayer.options = items;
     else
       dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
-    updateUI();
   });
 
 }
@@ -326,10 +325,10 @@ setInterval(testDL,150);
 loadSettings();
 
 chrome.devtools.inspectedWindow.eval('window.location.href',
-  function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+  function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
   );
 chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
   );
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
