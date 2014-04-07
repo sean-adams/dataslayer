@@ -58,8 +58,7 @@ function updateUI() {
       for (var param in v.allParams)
         allParams = allParams + param + ': ' + v.allParams[param]+'\n';
 
-      switch(v.reqType){
-        case 'classic':
+      if((v.reqType=='classic') && dataslayer.options.showClassic){
           therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+'</u> (classic)</td></tr>';
           switch(v.utmt){
             case 'event':
@@ -138,8 +137,8 @@ function updateUI() {
               }
             );
           }
-          break;
-        case 'universal':
+        }
+        else if ((v.reqType=='universal') && dataslayer.options.showUniversal){
           therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+'</u> (Universal)</td></tr>';
           switch(v.t) {  // what type of hit is it?
             case 'event':
@@ -180,13 +179,12 @@ function updateUI() {
             therow = therow + '<tr><td><b>CM '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
           });
           
-          break;
-        case 'floodlight':
+          }
+        else if ((v.reqType=='floodlight') && dataslayer.options.showFloodlight){
           therow = '<tr><td></td><td title="'+allParams+'"><u>Floodlight</u></td></tr>';
           for (var flParam in v.allParams)
             therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
-          break;  
-        }  //end reqType switching
+          }
 
       $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
@@ -311,7 +309,21 @@ function newRequest(request){
   updateUI();
 }
 
+// loadSettings:
+function loadSettings(){
+  chrome.storage.sync.get(null,function(items){
+    if (Object.getOwnPropertyNames(items).length > 0)
+      dataslayer.options = items;
+    else
+      dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
+    updateUI();
+  });
+
+}
+
 setInterval(testDL,150);
+
+loadSettings();
 
 chrome.devtools.inspectedWindow.eval('window.location.href',
   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
@@ -322,3 +334,4 @@ chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googl
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
+

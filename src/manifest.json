@@ -9,6 +9,7 @@
   "icons":{"48":"i48.png","128":"i128.png"},
 
   "devtools_page": "devtools.html",
+  "options_page": "options.html",
   
-  "permissions": [ "tabs", "http://*/*" ]
+  "permissions": [ "tabs", "storage", "http://*/*", "https://*/*" ]
 }
