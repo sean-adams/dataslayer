@@ -181,7 +181,12 @@ function updateUI() {
           });
           
           break;
-        }
+        case 'floodlight':
+          therow = '<tr><td></td><td title="'+allParams+'"><u>Floodlight</u></td></tr>';
+          for (var flParam in v.allParams)
+            therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
+          break;  
+        }  //end reqType switching
 
       $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
       // $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
@@ -248,24 +253,33 @@ function newPageLoad(newurl){
 function newRequest(request){
   var reqType = '';
   if (/__utm.gif/i.test(request.request.url)){
-    //classic request
     reqType = 'classic';
   }
   else if (/google-analytics.com\/collect/i.test(request.request.url)){
-    //universal request
     reqType = 'universal';
   }
+  else if (/.fls.doubleclick.net\/activity/i.test(request.request.url)){
+    reqType = 'floodlight';
+  }
   else return;  //break out if it's not a tag we're looking for, else...
+
   // parse query string into key/value pairs
   var queryParams = {};
-  if ((reqType == 'classic') || (reqType == 'universal')){
+  if ((reqType == 'classic') || (reqType == 'universal'))
     request.request.url.split('?')[1].split('&').
                                       forEach(function(pair){
                                         pair = pair.split('=');
                                         queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
                                       }
     );
-  }
+  else if (reqType == 'floodlight')
+    request.request.url.split(';').slice(1).
+                                      forEach(function(pair){
+                                        pair = pair.split('=');
+                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+                                      }
+    );
+  
   var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
                     'in','ip','iq','ic','iv','cu','sn','sa','st','uid',                     //UA
                     '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
@@ -275,23 +289,25 @@ function newRequest(request){
 
   var utmParams = {reqType:reqType,allParams:queryParams};
   
-  var utmCM = {};
-  var utmCD = {};
-  $.each(queryParams,function(k,v){
-      if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
-      else if (k.substring(0,2)=='cd'){
-        utmCD[k.substring(2)]=v;
+  //push params we're looking for if it's not a floodlight (we'll just show them all)
+  if (reqType != 'floodlight'){
+    var utmCM = {};
+    var utmCD = {};
+    $.each(queryParams,function(k,v){
+        if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
+        else if (k.substring(0,2)=='cd'){
+          utmCD[k.substring(2)]=v;
+        }
+        else if (k.substring(0,2)=='cm'){
+          utmCM[k.substring(2)]=v;
+        }
       }
-      else if (k.substring(0,2)=='cm'){
-        utmCM[k.substring(2)]=v;
-      }
-    }
-  );
-  if (utmCM!={}) utmParams.utmCM=utmCM;
-  if (utmCD!={}) utmParams.utmCD=utmCD;
+    );
+    if (utmCM!={}) utmParams.utmCM=utmCM;
+    if (utmCD!={}) utmParams.utmCD=utmCD;
+  }
 
-  if (utmParams) dataslayer.tags[dataslayer.activeIndex].push(utmParams);
-
+  dataslayer.tags[dataslayer.activeIndex].push(utmParams);
   updateUI();
 }
 
