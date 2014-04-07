@@ -104,8 +104,36 @@ function updateUI() {
                   gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
                 }
                 else {
-                  gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1); gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1); gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
-                  therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(scope '+gaCVs[2][i]+')</i></span></td></tr>\n';
+                  gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1);
+                  gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1);
+
+                  //scope is optional so we may have errors with [2]
+                  try {
+                    gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
+                  }
+                  catch(error) {
+                    console.log(error);
+                    if (!gaCVs[2]) gaCVs[2] = [];
+                    if (!gaCVs[2][i]) gaCVs[2][i]='0'; //scope defaults to page, let's make this a special case
+                  }
+                  finally {
+                    therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
+                    switch (String(gaCVs[2][i])){
+                      case '0': 
+                        therow = therow + 'no scope-&gt; page';
+                        break;
+                      case '1':
+                        therow = therow + 'visitor scope';
+                        break;
+                      case '2':
+                        therow = therow + 'session scope';
+                        break;
+                      case '3':
+                        therow = therow + 'page scope';
+                        break;
+                    }
+                    therow = therow + ')</i></span></td></tr>\n';
+                  }
                 }
               }
             );
