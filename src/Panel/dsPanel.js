@@ -74,7 +74,7 @@ function updateUI() {
       // $('#sub'+a+' td.dlt ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
     }
 
-    $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a href="#" class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n');
+    $('#sub'+a+'>ul').prepend('<li class="newpage" data-dlnum="'+a+'"><a class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n');
   });
 
   $.each(dataslayer.tags,function(a,dL){
@@ -88,7 +88,7 @@ function updateUI() {
         allParams = allParams + '<tr class="allparams allparams' + a + '_' + q + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
 
       if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic){
-          therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a href="#" class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+          therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.utmt){
             case 'event':
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
@@ -168,7 +168,7 @@ function updateUI() {
           }
         }
         else if ((v.reqType=='universal') && dataslayer.options.showUniversal){
-          therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a href="#" class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+          therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.t) {  // what type of hit is it?
             case 'event':
               therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
