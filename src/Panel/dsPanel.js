@@ -85,10 +85,10 @@ function updateUI() {
       // utmcc: cookie
       var allParams = '';
       for (var param in v.allParams)
-        allParams = allParams + param + ': ' + v.allParams[param]+'\n';
+        allParams = allParams + '<tr class="allparams allparams' + a + '_' + q + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
 
-          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+'</u> (classic)</td></tr>';
       if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic){
+          therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a href="#" class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.utmt){
             case 'event':
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
@@ -168,7 +168,7 @@ function updateUI() {
           }
         }
         else if ((v.reqType=='universal') && dataslayer.options.showUniversal){
-          therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.tid+'</u> (Universal)</td></tr>';
+          therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a href="#" class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.t) {  // what type of hit is it?
             case 'event':
               therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
@@ -210,7 +210,7 @@ function updateUI() {
           
           }
         else if ((v.reqType=='floodlight') && dataslayer.options.showFloodlight){
-          therow = '<tr><td></td><td title="'+allParams+'"><u>Floodlight</u></td></tr>';
+          therow = '<tr><td></td><td><u>Floodlight</u></td></tr>';
           for (var flParam in v.allParams)
             therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
           }
@@ -237,6 +237,18 @@ function updateUI() {
   $('td.dlt').not($('td.dlt').has('li')).css('width','0');
   $('td.utm').not($('td.utm').has('li')).css('width','0');
 
+  $('a.toggle').click(function(){
+    if($(this).html()=='+'){
+      // $('tr.allparams').removeClass('allparams-visible');
+      // $('a.toggle').html('+');
+      $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
+      $(this).html('-');
+    }
+    else{
+      $('.allparams'+$(this).data('toggle')).removeClass('allparams-visible');
+      $(this).html('+');
+    }
+  });
 
   $('a.newpage').click(function(){
       $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');

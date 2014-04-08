@@ -27,27 +27,27 @@
 <li class="event submenu dlnum1"><table cols="2">
 <tbody><tr><td><b>tagTypeBlacklist[0]</b></td><td><span>html</span></td></tr></tbody></table></li>
 </ul></td><td class="utm" style="border-left-width: 1px; border-left-style: dashed; border-left-color: rgb(112, 111, 111);"><ul>
-<li class="event submenu dlnum1"><table cols="2"><tbody><tr><td></td><td title="utmwv: 5.4.9
-utms: 5
-utmn: 1778486045
-utmhn: www.google.com
-utmcs: UTF-8
-utmsr: 1600x900
-utmvp: 1585x481
-utmsc: 24-bit
-utmul: en-us
-utmje: 1
-utmfl: 12.0 r0
-utmdt: Google Tag Manager
-utmhid: 1419745136
-utmr: 0
-utmp: management/Accounts
-utmpg: 2:Application pages
-utmht: 1396716730179
-utmac: UA-32455356-1
-utmcc: __utma=173272373.1090126035.1383223730.1396668710.1396715144.28;+__utmz=173272373.1394424467.25.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided);
-utmu: qIAgAABAAAGBAAAAAgAAAB~
-"><u>UA-32455356-1</u> (classic)</td></tr>
+<li class="event submenu dlnum1"><table cols="2"><tbody><tr><td></td><td><u>UA-32455356-1</u> (classic) <a href="#" class="toggle" data-toggle="1_1">+</a></td></tr>
+<tr class="allparams allparams1_1"><td>utmwv</td><td>5.4.9</td></tr>
+<tr class="allparams allparams1_1"><td>utms</td><td>5</td></tr>
+<tr class="allparams allparams1_1"><td>utmn</td><td>1778486045</td></tr>
+<tr class="allparams allparams1_1"><td>utmhn</td><td>www.google.com</td></tr>
+<tr class="allparams allparams1_1"><td>utmcs</td><td>UTF-8</td></tr>
+<tr class="allparams allparams1_1"><td>utmsr</td><td>1600x900</td></tr>
+<tr class="allparams allparams1_1"><td>utmvp</td><td>1585x481</td></tr>
+<tr class="allparams allparams1_1"><td>utmsc</td><td>24-bit</td></tr>
+<tr class="allparams allparams1_1"><td>utmul</td><td>en-us</td></tr>
+<tr class="allparams allparams1_1"><td>utmje</td><td>1</td></tr>
+<tr class="allparams allparams1_1"><td>utmfl</td><td>12.0 r0</td></tr>
+<tr class="allparams allparams1_1"><td>utmdt</td><td>Google Tag Manager</td></tr>
+<tr class="allparams allparams1_1"><td>utmhid</td><td>1419745136</td></tr>
+<tr class="allparams allparams1_1"><td>utmr</td><td>0</td></tr>
+<tr class="allparams allparams1_1"><td>utmp</td><td>management/Accounts</td></tr>
+<tr class="allparams allparams1_1"><td>utmpg</td><td>2:Application pages</td></tr>
+<tr class="allparams allparams1_1"><td>utmht</td><td>1396716730179</td></tr>
+<tr class="allparams allparams1_1"><td>utmac</td><td>UA-32455356-1</td></tr>
+<tr class="allparams allparams1_1"><td>utmcc</td><td>__utma=173272373.1090126035.1383223730.1396668710.1396715144.28;+__utmz=173272373.1394424467.25.2.utmcsr=google|utmccn=(organic)|utmcmd=organic|utmctr=(not%20provided);</td></tr>
+<tr class="allparams allparams1_1"><td>utmu</td><td>qIAgAABAAAGBAAAAAgAAAB~</td></tr>
 <tr><td><b>url</b></td><td><span>www.google.commanagement/Accounts</span></td></tr></tbody></table></li>
 </ul></td></tr></tbody></table></div>
 <div id="sub0" class="pure-menu pure-menu-open"><ul><li class="newpage" data-dlnum="0"><a href="#" class="newpage page0" data-dlnum="0">https://www.google.com/tagmanager/</a></li>
@@ -77,6 +77,20 @@ utmu: qIAgAABAAAGBAAAAAgAAAB~
   $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
   $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
  });
+  
+  $('a.toggle').click(function(){
+    if($(this).html()=="+"){
+      $('tr.allparams').removeClass('allparams-visible');
+      $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
+      $(this).html('-');
+    }
+    else{
+      $('tr.allparams').removeClass('allparams-visible');
+      $(this).html('+');
+    }
+    
+  });
+
    $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
   $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
   $('.pure-menu').not($('.pure-menu').has('td.dlt li')).find('td.utm').has('li').css('border-left','none');
