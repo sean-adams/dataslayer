@@ -25,4 +25,4 @@ The extension options page (found in the [Chrome extensions page](chrome://exten
 
 Misc
 ----
-dataslayer relies on [Pure](http://purecss.io/) and [jQuery](http://jquery.com/).
+dataslayer was built with [Pure](http://purecss.io/) and [jQuery](http://jquery.com/).
