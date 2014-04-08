@@ -87,8 +87,8 @@ function updateUI() {
       for (var param in v.allParams)
         allParams = allParams + param + ': ' + v.allParams[param]+'\n';
 
-      if((v.reqType=='classic') && dataslayer.options.showClassic){
           therow = '<tr><td></td><td title="'+allParams+'"><u>'+v.utmac+'</u> (classic)</td></tr>';
+      if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic){
           switch(v.utmt){
             case 'event':
               var eventdata = v.utme.split(')')[0].substring(2).split('*');
@@ -283,7 +283,9 @@ function newPageLoad(newurl){
 function newRequest(request){
   var reqType = '';
   if (/__utm\.gif/i.test(request.request.url)){
-    reqType = 'classic';
+    if (/stats\.g\.doubleclick\.net/i.test(request.request.url))
+      reqType = 'dc.js';
+    else reqType = 'classic';
   }
   else if (/google-analytics\.com\/collect/i.test(request.request.url)){
     reqType = 'universal';
@@ -295,7 +297,7 @@ function newRequest(request){
 
   // parse query string into key/value pairs
   var queryParams = {};
-  if ((reqType == 'classic') || (reqType == 'universal'))
+  if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js'))
     request.request.url.split('?')[1].split('&').
                                       forEach(function(pair){
                                         pair = pair.split('=');
