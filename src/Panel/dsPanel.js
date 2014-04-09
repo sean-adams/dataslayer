@@ -7,19 +7,16 @@ dataslayer.tags = [[]];
 dataslayer.gtmIDs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
+dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true};
 
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    if (items.hasOwnProperty('showUniversal')) {
-      dataslayer.options = items;
-      // console.info('dataslayer settings loaded from chrome');
-    }
-    else{
-      dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};
-      // console.info('dataslayer settings set to default');
-    }
+    console.info('dataslayer: settings loaded');
+    dataslayer.options = items;
+    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
+      if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
+    });
   });
 
 }
@@ -29,7 +26,10 @@ function loadSettings(){
 function updateUI() {
   $('#datalayeritems').html('');
   var therow = '';
-  if (!dataslayer.options) {dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true};}
+  if (!dataslayer.options) dataslayer.options = {};
+  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
+    if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
+  });
 
   $.each(dataslayer.datalayers,function(a,dL){  //iterate each page's dataLayer
     $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul></ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul></ul></td><td class="utm"><ul></ul></td></tr></tbody></table></div>\n');

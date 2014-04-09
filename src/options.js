@@ -12,8 +12,14 @@ function loadSettings(){
 		ourKeys.push($(this).attr('id'));
 	});
 
-	chrome.storage.sync.get(ourKeys,function(items){
-		$.each(items,function(i,v){
+	chrome.storage.sync.get(null,function(items){
+		var ourItems = items;
+
+		$.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
+			if (!ourItems.hasOwnProperty(prop)) ourItems[prop] = true;  
+		});
+
+		$.each(ourItems,function(i,v){
 			$('#'+i).prop('checked',v);
 		});		
 	});
