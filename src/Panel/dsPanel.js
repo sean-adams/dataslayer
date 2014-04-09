@@ -214,6 +214,29 @@ function updateUI() {
           for (var flParam in v.allParams)
             therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
           }
+        else if ((v.reqType=='sitecatalyst') && dataslayer.options.showSitecatalyst){
+          therow = '<tr><td></td><td><u>'+v.rsid+'</u> (SiteCatalyst) <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+          if (v.pe=='lnk_o') {
+            therow = therow + '<tr><td></td><td><span><b>click event</b></td></tr>\n';
+            if (v.pev2) therow = therow + '<tr><td><b>link name</b></td><td><span>'+v.pev2+'</span></td></tr>\n';
+          }
+          if (v.pageName) therow = therow + '<tr><td><b>pageName</b></td><td><span>'+v.pageName+'</span></td></tr>\n';
+          if (v.events) therow = therow + '<tr><td><b>events</b></td><td><span>'+v.events+'</span></td></tr>\n';
+          if (v.products) therow = therow + '<tr><td><b>products</b></td><td><span>'+v.products+'</span></td></tr>\n';
+
+
+          // enumerate eVars and props
+          $.each(v.scEvars,function(cd,cdv){
+            if (cd == '0')
+              therow = therow + '<tr><td><b>campaign</b></td><td><span>'+cdv+'</span></td></tr>\n';
+            else
+            therow = therow + '<tr><td><b>eVar'+cd+'</b></td><td><span>'+cdv+'</span></td></tr>\n';
+          });
+          $.each(v.scProps,function(cm,cmv){
+            therow = therow + '<tr><td><b>prop'+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
+          });
+          
+          }
 
       if (therow !== ''){
         $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
@@ -305,40 +328,44 @@ function newRequest(request){
   else if (/\.fls\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0])){
     reqType = 'floodlight';
   }
+  else if (/\/b\/ss\//i.test(request.request.url)){
+    reqType = 'sitecatalyst';
+  }
   else return;  //break out if it's not a tag we're looking for, else...
 
   // parse query string into key/value pairs
   var queryParams = {};
-  if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js'))
+  if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js') || (reqType == 'sitecatalyst'))
     request.request.url.split('?')[1].split('&').
                                       forEach(function(pair){
                                         pair = pair.split('=');
                                         queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
                                       }
-    );
+                                      );
   else if (reqType == 'floodlight')
     request.request.url.split(';').slice(1).
                                       forEach(function(pair){
                                         pair = pair.split('=');
                                         queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
                                       }
-    );
+                                      );
   
-  var testParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
-                    'in','ip','iq','ic','iv','cu','sn','sa','st','uid',                     //UA
-                    '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
-                    'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
-                    'utmiqt','utmipc','utmiva','utmipr',                                    //classic
-                    ];
+
 
   var utmParams = {reqType:reqType,allParams:queryParams};
   
   //push params we're looking for if it's not a floodlight (we'll just show them all)
-  if (reqType != 'floodlight'){
+  if ((reqType != 'floodlight') && (reqType != 'sitecatalyst')){
+    var utmTestParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
+                  'in','ip','iq','ic','iv','cu','sn','sa','st','uid',                     //UA
+                  '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
+                  'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
+                  'utmiqt','utmipc','utmiva','utmipr',                                    //classic
+                  ];
     var utmCM = {};
     var utmCD = {};
     $.each(queryParams,function(k,v){
-        if ($.inArray(k,testParams)>=0){utmParams[k]=v;}
+        if ($.inArray(k,utmTestParams)>=0){utmParams[k]=v;}
         else if (k.substring(0,2)=='cd'){
           utmCD[k.substring(2)]=v;
         }
@@ -349,6 +376,24 @@ function newRequest(request){
     );
     if (utmCM!={}) utmParams.utmCM=utmCM;
     if (utmCD!={}) utmParams.utmCD=utmCD;
+  }
+  else if (reqType == 'sitecatalyst'){
+    utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([\w,]+))(?=\/)/)[1];
+    var scEvars = {};
+    var scProps = {};
+    var scTestParams = ['pageName','pe','events','products','pev2'];
+    $.each(queryParams,function(k,v){
+        if ($.inArray(k,scTestParams)>=0){utmParams[k]=v;}
+        else if (/v[0-9]{1,2}/i.test(k)){
+          scEvars[k.substring(1)]=v;
+        }
+        else if (/c[0-9]{1,2}/i.test(k)){
+          scProps[k.substring(1)]=v;
+        }
+      }
+    );
+    if (scEvars!={}) utmParams.scEvars=scEvars;
+    if (scProps!={}) utmParams.scProps=scProps;    
   }
 
   dataslayer.tags[dataslayer.activeIndex].push(utmParams);
