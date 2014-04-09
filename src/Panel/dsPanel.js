@@ -222,7 +222,15 @@ function updateUI() {
           }
           if (v.pageName) therow = therow + '<tr><td><b>pageName</b></td><td><span>'+v.pageName+'</span></td></tr>\n';
           if (v.events) therow = therow + '<tr><td><b>events</b></td><td><span>'+v.events+'</span></td></tr>\n';
-          if (v.products) therow = therow + '<tr><td><b>products</b></td><td><span>'+v.products+'</span></td></tr>\n';
+          if (v.products){
+            var productsArray = v.products.split(',');
+            if (productsArray.length > 1)
+              $.each(productsArray,function(productKey,productValue){
+                therow = therow + '<tr><td><b>product '+productKey+'</b></td><td><span>'+productValue+'</span></td></tr>\n';  
+              });
+            else
+              therow = therow + '<tr><td><b>product</b></td><td><span>'+v.products+'</span></td></tr>\n';
+          }
 
 
           // enumerate eVars and props
