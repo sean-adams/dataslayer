@@ -3,6 +3,7 @@ dataslayer Changelog
 
 0.7
 ---
++ totally revamped dataLayer grabbing based on the [Google Data Layer Helper Library](https://github.com/google/data-layer-helper); should fix site lag
 + parse SiteCatalyst tags
 + fixed Floodlight regex to avoid triggered subtags from being captured
 + fixed options logic
