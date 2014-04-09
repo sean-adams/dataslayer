@@ -215,7 +215,7 @@ function updateUI() {
             therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
           }
 
-      if (therow != ''){
+      if (therow !== ''){
         $('#sub'+a+' td.utm ul').prepend('<li class="event submenu dlnum'+a+'"><table cols=2>'+therow+'</table></li>\n');
         if (q<(dataslayer.tags[a].length-1)) $('#sub'+a+' td.utm ul').prepend('<li class="eventbreak submenu dlnum'+a+'"></li>\n');
       }
