@@ -302,7 +302,7 @@ function newRequest(request){
   else if (/google-analytics\.com\/collect/i.test(request.request.url)){
     reqType = 'universal';
   }
-  else if (/\.fls\.doubleclick\.net\/activity/i.test(request.request.url)){
+  else if (/\.fls\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0])){
     reqType = 'floodlight';
   }
   else return;  //break out if it's not a tag we're looking for, else...
