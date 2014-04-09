@@ -3,7 +3,9 @@ dataslayer Changelog
 
 0.7
 ---
-
++ parse SiteCatalyst tags
++ fixed Floodlight regex to avoid triggered subtags from being captured
++ fixed options logic
 
 0.6.5
 -----
