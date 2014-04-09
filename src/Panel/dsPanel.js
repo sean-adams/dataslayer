@@ -24,9 +24,9 @@ function loadSettings(){
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
 function updateUI() {
+  loadSettings();
   $('#datalayeritems').html('');
   var therow = '';
-  if (!dataslayer.options) dataslayer.options = {};
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
