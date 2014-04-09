@@ -314,6 +314,26 @@ function testDL() {
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
   loadSettings();
+  var ourPort = chrome.runtime.connect();
+  ourPort.onMessage.addListener(function(message,sender,sendResponse){
+    console.log(message);
+    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+      // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+      );
+
+    // find first GTM tag and get its ID
+    chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+      function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+      );
+    updateUI();
+
+    // $.each(message,function(messagek,messagev){
+    //   console.log(messagev);
+    // })
+  });
+
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
   dataslayer.datalayers[dataslayer.activeIndex] = [];
   dataslayer.urls[dataslayer.activeIndex] = newurl;
@@ -420,6 +440,8 @@ chrome.devtools.inspectedWindow.eval('window.location.href',
 chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
   function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
   );
+
+testDL();
 
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
