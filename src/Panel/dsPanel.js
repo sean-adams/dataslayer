@@ -410,7 +410,7 @@ function newRequest(request){
 
 
 
-setInterval(testDL,150);
+// setInterval(testDL,150);
 
 loadSettings();
 
@@ -424,3 +424,22 @@ chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googl
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
+var ourPort = chrome.runtime.connect();
+ourPort.onMessage.addListener(function(message,sender,sendResponse){
+  console.log(message);
+  dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+    // get the current URL and grab it
+  chrome.devtools.inspectedWindow.eval('window.location.href',
+    function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+    );
+
+  // find first GTM tag and get its ID
+  chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+    function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+    );
+  updateUI();
+
+  // $.each(message,function(messagek,messagev){
+  //   console.log(messagev);
+  // })
+});
