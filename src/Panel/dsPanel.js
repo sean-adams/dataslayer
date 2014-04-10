@@ -12,7 +12,7 @@ dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: tr
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    console.info('dataslayer: settings loaded');
+    // console.info('dataslayer: settings loaded');
     dataslayer.options = items;
     $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
@@ -316,17 +316,18 @@ function newPageLoad(newurl){
   loadSettings();
   var ourPort = chrome.runtime.connect();
   ourPort.onMessage.addListener(function(message,sender,sendResponse){
-    console.log(message);
+    // console.log(message);
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
     chrome.devtools.inspectedWindow.eval('window.location.href',
       function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
       );
 
+    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
     // find first GTM tag and get its ID
-    chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-      function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
-      );
+    // chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+    //   function(gtm,error){console.log(gtm+' in new page'); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+    //   );
     updateUI();
 
     // $.each(message,function(messagek,messagev){
@@ -338,7 +339,10 @@ function newPageLoad(newurl){
   dataslayer.datalayers[dataslayer.activeIndex] = [];
   dataslayer.urls[dataslayer.activeIndex] = newurl;
   dataslayer.tags[dataslayer.activeIndex] = [];
+
   updateUI();
+
+  chrome.runtime.sendMessage({type: 'newpageload',tabID:  chrome.devtools.inspectedWindow.tabId});
 }
 
 // newRequest: called on a new network request of any kind
@@ -438,7 +442,7 @@ chrome.devtools.inspectedWindow.eval('window.location.href',
   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
   );
 chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
+  function(gtm,error){console.log(gtm); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
   );
 
 testDL();
@@ -448,20 +452,24 @@ chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
 var ourPort = chrome.runtime.connect();
 ourPort.onMessage.addListener(function(message,sender,sendResponse){
-  console.log(message);
-  dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
-    // get the current URL and grab it
-  chrome.devtools.inspectedWindow.eval('window.location.href',
-    function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-    );
+  // console.log(message);
+  if (message.type=='dataslayergtm'){
+    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+      // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+      );
 
-  // find first GTM tag and get its ID
-  chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-    function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
-    );
-  updateUI();
+    // find first GTM tag and get its ID
+    // chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+    //   function(gtm,error){console.log(gtm); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
+    //   );
+    updateUI();
+  }
 
   // $.each(message,function(messagek,messagev){
   //   console.log(messagev);
   // })
 });
+

@@ -14,7 +14,7 @@
   "content_scripts": [
   {
     "matches": ["http://*/*", "https://*/*"],
-    "js": ["data-layer-helper.js","content.js"]
+    "js": ["content.js"]
     // "run_at": "document_start"
   }
   ],

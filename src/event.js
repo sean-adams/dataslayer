@@ -4,6 +4,14 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	devtoolsPort.postMessage(message);
+	// console.log(message);
+	if (message.type=='dataslayergtm') {
+		// console.info(message);
+		devtoolsPort.postMessage(message);
+	}
+	else if (message.type=='newpageload'){
+		chrome.tabs.executeScript(message.tabId,{ file: 'insert.js', runAt: "document_idle" });
+		console.log('code injected');
+	}
 });
 
