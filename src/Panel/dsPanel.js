@@ -9,6 +9,9 @@ dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true};
 
+dataslayer.port = chrome.runtime.connect();
+
+
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
@@ -314,8 +317,8 @@ function testDL() {
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
   loadSettings();
-  var ourPort = chrome.runtime.connect();
-  ourPort.onMessage.addListener(function(message,sender,sendResponse){
+  dataslayer.port = chrome.runtime.connect();
+  dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
     // console.log(message);
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
@@ -450,8 +453,8 @@ testDL();
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
-var ourPort = chrome.runtime.connect();
-ourPort.onMessage.addListener(function(message,sender,sendResponse){
+
+dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
   // console.log(message);
   if (message.type=='dataslayergtm'){
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
@@ -473,3 +476,4 @@ ourPort.onMessage.addListener(function(message,sender,sendResponse){
   // })
 });
 
+chrome.runtime.sendMessage({type: 'devtoolsopened',tabID: chrome.devtools.inspectedWindow.tabId});

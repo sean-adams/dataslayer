@@ -13,5 +13,11 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 		chrome.tabs.executeScript(message.tabId,{ file: 'insert.js', runAt: "document_idle" });
 		console.log('code injected');
 	}
+	else if (message.type=='devtoolsopened'){
+		console.log('devtools opened');
+		console.log(message);
+		chrome.tabs.executeScript(message.tabId,{ file: 'insert.js', runAt: 'document_idle' },function(results){console.log(results);});
+		console.log('code injected');
+	}	
 });
 
