@@ -1,7 +1,6 @@
 var dataslayer = {};
 dataslayer.helperListener = function(event){
-	if ((event.source == window)&&(event.data.type && (event.data.type=='dataslayergtm'))){
-		// console.info(event.data);
+	if ((event.source == window)&&(event.data.type && (event.data.type=='dataslayer_gtm'))){
 		chrome.runtime.sendMessage(event.data);
 	}
 };

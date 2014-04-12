@@ -4,20 +4,9 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	// console.log(message);
-	if (message.type=='dataslayergtm') {
-		// console.info(message);
+	if (message.type=='dataslayer_gtm')
 		devtoolsPort.postMessage(message);
-	}
-	else if (message.type=='newpageload'){
-		chrome.tabs.executeScript(message.tabId,{ file: 'insert.js', runAt: "document_idle" });
-		console.log('code injected');
-	}
-	else if (message.type=='devtoolsopened'){
-		console.log('devtools opened');
-		console.log(message);
-		chrome.tabs.executeScript(message.tabId,{ file: 'insert.js', runAt: 'document_idle' },function(results){console.log(results);});
-		console.log('code injected');
-	}	
+	else if ((message.type=='dataslayer_pageload')||(message.type=='dataslayer_opened'))
+		chrome.tabs.executeScript(message.tabID,{ file: 'insert.js', runAt: "document_idle" });
 });
 

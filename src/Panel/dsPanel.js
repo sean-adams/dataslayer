@@ -320,22 +320,23 @@ function newPageLoad(newurl){
   dataslayer.port = chrome.runtime.connect();
   dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
     // console.log(message);
-    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+    if (message.type=='dataslayer_gtm'){
+      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-      );
+      chrome.devtools.inspectedWindow.eval('window.location.href',
+        function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+        );
 
-    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
     // find first GTM tag and get its ID
     // chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
     //   function(gtm,error){console.log(gtm+' in new page'); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
     //   );
-    updateUI();
+      updateUI();
 
     // $.each(message,function(messagek,messagev){
     //   console.log(messagev);
-    // })
+    }
   });
 
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
@@ -345,7 +346,7 @@ function newPageLoad(newurl){
 
   updateUI();
 
-  chrome.runtime.sendMessage({type: 'newpageload',tabID:  chrome.devtools.inspectedWindow.tabId});
+  chrome.runtime.sendMessage({type: 'dataslayer_pageload',tabID:  chrome.devtools.inspectedWindow.tabId});
 }
 
 // newRequest: called on a new network request of any kind
@@ -455,8 +456,7 @@ chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
 
 dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
-  // console.log(message);
-  if (message.type=='dataslayergtm'){
+  if (message.type=='dataslayer_gtm'){
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
     dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
       // get the current URL and grab it
@@ -476,4 +476,4 @@ dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
   // })
 });
 
-chrome.runtime.sendMessage({type: 'devtoolsopened',tabID: chrome.devtools.inspectedWindow.tabId});
+chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
