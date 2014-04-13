@@ -126,17 +126,7 @@ function updateUI() {
             }
           if ((v.utme)&&(v.utme.indexOf('14(')>=0)) { //we have performance information
             var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
-            // var performancedatacalc = performancedata.split(')');
-            // performancedatacalc[0]=performancedatacalc[0].substring(1).split('*');
-            // performancedatacalc[1]=performancedatacalc[1].substring(1).split('*');
-            // performancedatacalc[2]=[];
-            // $.each(performancedatacalc[0],function(a,b){
-            //   if (typeof performancedatacalc[1][a] !== 'undefined'){
-            //   performancedatacalc[2][a] = performancedatacalc[1][a]-performancedatacalc[0][a];
-            //   }
-            // });
             therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
-            // therow = therow + '\n<tr><td><b>times</b></td><td><span>'+performancedatacalc[2].join('ms, ')+'ms'+'</span></td></tr>';
           }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
@@ -460,7 +450,7 @@ chrome.devtools.inspectedWindow.eval('window.location.href',
   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
   );
 chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-  function(gtm,error){console.log(gtm); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
+  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
   );
 
 testDL();
