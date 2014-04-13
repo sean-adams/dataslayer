@@ -8,5 +8,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 		devtoolsPort.postMessage(message);
 	else if ((message.type=='dataslayer_pageload')||(message.type=='dataslayer_opened'))
 		chrome.tabs.executeScript(message.tabID,{ file: 'insert.js', runAt: "document_idle" });
+	else if (message.type=='dataslayer_loadsettings')
+		devtoolsPort.postMessage(message);
 });
 

@@ -15,7 +15,6 @@ dataslayer.port = chrome.runtime.connect();
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    // console.info('dataslayer: settings loaded');
     dataslayer.options = items;
     $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
@@ -27,7 +26,7 @@ function loadSettings(){
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
 function updateUI() {
-  loadSettings();
+  // loadSettings();
   $('#datalayeritems').html('');
   var therow = '';
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
@@ -314,30 +313,30 @@ function testDL() {
   chrome.devtools.inspectedWindow.eval('dataLayer', onEval);
 }
 
+function messageListener(message,sender,sendResponse){
+  if (message.type=='dataslayer_gtm'){
+    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+    // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+      );
+
+    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+
+    updateUI();
+  }
+  else if (message.type=='dataslayer_loadsettings'){
+    // console.log(message.data);
+    for (var a in message.data) { dataslayer.options[a] = message.data[a]; }
+    updateUI();
+  }
+}
+
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
   loadSettings();
   dataslayer.port = chrome.runtime.connect();
-  dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
-    // console.log(message);
-    if (message.type=='dataslayer_gtm'){
-      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
-      // get the current URL and grab it
-      chrome.devtools.inspectedWindow.eval('window.location.href',
-        function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-        );
-
-      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
-    // find first GTM tag and get its ID
-    // chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-    //   function(gtm,error){console.log(gtm+' in new page'); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
-    //   );
-      updateUI();
-
-    // $.each(message,function(messagek,messagev){
-    //   console.log(messagev);
-    }
-  });
+  dataslayer.port.onMessage.addListener(messageListener);
 
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
   dataslayer.datalayers[dataslayer.activeIndex] = [];
@@ -437,9 +436,6 @@ function newRequest(request){
 }
 
 
-
-// setInterval(testDL,150);
-
 loadSettings();
 
 chrome.devtools.inspectedWindow.eval('window.location.href',
@@ -454,26 +450,6 @@ testDL();
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
-
-dataslayer.port.onMessage.addListener(function(message,sender,sendResponse){
-  if (message.type=='dataslayer_gtm'){
-    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
-    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
-      // get the current URL and grab it
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-      );
-
-    // find first GTM tag and get its ID
-    // chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-    //   function(gtm,error){console.log(gtm); dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
-    //   );
-    updateUI();
-  }
-
-  // $.each(message,function(messagek,messagev){
-  //   console.log(messagev);
-  // })
-});
+dataslayer.port.onMessage.addListener(messageListener);
 
 chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
