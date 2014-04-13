@@ -93,9 +93,13 @@ function updateUI() {
           therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.utmt){
             case 'event':
-              var eventdata = v.utme.split(')')[0].substring(2).split('*');
-              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
-              if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
+              if (v.utme.indexOf('5(')>=0){
+                // console.log(v.utme);
+                var eventdata = v.utme.match(/5\([^)]+(?=\))/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').substring(2).split('*'); //find events and unescape
+                $.each(eventdata,function(a,b){eventdata[a]=eventdata[a].replace(/\'2/g,'*').replace(/\'0/g,'\'');});
+                therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
+                if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
+                }
               break;
             case 'transaction':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
