@@ -325,7 +325,7 @@ function testDL() {
 }
 
 function messageListener(message,sender,sendResponse){
-  if (message.type=='dataslayer_gtm'){
+  if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
     // get the current URL and grab it
     chrome.devtools.inspectedWindow.eval('window.location.href',
