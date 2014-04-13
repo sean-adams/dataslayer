@@ -121,9 +121,23 @@ function updateUI() {
                       '</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
               break;
             default:  //pageview
-              therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';  
+              therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';
               break;
             }
+          if ((v.utme)&&(v.utme.indexOf('14(')>=0)) { //we have performance information
+            var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
+            // var performancedatacalc = performancedata.split(')');
+            // performancedatacalc[0]=performancedatacalc[0].substring(1).split('*');
+            // performancedatacalc[1]=performancedatacalc[1].substring(1).split('*');
+            // performancedatacalc[2]=[];
+            // $.each(performancedatacalc[0],function(a,b){
+            //   if (typeof performancedatacalc[1][a] !== 'undefined'){
+            //   performancedatacalc[2][a] = performancedatacalc[1][a]-performancedatacalc[0][a];
+            //   }
+            // });
+            therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
+            // therow = therow + '\n<tr><td><b>times</b></td><td><span>'+performancedatacalc[2].join('ms, ')+'ms'+'</span></td></tr>';
+          }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             
