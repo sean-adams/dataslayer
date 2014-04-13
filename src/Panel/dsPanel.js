@@ -136,47 +136,46 @@ function updateUI() {
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             
             $.each(gaCVs,function(i,d){
-              //split on * separators or ! that lets us know nothing was set or ) for the end
-              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); 
+              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^\)]+(?=[\*\)])/g); 
               }
             );
+            var newspot=0;
+            var gaCVsfixed = [{},{},{}];
+            for (var row in gaCVs[0]){
+              if (gaCVs[0][row].indexOf('!')>=0){
+                newspot = gaCVs[0][row].substring(0,gaCVs[0][row].indexOf('!'))-1;
+
+                $.each(gaCVs,function(a,b){
+                  if (b.hasOwnProperty(row)) b[row] = b[row].substring(b[row].indexOf('!')+1);
+                });
+              }
+
+              gaCVsfixed[0][newspot] = gaCVs[0][row];
+              gaCVsfixed[1][newspot] = gaCVs[1][row];
+              gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0';
+
+              newspot = newspot+1;
+            }
+
+            gaCVs = gaCVsfixed;
 
             $.each(gaCVs[0],function(i,d){
-                if (d.substring(d.length-1)=='!'){
-                  gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
-                }
-                else {
-                  gaCVs[0][i]=gaCVs[0][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'').substring(0,gaCVs[0][i].length-1);
-                  gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'').substring(0,gaCVs[1][i].length-1);
+                  gaCVs[0][i]=gaCVs[0][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
+                  gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
 
-                  //scope is optional so we may have errors with [2]
-                  try {
-                    gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
+                  therow = therow + '<tr><td><b>CV '+(parseInt(i)+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
+                  switch (String(gaCVs[2][i])){
+                    case '0': therow = therow + 'no scope-&gt; page';
+                      break;
+                    case '1': therow = therow + 'visitor scope';
+                      break;
+                    case '2': therow = therow + 'session scope';
+                      break;
+                    case '3': therow = therow + 'page scope';
+                      break;
                   }
-                  catch(error) {
-                    console.log(error);
-                    if (!gaCVs[2]) gaCVs[2] = [];
-                    if (!gaCVs[2][i]) gaCVs[2][i]='0'; //scope defaults to page, let's make this a special case
-                  }
-                  finally {
-                    therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
-                    switch (String(gaCVs[2][i])){
-                      case '0': 
-                        therow = therow + 'no scope-&gt; page';
-                        break;
-                      case '1':
-                        therow = therow + 'visitor scope';
-                        break;
-                      case '2':
-                        therow = therow + 'session scope';
-                        break;
-                      case '3':
-                        therow = therow + 'page scope';
-                        break;
-                    }
-                    therow = therow + ')</i></span></td></tr>\n';
-                  }
-                }
+                  therow = therow + ')</i></span></td></tr>\n';
+                // }
               }
             );
           }
