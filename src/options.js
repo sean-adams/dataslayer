@@ -30,4 +30,5 @@ function saveSettings(){
 		dataslayer.options[$(this).attr('id')] = $(this).prop('checked');
 	});
 	chrome.storage.sync.set(dataslayer.options);
+	chrome.runtime.sendMessage({type: 'dataslayer_loadsettings',data: dataslayer.options});
 }

@@ -10,6 +10,19 @@
 
   "devtools_page": "devtools.html",
   "options_page": "options.html",
+
+  "content_scripts": [
+  {
+    "matches": ["http://*/*", "https://*/*"],
+    "js": ["content.js"]
+    // "run_at": "document_start"
+  }
+  ],
+
+  "background": {
+    "scripts": ["event.js"],
+    "persistent": false
+  },
   
   "permissions": [ "tabs", "storage", "http://*/*", "https://*/*" ]
 }

@@ -9,10 +9,12 @@ dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true};
 
+dataslayer.port = chrome.runtime.connect();
+
+
 // loadSettings:
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
-    console.info('dataslayer: settings loaded');
     dataslayer.options = items;
     $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
@@ -24,7 +26,7 @@ function loadSettings(){
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
 function updateUI() {
-  loadSettings();
+  // loadSettings();
   $('#datalayeritems').html('');
   var therow = '';
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
@@ -91,9 +93,13 @@ function updateUI() {
           therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
           switch(v.utmt){
             case 'event':
-              var eventdata = v.utme.split(')')[0].substring(2).split('*');
-              therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
-              if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
+              if (v.utme.indexOf('5(')>=0){
+                // console.log(v.utme);
+                var eventdata = v.utme.match(/5\([^)]+(?=\))/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').substring(2).split('*'); //find events and unescape
+                $.each(eventdata,function(a,b){eventdata[a]=eventdata[a].replace(/\'2/g,'*').replace(/\'0/g,'\'');});
+                therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
+                if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
+                }
               break;
             case 'transaction':
               therow = therow + '\n<tr><td></td><td><b>transaction '+v.utmtid+'</b></td></tr>\n';
@@ -115,54 +121,61 @@ function updateUI() {
                       '</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
               break;
             default:  //pageview
-              therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';  
+              therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';
               break;
             }
+          if ((v.utme)&&(v.utme.indexOf('14(')>=0)) { //we have performance information
+            var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
+            therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
+          }
+          if ((v.utme)&&(v.utme.indexOf('12(')>=0)) { //we have in-page information
+            var inpagedata = v.utme.match(/12\([^)]+(?=\))/i)[0].substring(3).replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
+            therow = therow + '\n<tr><td><b>in-page ID</b></td><td><span>'+inpagedata+'</span></td></tr>';
+          }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             
             $.each(gaCVs,function(i,d){
-              //split on * separators or ! that lets us know nothing was set or ) for the end
-              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^.\!|^\)]+(\*|\!|\))/g); 
+              gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^\)]+(?=[\*\)])/g); 
               }
             );
+            var newspot=0;
+            var gaCVsfixed = [{},{},{}];
+            for (var row in gaCVs[0]){
+              if (gaCVs[0][row].indexOf('!')>=0){
+                newspot = gaCVs[0][row].substring(0,gaCVs[0][row].indexOf('!'))-1;
+
+                $.each(gaCVs,function(a,b){
+                  if (b.hasOwnProperty(row)) b[row] = b[row].substring(b[row].indexOf('!')+1);
+                });
+              }
+
+              gaCVsfixed[0][newspot] = gaCVs[0][row];
+              gaCVsfixed[1][newspot] = gaCVs[1][row];
+              gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0';
+
+              newspot = newspot+1;
+            }
+
+            gaCVs = gaCVsfixed;
 
             $.each(gaCVs[0],function(i,d){
-                if (d.substring(d.length-1)=='!'){
-                  gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
-                }
-                else {
-                  gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1);
-                  gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1);
+                  gaCVs[0][i]=gaCVs[0][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
+                  gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
 
-                  //scope is optional so we may have errors with [2]
-                  try {
-                    gaCVs[2][i]=gaCVs[2][i].substring(0,gaCVs[2][i].length-1);
+                  therow = therow + '<tr><td><b>CV '+(parseInt(i)+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
+                  switch (String(gaCVs[2][i])){
+                    case '0': therow = therow + 'no scope-&gt; page';
+                      break;
+                    case '1': therow = therow + 'visitor scope';
+                      break;
+                    case '2': therow = therow + 'session scope';
+                      break;
+                    case '3': therow = therow + 'page scope';
+                      break;
                   }
-                  catch(error) {
-                    console.log(error);
-                    if (!gaCVs[2]) gaCVs[2] = [];
-                    if (!gaCVs[2][i]) gaCVs[2][i]='0'; //scope defaults to page, let's make this a special case
-                  }
-                  finally {
-                    therow = therow + '<tr><td><b>CV '+(i+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
-                    switch (String(gaCVs[2][i])){
-                      case '0': 
-                        therow = therow + 'no scope-&gt; page';
-                        break;
-                      case '1':
-                        therow = therow + 'visitor scope';
-                        break;
-                      case '2':
-                        therow = therow + 'session scope';
-                        break;
-                      case '3':
-                        therow = therow + 'page scope';
-                        break;
-                    }
-                    therow = therow + ')</i></span></td></tr>\n';
-                  }
-                }
+                  therow = therow + ')</i></span></td></tr>\n';
+                // }
               }
             );
           }
@@ -311,14 +324,39 @@ function testDL() {
   chrome.devtools.inspectedWindow.eval('dataLayer', onEval);
 }
 
+function messageListener(message,sender,sendResponse){
+  if (message.type=='dataslayer_gtm'){
+    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+    // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+      );
+
+    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+
+    updateUI();
+  }
+  else if (message.type=='dataslayer_loadsettings'){
+    // console.log(message.data);
+    for (var a in message.data) { dataslayer.options[a] = message.data[a]; }
+    updateUI();
+  }
+}
+
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
   loadSettings();
+  dataslayer.port = chrome.runtime.connect();
+  dataslayer.port.onMessage.addListener(messageListener);
+
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
   dataslayer.datalayers[dataslayer.activeIndex] = [];
   dataslayer.urls[dataslayer.activeIndex] = newurl;
   dataslayer.tags[dataslayer.activeIndex] = [];
+
   updateUI();
+
+  chrome.runtime.sendMessage({type: 'dataslayer_pageload',tabID:  chrome.devtools.inspectedWindow.tabId});
 }
 
 // newRequest: called on a new network request of any kind
@@ -409,9 +447,6 @@ function newRequest(request){
 }
 
 
-
-setInterval(testDL,150);
-
 loadSettings();
 
 chrome.devtools.inspectedWindow.eval('window.location.href',
@@ -421,6 +456,11 @@ chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googl
   function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
   );
 
+testDL();
+
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
+dataslayer.port.onMessage.addListener(messageListener);
+
+chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});

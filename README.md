@@ -25,6 +25,6 @@ The extension options page (found in the [Chrome extensions page](chrome://exten
 
 Misc
 ----
-dataslayer was built with [Pure](http://purecss.io/) and [jQuery](http://jquery.com/).
+dataslayer was built with the [Google Data Layer Helper Library](https://github.com/google/data-layer-helper), [Pure](http://purecss.io/), and [jQuery](http://jquery.com/).
 
 dataslayer is under the MIT License. See LICENSE.md.
