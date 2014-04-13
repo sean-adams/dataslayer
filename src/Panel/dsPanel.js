@@ -128,6 +128,10 @@ function updateUI() {
             var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
             therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
           }
+          if ((v.utme)&&(v.utme.indexOf('12(')>=0)) { //we have in-page information
+            var inpagedata = v.utme.match(/12\([^)]+(?=\))/i)[0].substring(3);
+            therow = therow + '\n<tr><td><b>in-page ID</b></td><td><span>'+inpagedata+'</span></td></tr>';
+          }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
             var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
             
