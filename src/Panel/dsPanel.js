@@ -138,8 +138,8 @@ function updateUI() {
                   gaCVs[0][i]=''; gaCVs[1][i]=''; gaCVs[2][i]='';
                 }
                 else {
-                  gaCVs[0][i]=gaCVs[0][i].substring(0,gaCVs[0][i].length-1);
-                  gaCVs[1][i]=gaCVs[1][i].substring(0,gaCVs[1][i].length-1);
+                  gaCVs[0][i]=gaCVs[0][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'').substring(0,gaCVs[0][i].length-1);
+                  gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'').substring(0,gaCVs[1][i].length-1);
 
                   //scope is optional so we may have errors with [2]
                   try {
