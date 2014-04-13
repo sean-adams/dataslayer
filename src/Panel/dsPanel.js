@@ -129,7 +129,7 @@ function updateUI() {
             therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
           }
           if ((v.utme)&&(v.utme.indexOf('12(')>=0)) { //we have in-page information
-            var inpagedata = v.utme.match(/12\([^)]+(?=\))/i)[0].substring(3);
+            var inpagedata = v.utme.match(/12\([^)]+(?=\))/i)[0].substring(3).replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
             therow = therow + '\n<tr><td><b>in-page ID</b></td><td><span>'+inpagedata+'</span></td></tr>';
           }
           if ((v.utme)&&(v.utme.indexOf('8(')>=0)) { //we have CVs here
