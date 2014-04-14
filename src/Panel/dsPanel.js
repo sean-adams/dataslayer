@@ -429,7 +429,7 @@ function newRequest(request){
     if (utmCD!={}) utmParams.utmCD=utmCD;
   }
   else if (reqType == 'sitecatalyst'){
-    utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([\w,]+))(?=\/)/)[1];
+    utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([^\/]+))(?=\/)/)[1];
     var scEvars = {};
     var scProps = {};
     var scTestParams = ['pageName','pe','events','products','pev2'];
