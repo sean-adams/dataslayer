@@ -11,13 +11,6 @@
   "devtools_page": "devtools.html",
   "options_page": "options.html",
 
-  "content_scripts": [
-  {
-    "matches": ["http://*/*", "https://*/*"],
-    "js": ["content.js"]
-  }
-  ],
-
   "background": {
     "scripts": ["event.js"],
     "persistent": false

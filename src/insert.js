@@ -1,3 +1,4 @@
+if (document.getElementById('dataslayer_script') == null){
 var insertScript = 
 '(function(){/* jQuery v1.9.1 (c) 2005, 2012 jQuery Foundation, Inc. jquery.org/license.*/'+
 'var g=/\\[object (Boolean|Number|String|Function|Array|Date|RegExp)\\]/;function h(a){return null==a?String(a):(a=g.exec(Object.prototype.toString.call(Object(a))))?a[1].toLowerCase():"object"}function k(a,b){return Object.prototype.hasOwnProperty.call(Object(a),b)}function m(a){if(!a||"object"!=h(a)||a.nodeType||a==a.window)return!1;try{if(a.constructor&&!k(a,"constructor")&&!k(a.constructor.prototype,"isPrototypeOf"))return!1}catch(b){return!1}for(var c in a);return void 0===c||k(a,c)};/*'+
@@ -11,6 +12,7 @@ var insertScript =
 'else if ((document.readyState == \'complete\')&&(typeof window.dataLayer == \'undefined\')&&(document.querySelector(\'script[src*=googletagmanager\\\\.com]\') == null)) {console.log(\'dataslayer: giving up\'); window.clearInterval(dataslayer.timerID);}'+
 '},200);';
 dataslayers = document.createElement('script');
+dataslayers.id = 'dataslayer_script';
 dataslayers.innerHTML = insertScript;
 dataslayers.type = 'text/javascript';
-document.head.appendChild(dataslayers);
+document.head.appendChild(dataslayers);}
