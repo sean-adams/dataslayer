@@ -10,7 +10,7 @@ dataslayer Changelog
     + site speed & in-page link attribution info showing up incorrectly
 + fixed elements passed to dataLayer by GTM click listener
 + parse SiteCatalyst tags
-+ fixed Floodlight regex to avoid triggered subtags from being captured
++ fixed Floodlight regex to avoid triggered subtags being captured
 + fixed options logic
 
 0.6.5
