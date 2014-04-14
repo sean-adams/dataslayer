@@ -382,17 +382,22 @@ function newRequest(request){
   // parse query string into key/value pairs
   var queryParams = {};
   if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js') || (reqType == 'sitecatalyst'))
-    request.request.url.split('?')[1].split('&').
-                                      forEach(function(pair){
-                                        pair = pair.split('=');
-                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
-                                      }
-                                      );
+      request.request.url.split('?')[1].split('&').
+                                        forEach(function(pair){
+                                          pair = pair.split('=');
+                                          try{
+                                            queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
+                                          }
+                                          catch(e) {
+                                            console.log(e+' error with '+pair[0]+' = '+pair[1]);
+                                          }
+                                        }
+                                        );
   else if (reqType == 'floodlight')
     request.request.url.split(';').slice(1).
                                       forEach(function(pair){
                                         pair = pair.split('=');
-                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+                                        queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
                                       }
                                       );
   
