@@ -1,6 +1,11 @@
 dataslayer Changelog
 ====================
 
+0.7.5
+-----
++ added info on bug reporting in options
++ fixed SiteCatalyst detection
+
 0.7
 ---
 + totally revamped dataLayer grabbing based on the [Google Data Layer Helper Library](https://github.com/google/data-layer-helper); should fix sites that lagged from the old method
