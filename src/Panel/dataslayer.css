@@ -85,3 +85,6 @@ li td {overflow: hidden; white-space: nowrap;}
 .allparams-visible {display: table-row; font-size:75%;}
 
 .event td a {display: inline;}
+
+a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.5; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
+a.settings img:hover {opacity: 1;}

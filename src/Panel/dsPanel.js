@@ -454,6 +454,8 @@ function newRequest(request){
 
 loadSettings();
 
+$('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
+
 chrome.devtools.inspectedWindow.eval('window.location.href',
   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
   );
