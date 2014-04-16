@@ -3,8 +3,9 @@ dataslayer Changelog
 
 0.7.5
 -----
-+ added info on bug reporting in options
 + fixed SiteCatalyst detection
++ added direct link to options in panel
++ added info on bug reporting in options
 
 0.7
 ---
