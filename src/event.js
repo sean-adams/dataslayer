@@ -5,10 +5,11 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+	console.log(message);
 	if (message.type=='dataslayer_gtm'){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){
-			v.postMessage(message);
+			try{v.postMessage(message);}catch(e){console.log(e);}
 		});
 	}
 	else if ((message.type=='dataslayer_pageload')||(message.type=='dataslayer_opened')){
