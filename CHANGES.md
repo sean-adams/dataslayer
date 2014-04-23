@@ -1,8 +1,9 @@
 dataslayer Changelog
 ====================
 
-0.8
----
+0.7.9
+-----
++ fixed silent failure on DevTools disconnect
 + SiteCatalyst: capture exit links
 
 0.7.5

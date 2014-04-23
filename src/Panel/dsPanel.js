@@ -330,7 +330,7 @@ function testDL() {
 }
 
 function messageListener(message,sender,sendResponse){
-  console.log(message);
+  // console.log(message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
     // get the current URL and grab it

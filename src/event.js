@@ -5,7 +5,7 @@ chrome.runtime.onConnect.addListener(function(port){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	console.log(message);
+	// console.log(message);
 	if (message.type=='dataslayer_gtm'){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){
