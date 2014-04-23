@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.8
+---
++ SiteCatalyst: capture exit links
+
 0.7.5
 -----
 + fixed SiteCatalyst detection
