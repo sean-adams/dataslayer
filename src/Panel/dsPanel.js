@@ -25,8 +25,9 @@ function loadSettings(){
 
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
-function updateUI() {
-  // loadSettings();
+// accepts *section* as 'datalayer'|'tags'|'all'(default)
+function updateUI(section) {
+  section = section || 'all';
   $('#datalayeritems').html('');
   var therow = '';
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
