@@ -234,6 +234,11 @@ function updateUI(section) {
             therow = therow + '<tr><td></td><td><span><b>click event</b></td></tr>\n';
             if (v.pev2) therow = therow + '<tr><td><b>link name</b></td><td><span>'+v.pev2+'</span></td></tr>\n';
           }
+          else if (v.pe=='lnk_e') {
+            therow = therow + '<tr><td></td><td><span><b>exit link</b></td></tr>\n';
+            if (v.pev2) therow = therow + '<tr><td><b>link name</b></td><td><span>'+v.pev2+'</span></td></tr>\n';
+            if (v.pev1) therow = therow + '<tr><td><b>link url</b></td><td><span>'+v.pev1+'</span></td></tr>\n';
+          }
           if (v.pageName) therow = therow + '<tr><td><b>pageName</b></td><td><span>'+v.pageName+'</span></td></tr>\n';
           if (v.events) therow = therow + '<tr><td><b>events</b></td><td><span>'+v.events+'</span></td></tr>\n';
           if (v.products){
@@ -326,6 +331,7 @@ function testDL() {
 }
 
 function messageListener(message,sender,sendResponse){
+  // console.log(message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
     // get the current URL and grab it
@@ -433,7 +439,7 @@ function newRequest(request){
     utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([^\/]+))(?=\/)/)[1];
     var scEvars = {};
     var scProps = {};
-    var scTestParams = ['pageName','pe','events','products','pev2'];
+    var scTestParams = ['pageName','pe','events','products','pev2','pev1'];
     $.each(queryParams,function(k,v){
         if ($.inArray(k,scTestParams)>=0){utmParams[k]=v;}
         else if (/v[0-9]{1,2}/i.test(k)){
