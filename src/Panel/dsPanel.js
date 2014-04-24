@@ -408,7 +408,7 @@ function newRequest(request){
   //push params we're looking for if it's not a floodlight (we'll just show them all)
   if ((reqType != 'floodlight') && (reqType != 'sitecatalyst')){
     var utmTestParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
-                  'in','ip','iq','ic','iv','cu','sn','sa','st','uid',                     //UA
+                  'in','ip','iq','ic','iv','cu','sn','sa','st','uid','linkid',                    //UA
                   '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
                   'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
                   'utmiqt','utmipc','utmiva','utmipr',                                    //classic
