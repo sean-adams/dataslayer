@@ -3,7 +3,7 @@
 
   "name": "dataslayer",
   "description": "Debug and test Google Tag Manager and Google Analytics implementations.",
-  "version": "0.7.9",
+  "version": "0.8.0",
   "short_name": "dataslayer",
 
   "icons":{"48":"i48.png","128":"i128.png"},
