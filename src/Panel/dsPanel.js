@@ -153,7 +153,12 @@ function updateUI(section) {
 
               gaCVsfixed[0][newspot] = gaCVs[0][row];
               gaCVsfixed[1][newspot] = gaCVs[1][row];
-              gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0';
+              try{
+              gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? (typeof gaCVs[2][row] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0') : '0';
+              }
+              catch(err){
+                console.log(err+' @'+newspot);
+              }
 
               newspot = newspot+1;
             }
