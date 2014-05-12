@@ -394,22 +394,34 @@ function newRequest(request){
   }
   else return;  //break out if it's not a tag we're looking for, else...
 
+  var requestURI;
+
+  if (request.request.method=='GET'){
+    requestURI = (reqType=='floodlight') ? request.request.url : request.request.url.split('?')[1];
+  }
+  else if (request.request.method=='POST') {
+    requestURI = request.request.postData.text;
+    console.log(requestURI);
+  }
+
   // parse query string into key/value pairs
   var queryParams = {};
   if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js') || (reqType == 'sitecatalyst'))
-      request.request.url.split('?')[1].split('&').
-                                        forEach(function(pair){
-                                          pair = pair.split('=');
-                                          try{
-                                            queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
-                                          }
-                                          catch(e) {
-                                            console.log(e+' error with '+pair[0]+' = '+pair[1]);
-                                          }
-                                        }
-                                        );
+      {try{requestURI.split('&').
+                                                    forEach(function(pair){
+                                                      pair = pair.split('=');
+                                                      try{
+                                                        queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
+                                                      }
+                                                      catch(e) {
+                                                        console.log(e+' error with '+pair[0]+' = '+pair[1]);
+                                                      }
+                                                    }
+                                                    );
+                                                  }
+                                                  catch(e){console.log('error '+e+' with url '+request.request.url);}}
   else if (reqType == 'floodlight')
-    request.request.url.split(';').slice(1).
+    requestURI.split(';').slice(1).
                                       forEach(function(pair){
                                         pair = pair.split('=');
                                         queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
