@@ -163,6 +163,23 @@ function updateUI(section) {
               newspot = newspot+1;
             }
 
+            newspot = 0;
+            for (var row in gaCVs[2]){
+              if (gaCVs[2][row].indexOf('!')>=0){
+                newspot = gaCVs[2][row].substring(0,gaCVs[2][row].indexOf('!'))-1;
+                for (i=0;i<newspot;i++){gaCVsfixed[2][i]='0';}
+                gaCVs[2][row] = gaCVs[2][row].substring(gaCVs[2][row].indexOf('!')+1);
+              }
+              try{
+              gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? (typeof gaCVs[2][row] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0') : '0';
+              }
+              catch(err){
+                console.log(err+' @ CV '+newspot);
+              }
+
+              newspot = newspot+1;
+            }
+
             gaCVs = gaCVsfixed;
 
             $.each(gaCVs[0],function(i,d){
