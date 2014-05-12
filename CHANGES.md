@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.7.12
+------
++ fixed breaking with odd CV scope sets
+
 0.7.9
 -----
 + fixed silent failure on DevTools disconnect
