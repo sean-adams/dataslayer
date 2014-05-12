@@ -4,6 +4,7 @@ dataslayer Changelog
 0.7.12
 ------
 + fixed breaking with odd CV scope sets
++ parse Universal Analytics content groupings
 + handle Universal Analytics POST requests
 
 0.7.9
