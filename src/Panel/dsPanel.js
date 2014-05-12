@@ -157,7 +157,7 @@ function updateUI(section) {
               gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? (typeof gaCVs[2][row] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0') : '0';
               }
               catch(err){
-                console.log(err+' @'+newspot);
+                console.log(err+' @ CV '+newspot);
               }
 
               newspot = newspot+1;
@@ -225,6 +225,9 @@ function updateUI(section) {
           });
           $.each(v.utmCM,function(cm,cmv){
             therow = therow + '<tr><td><b>CM '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
+          });
+          $.each(v.utmCG,function(cm,cmv){
+            therow = therow + '<tr><td><b>CG '+cm+'</b></td><td><span>'+cmv+'</span></td></tr>\n';
           });
           
           }
@@ -427,6 +430,7 @@ function newRequest(request){
                   ];
     var utmCM = {};
     var utmCD = {};
+    var utmCG = {};
     $.each(queryParams,function(k,v){
         if ($.inArray(k,utmTestParams)>=0){utmParams[k]=v;}
         else if (k.substring(0,2)=='cd'){
@@ -435,10 +439,14 @@ function newRequest(request){
         else if (k.substring(0,2)=='cm'){
           utmCM[k.substring(2)]=v;
         }
+        else if (k.substring(0,2)=='cg'){
+          utmCG[k.substring(2)]=v;
+        }
       }
     );
     if (utmCM!={}) utmParams.utmCM=utmCM;
     if (utmCD!={}) utmParams.utmCD=utmCD;
+    if (utmCG!={}) utmParams.utmCG=utmCG;
   }
   else if (reqType == 'sitecatalyst'){
     utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([^\/]+))(?=\/)/)[1];
