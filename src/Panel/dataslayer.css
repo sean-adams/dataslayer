@@ -5,7 +5,7 @@ table {font-size:1em;}
 
 .pure-menu a { transition: all 0.2s; -webkit-transition: all 0.2s; white-space: normal; padding: 0px;}
 
-.pure-menu li a {padding-left: 0px !important; padding-right: 30px !important; cursor: pointer !important;}
+.pure-menu li a { padding-right: 30px; cursor: pointer !important;}
 .pure-menu.pure-menu-open, .pure-menu.pure-menu-horizontal li .pure-menu-children {  background: white;}
 .pure-menu-heading { font-weight: bold; border-bottom: none !important; text-transform: none !important; cursor: default !important; background: white !important; }
 
@@ -42,7 +42,8 @@ li.submenu-hidden.eventbreak {border:0;}
 ul li table {margin-left: 30px;}
 ul li table td {padding-right: 30px;}
 
-.pure-menu-open>ul {border: 1px blue !important; margin-left: 20px !important; overflow:hidden;}
+.pure-menu-open>ul {border: 1px blue !important; overflow:hidden;}
+.pure-menu-open>ul>a.newpage {padding-left: 20px !important;}
 
 .pure-menu { margin: 20px;}
 
@@ -88,3 +89,5 @@ li td {overflow: hidden; white-space: nowrap;}
 
 a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.5; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
 a.settings img:hover {opacity: 1;}
+
+a.toggle { padding: 0 5 0 5 !important;}
