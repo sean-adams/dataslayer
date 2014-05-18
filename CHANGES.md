@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.8.0
+-----
++ improved UI performance
+
 0.7.12
 ------
 + fixed breaking with odd CV scope sets
