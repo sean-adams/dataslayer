@@ -430,24 +430,22 @@ function updateUI(pageIndex,type) {
 function testDL() {
   function onEval(result, isException) {
     if (result) {
-      if (JSON.stringify(dataslayer.datalayers[dataslayer.activeIndex])!=JSON.stringify(result)){
         dataslayer.datalayers[dataslayer.activeIndex]=result;
-
-        // get the current URL and grab it
-        chrome.devtools.inspectedWindow.eval('window.location.href',
-          function(url,error){
-            dataslayer.urls[dataslayer.activeIndex]=url;
-            // find first GTM tag and get its ID
-            chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-              function(gtm,error){
-                dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;
-                updateUI();
-              }
-              );
+    }
+    // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){
+        dataslayer.urls[dataslayer.activeIndex]=url;
+        // find first GTM tag and get its ID
+        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+          function(gtm,error){
+            if (!error)
+              dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;
+            updateUI();
           }
         );
       }
-    }
+    );
   }
   chrome.devtools.inspectedWindow.eval('dataLayer', onEval);
 }
