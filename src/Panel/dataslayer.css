@@ -64,7 +64,7 @@ visibility: visible !important;
 td.utm, td.dlt {vertical-align:top !important;}
 /*td.dlt ul li {border-right: 1px dashed black;}*/
 
-li.newpage:after,td>span:after {
+li.newpage:not(.options):after,td>span:after {
 content: '';
 position: absolute;
 top: 0;
@@ -91,3 +91,8 @@ a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.5; -webkit-tra
 a.settings img:hover {opacity: 1;}
 
 a.toggle { padding: 0 5 0 5 !important;}
+
+a.currentpage.newpage.options {cursor: default !important;}
+li.options { background: #eee;}
+
+label {cursor: pointer;}
