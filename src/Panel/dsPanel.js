@@ -416,14 +416,17 @@ function testDL() {
 
         // get the current URL and grab it
         chrome.devtools.inspectedWindow.eval('window.location.href',
-          function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-          );
-
-        // find first GTM tag and get its ID
-        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-          function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;}
-          );
-        updateUI();
+          function(url,error){
+            dataslayer.urls[dataslayer.activeIndex]=url;
+            // find first GTM tag and get its ID
+            chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+              function(gtm,error){
+                dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;
+                updateUI();
+              }
+              );
+          }
+        );
       }
     }
   }
@@ -580,12 +583,12 @@ loadSettings();
 
 $('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
 
-chrome.devtools.inspectedWindow.eval('window.location.href',
-  function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
-  );
-chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-  function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
-  );
+// chrome.devtools.inspectedWindow.eval('window.location.href',
+//   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
+//   );
+// chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
+//   function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
+//   );
 
 testDL();
 
