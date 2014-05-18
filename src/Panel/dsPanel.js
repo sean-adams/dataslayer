@@ -24,10 +24,12 @@ function loadSettings(){
 }
 
 
-
-
-function parseUniversal(v,allParams,a,q){
-  var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+// parseUniversal:
+// - v: tag object
+// - allParams: HTML version of all params
+// - ref: pageindex_tagindex e.g '2_3'
+function parseUniversal(v,allParams,ref){
+  var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   switch(v.t) {  // what type of hit is it?
     case 'event':
       therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
@@ -76,8 +78,12 @@ function parseUniversal(v,allParams,a,q){
 
 }
 
-function parseSiteCatalyst(v,allParams,a,q){
-  var therow = '<tr><td></td><td><u>'+v.rsid+'</u> (SiteCatalyst) <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+// parseSiteCatalyst:
+// - v: tag object
+// - allParams: HTML version of all params
+// - ref: pageindex_tagindex e.g '2_3'
+function parseSiteCatalyst(v,allParams,ref){
+  var therow = '<tr><td></td><td><u>'+v.rsid+'</u> (SiteCatalyst) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   if (v.pe=='lnk_o') {
     therow = therow + '<tr><td></td><td><span><b>click event</b></td></tr>\n';
     if (v.pev2) therow = therow + '<tr><td><b>link name</b></td><td><span>'+v.pev2+'</span></td></tr>\n';
@@ -114,8 +120,12 @@ function parseSiteCatalyst(v,allParams,a,q){
   return therow;
 }
 
-function parseClassic(v,allParams,a,q){
-  var therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + a + '_' + q + '">+</a></td></tr>\n'+allParams;
+// parseClassic:
+// - v: tag object
+// - allParams: HTML version of all params
+// - ref: pageindex_tagindex e.g '2_3'
+function parseClassic(v,allParams,ref){
+  var therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   switch(v.utmt){
     case 'event':
       if (v.utme.indexOf('5(')>=0){
@@ -232,7 +242,9 @@ function parseClassic(v,allParams,a,q){
   return therow;
 }
 
-function parseFloodlight(v,allParams,index,q){
+// parseFloodlight:
+// - v: tag object
+function parseFloodlight(v){
   var therow = '<tr><td></td><td><u>Floodlight</u></td></tr>';
   for (var flParam in v.allParams)
     therow = therow + '\n<tr><td><b>'+flParam+'</b></td><td><span>'+v.allParams[flParam]+'</span></td></tr>';
@@ -240,9 +252,9 @@ function parseFloodlight(v,allParams,index,q){
 }
 
 
-//datalayerHTML
-//index: index of dataslayer.datalayers
-//returns contents of td.dlt > ul
+// datalayerHTML
+// - index: index of dataslayer.datalayers
+// returns contents of td.dlt > ul
 function datalayerHTML(index) {
   var allrows = '';
 
@@ -286,9 +298,9 @@ function datalayerHTML(index) {
   return allrows;
 }
 
-//tagHTML
-//index: index of dataslayer.tags
-//returns contents of td.utm > ul
+// tagHTML:
+// - index: index of dataslayer.tags
+// returns contents of td.utm > ul
 function tagHTML(index){
   var allrows = '';
   $.each(dataslayer.tags[index],function(q,v){
@@ -299,13 +311,13 @@ function tagHTML(index){
       allParams = allParams + '<tr class="allparams allparams' + index + '_' + q + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
 
     if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic)
-        therow = parseClassic(v,allParams,index,q);
+        therow = parseClassic(v,allParams,index + '_' + q);
     else if ((v.reqType=='universal') && dataslayer.options.showUniversal)
-        therow = parseUniversal(v,allParams,index,q);
+        therow = parseUniversal(v,allParams,index + '_' + q);
     else if ((v.reqType=='floodlight') && dataslayer.options.showFloodlight)
-        therow = parseFloodlight(v,allParams,index,q);
+        therow = parseFloodlight(v);
     else if ((v.reqType=='sitecatalyst') && dataslayer.options.showSitecatalyst)
-        therow = parseSiteCatalyst(v,allParams,index,q);
+        therow = parseSiteCatalyst(v,allParams,index + '_' + q);
     else
         return;  
 
@@ -320,17 +332,23 @@ return allrows;
 
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
-// accepts *pageIndex* as index or -1 (default, refresh all)
-function updateUI(pageIndex) {
+// - pageIndex: page index or -1 (default: -1)
+// - type: datalayer|tag|all (default: all)
+function updateUI(pageIndex,type) {
+  console.log('updateUI');
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
 
   pageIndex = pageIndex || -1;
+  type = type || 'all';
+
   if (pageIndex > -1){
     if ($('#sub'+pageIndex).length>0){
-      $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(pageIndex));
-      $('#sub'+pageIndex+'>table td.utm>ul').html(tagHTML(pageIndex));
+      if (type!=='tag')
+        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(pageIndex));
+      if (type!=='datalayer')
+        $('#sub'+pageIndex+'>table td.utm>ul').html(tagHTML(pageIndex));
     }
     else{
         $('#datalayeritems').prepend('<div id="sub'+pageIndex+'" class="pure-menu pure-menu-open"><ul>'+
@@ -427,7 +445,7 @@ function messageListener(message,sender,sendResponse){
 
     dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
 
-    updateUI(dataslayer.activeIndex);
+    updateUI(dataslayer.activeIndex,'datalayer');
   }
   else if (message.type=='dataslayer_loadsettings'){
     // console.log(message.data);
@@ -558,7 +576,7 @@ function newRequest(request){
   }
 
   dataslayer.tags[dataslayer.activeIndex].push(utmParams);
-  updateUI(dataslayer.activeIndex);
+  updateUI(dataslayer.activeIndex,'tag');
 }
 
 
