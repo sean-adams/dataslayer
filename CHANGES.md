@@ -4,6 +4,7 @@ dataslayer Changelog
 0.8.0
 -----
 + improved UI performance
++ added option to display dataLayer presence in the panel (and removed content console logging)
 
 0.7.12
 ------
