@@ -39,7 +39,9 @@ function parseUniversal(v,allParams,a,q){
       therow = therow + '\n<tr><td><b>' + (v.dp ? 'path' : 'url') + '</b></td><td><span>' + (v.dp ? v.dp : v.dl) + '</span></td></tr>';
       break;
     case 'social':
-      therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.sn+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.sa+'</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.st+'</span></td></tr>';
+      therow = therow + '\n<tr><td><b>network</b></td><td><span>'+v.sn+
+        '</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.sa+
+        '</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.st+'</span></td></tr>';
       break;
     case 'transaction':
       if(!v.cu) v.cu='';  // if no currency code set, blank it for display purposes
@@ -120,7 +122,9 @@ function parseClassic(v,allParams,a,q){
         // console.log(v.utme);
         var eventdata = v.utme.match(/5\([^)]+(?=\))/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').substring(2).split('*'); //find events and unescape
         $.each(eventdata,function(a,b){eventdata[a]=eventdata[a].replace(/\'2/g,'*').replace(/\'0/g,'\'');});
-        therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+'</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+'</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
+        therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+
+          '</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+
+          '</span></td></tr>\n<tr><td><b>label</b></td><td><span>'+eventdata[2]+'</span></td></tr>';  
         if (eventdata[3]) therow = therow + '\n<tr><td><b>value</b></td><td>'+eventdata[3]+'</td></tr>';
         }
       break;
@@ -276,7 +280,8 @@ function datalayerHTML(index) {
     allrows = therow + allrows;
   });
 
-  if(dataslayer.gtmIDs[index])        allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[index]+'</u></td></tr></table></li>\n' + allrows;
+  if(dataslayer.gtmIDs[index])
+    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[index]+'</u></td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
