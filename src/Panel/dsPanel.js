@@ -371,7 +371,6 @@ function updateUI(pageIndex,type) {
   // click setup and various cleanup
   for (var i=0;i<dataslayer.datalayers.length-1;i++){
       if (!$('.dlnum'+i).hasClass('clicked-open')) $('.dlnum'+i).addClass('submenu-hidden');
-      // $('.dlnum'+i).removeClass('submenu');
       $('.page'+i).removeClass('currentpage');
     }
 
@@ -389,8 +388,6 @@ function updateUI(pageIndex,type) {
 
   $('a.toggle').on('click.dataslayer',function(){
     if($(this).html()=='+'){
-      // $('tr.allparams').removeClass('allparams-visible');
-      // $('a.toggle').html('+');
       $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
       $(this).html('-');
     }
@@ -404,7 +401,6 @@ function updateUI(pageIndex,type) {
   $('a.newpage').on('click.dataslayer',function(){
       $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
       $('.dlnum'+$(this).data('dlnum')).toggleClass('clicked-open');
-      // $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu');
     }
   );
   // end click setup and various cleanup
