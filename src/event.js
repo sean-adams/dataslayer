@@ -1,11 +1,9 @@
 var devtoolsPort = [];
 chrome.runtime.onConnect.addListener(function(port){
-	// port.onDisconnect.addListener(function(port){devtoolsPort.splice(devtoolsPort.indexOf(port),1);});
 	devtoolsPort.push(port);
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	// console.log(message);
 	if (message.type=='dataslayer_gtm'){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){

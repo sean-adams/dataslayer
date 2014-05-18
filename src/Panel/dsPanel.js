@@ -7,7 +7,8 @@ dataslayer.tags = [[]];
 dataslayer.gtmIDs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true};
+dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true};
+dataslayer.loading = false;
 
 dataslayer.port = chrome.runtime.connect();
 
@@ -16,7 +17,7 @@ dataslayer.port = chrome.runtime.connect();
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
     dataslayer.options = items;
-    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
+    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
   });
@@ -336,7 +337,7 @@ return allrows;
 // - type: datalayer|tag|all (default: all)
 function updateUI(pageIndex,type) {
   console.log('updateUI');
-  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst'],function(i,prop){
+  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
 
@@ -355,6 +356,15 @@ function updateUI(pageIndex,type) {
         '<li class="newpage" data-dlnum="'+pageIndex+'"><a class="newpage page'+pageIndex+' currentpage" data-dlnum="'+pageIndex+'">'+dataslayer.urls[pageIndex]+'</a></li>\n'+
         '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(pageIndex)+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(pageIndex)+'</ul></td></tr></tbody></table></div>\n');
+        if (dataslayer.options.showGTMLoad){
+          if (dataslayer.datalayers[pageIndex].length>0)
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+          else if (dataslayer.loading)
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM');
+          else
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
+          }
+        
     }
   }
   if (pageIndex === -1) {  //refresh all
@@ -365,6 +375,15 @@ function updateUI(pageIndex,type) {
         '<li class="newpage" data-dlnum="'+a+'"><a class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n'+
         '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(a)+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
+
+        if (dataslayer.options.showGTMLoad){
+          if (dataslayer.datalayers[a].length>0)
+            $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+          else if (dataslayer.loading)
+            $('#sub'+a+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM');
+          else
+            $('#sub'+a+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
+          }
     });
   } //end refresh all
 
@@ -436,15 +455,30 @@ function testDL() {
 function messageListener(message,sender,sendResponse){
   // console.log(message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
-    // get the current URL and grab it
     chrome.devtools.inspectedWindow.eval('window.location.href',
       function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
       );
 
-    dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+    if (message.data=='notfound'){
+      dataslayer.loading = false;
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
+      
+    }
+    else if (message.data=='found'){
+      dataslayer.loading = false;
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
+      
+    }
+    else{   
+      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+      // get the current URL and grab it
+      
+      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
 
-    updateUI(dataslayer.activeIndex,'datalayer');
+      updateUI(dataslayer.activeIndex,'datalayer');
+    }
   }
   else if (message.type=='dataslayer_loadsettings'){
     // console.log(message.data);
@@ -455,6 +489,7 @@ function messageListener(message,sender,sendResponse){
 
 // newPageLoad: called when user navigates to a new page 
 function newPageLoad(newurl){
+  dataslayer.loading = true;
   loadSettings();
   dataslayer.port = chrome.runtime.connect();
   dataslayer.port.onMessage.addListener(messageListener);
@@ -466,7 +501,7 @@ function newPageLoad(newurl){
 
   updateUI(dataslayer.activeIndex);
 
-  chrome.runtime.sendMessage({type: 'dataslayer_pageload',tabID:  chrome.devtools.inspectedWindow.tabId});
+  chrome.runtime.sendMessage({type: 'dataslayer_pageload',tabID: chrome.devtools.inspectedWindow.tabId});
 }
 
 // newRequest: called on a new network request of any kind

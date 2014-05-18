@@ -75,6 +75,42 @@ pointer-events: none;
 background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255, 1) 100%);
 }
 
+li.newpage.hasGTM:before{
+	content: '\2713';
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-top:5px;
+	padding-left:5px;
+	height: 100%;
+	pointer-events: none;
+	color: rgba(0, 128, 0, 0.5);
+}
+
+li.newpage.noGTM:before{
+	content: '\2717';
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-top:5px;
+	padding-left:5px;
+	height: 100%;
+	pointer-events: none;
+	color: rgba(255, 0, 0, 0.5);
+}
+
+li.newpage.seeking:before{
+	content:url('loader.gif');
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-top:6px;
+	padding-left:2px;
+	height: 100%;
+	pointer-events: none;
+	color: white;
+}
+
 .pure-menu a, .pure-menu .pure-menu-heading {line-height: normal !important;}
 
 /*li.event tr>td:first-child {text-align: right;}*/
@@ -95,4 +131,7 @@ a.toggle { padding: 0 5 0 5 !important;}
 a.currentpage.newpage.options {cursor: default !important;}
 li.options { background: #eee;}
 
-label {cursor: pointer;}
+label.pure-checkbox {
+	cursor: pointer;
+	margin-bottom: 0 !important;
+}

@@ -8,8 +8,8 @@ var insertScript =
 'function p(a){return{set:function(b,c){s(t(b,c),a.a)},get:function(b){return a.get(b)}}}function t(a,b){for(var c={},d=c,e=a.split("."),f=0;f<e.length-1;f++)d=d[e[f]]={};d[e[e.length-1]]=b;return c}function s(a,b){for(var c in a)if(k(a,c)){var d=a[c];"array"==h(d)?("array"==h(b[c])||(b[c]=[]),s(d,b[c])):m(d)?(m(b[c])||(b[c]={}),s(d,b[c])):b[c]=d}};})();'+
 'var dataslayer = {}; dataslayer.helperListener = function (message,model){var localDL=window.dataLayer; for(var ddl in localDL) {for (var ddel in localDL[ddl]) {if (localDL[ddl][ddel] instanceof Element) localDL[ddl][ddel]="<i>element</i>";} } var poster = {type: \'dataslayer_gtm\',gtmID: document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/), data: JSON.stringify(localDL)}; window.postMessage(poster,"*");};'+
 'dataslayer.timerID = window.setInterval(function(){'+
-'if (typeof window.dataLayer !== \'undefined\') {     console.log(\'dataslayer: dataLayer found\'); dataslayer.helper = new DataLayerHelper(window.dataLayer,dataslayer.helperListener,true);      window.clearInterval(dataslayer.timerID);  }'+
-'else if ((document.readyState == \'complete\')&&(typeof window.dataLayer == \'undefined\')&&(document.querySelector(\'script[src*=googletagmanager\\\\.com]\') == null)) {console.log(\'dataslayer: no dataLayer found\'); window.clearInterval(dataslayer.timerID);}'+
+'if (typeof window.dataLayer !== \'undefined\') { window.postMessage({type: \'dataslayer_gtm\',data: \'found\'},"*"); dataslayer.helper = new DataLayerHelper(window.dataLayer,dataslayer.helperListener,true);      window.clearInterval(dataslayer.timerID);  }'+
+'else if ((document.readyState == \'complete\')&&(typeof window.dataLayer == \'undefined\')&&(document.querySelector(\'script[src*=googletagmanager\\\\.com]\') == null)) { window.postMessage({type: \'dataslayer_gtm\',data: \'notfound\'},"*"); window.clearInterval(dataslayer.timerID);}'+
 '},200);';
 dataslayers = document.createElement('script');
 dataslayers.id = 'dataslayer_script';
