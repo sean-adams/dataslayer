@@ -5,6 +5,7 @@ dataslayer Changelog
 -----
 + improved UI performance
 + added option to display dataLayer presence in the panel (and removed content console logging)
++ click open/close is now persistent
 
 0.7.12
 ------
