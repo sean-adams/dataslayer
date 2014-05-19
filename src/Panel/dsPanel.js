@@ -370,6 +370,7 @@ function updateUI(pageIndex,type) {
         else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
         
     }
+    $('#sub'+pageIndex+'.clicked-closed .dlnum'+pageIndex).addClass('submenu-hidden');
   }
   else if (pageIndex === -1) {  //refresh all
     $('#datalayeritems').html('');
@@ -394,7 +395,7 @@ function updateUI(pageIndex,type) {
 
   // click setup and various cleanup
   for (var i=0;i<dataslayer.datalayers.length-1;i++){
-      if (!$('.dlnum'+i).hasClass('clicked-open')) $('.dlnum'+i).addClass('submenu-hidden');
+      $('#sub'+i+':not(.clicked-open) .dlnum'+i).addClass('submenu-hidden');
       $('.page'+i).removeClass('currentpage');
     }
 
@@ -424,7 +425,9 @@ function updateUI(pageIndex,type) {
   $('a.newpage').off('click.dataslayer');
   $('a.newpage').on('click.dataslayer',function(){
       $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
-      $('.dlnum'+$(this).data('dlnum')).toggleClass('clicked-open');
+      $('#sub'+$(this).data('dlnum')).addClass('clicked');
+      if ($('.dlnum'+$(this).data('dlnum')).hasClass('submenu-hidden')) $('#sub'+$(this).data('dlnum')).addClass('clicked-closed').removeClass('clicked-open');
+      else $('#sub'+$(this).data('dlnum')).addClass('clicked-open').removeClass('clicked-closed');
     }
   );
   // end click setup and various cleanup
