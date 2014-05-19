@@ -340,12 +340,11 @@ return allrows;
 // - pageIndex: page index or -1 (default: -1)
 // - type: datalayer|tag|all (default: all)
 function updateUI(pageIndex,type) {
-  console.log('updateUI');
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
 
-  pageIndex = pageIndex || -1;
+  if (pageIndex !== 0) pageIndex = pageIndex || -1;
   type = type || 'all';
 
   if (pageIndex > -1){
@@ -372,7 +371,7 @@ function updateUI(pageIndex,type) {
         
     }
   }
-  if (pageIndex === -1) {  //refresh all
+  else if (pageIndex === -1) {  //refresh all
     $('#datalayeritems').html('');
 
     $.each(dataslayer.datalayers,function(a,dL){  //iterate each page's dataLayer
