@@ -27,9 +27,11 @@ function loadSettings(){
 
 // parseUniversal:
 // - v: tag object
-// - allParams: HTML version of all params
 // - ref: pageindex_tagindex e.g '2_3'
-function parseUniversal(v,allParams,ref){
+function parseUniversal(v,ref){
+  var allParams = '';
+  for (var param in v.allParams)
+    allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
   var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   switch(v.t) {  // what type of hit is it?
     case 'event':
@@ -81,9 +83,11 @@ function parseUniversal(v,allParams,ref){
 
 // parseSiteCatalyst:
 // - v: tag object
-// - allParams: HTML version of all params
 // - ref: pageindex_tagindex e.g '2_3'
-function parseSiteCatalyst(v,allParams,ref){
+function parseSiteCatalyst(v,ref){
+  var allParams = '';
+  for (var param in v.allParams)
+    allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
   var therow = '<tr><td></td><td><u>'+v.rsid+'</u> (SiteCatalyst) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   if (v.pe=='lnk_o') {
     therow = therow + '<tr><td></td><td><span><b>click event</b></td></tr>\n';
@@ -123,9 +127,11 @@ function parseSiteCatalyst(v,allParams,ref){
 
 // parseClassic:
 // - v: tag object
-// - allParams: HTML version of all params
 // - ref: pageindex_tagindex e.g '2_3'
-function parseClassic(v,allParams,ref){
+function parseClassic(v,ref){
+  var allParams = '';
+  for (var param in v.allParams)
+    allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
   var therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
   switch(v.utmt){
     case 'event':
@@ -307,18 +313,16 @@ function tagHTML(index){
   $.each(dataslayer.tags[index],function(q,v){
     var therow = '';
 
-    var allParams = '';
-    for (var param in v.allParams)
-      allParams = allParams + '<tr class="allparams allparams' + index + '_' + q + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
+    
 
     if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic)
-        therow = parseClassic(v,allParams,index + '_' + q);
+        therow = parseClassic(v,index + '_' + q);
     else if ((v.reqType=='universal') && dataslayer.options.showUniversal)
-        therow = parseUniversal(v,allParams,index + '_' + q);
+        therow = parseUniversal(v,index + '_' + q);
     else if ((v.reqType=='floodlight') && dataslayer.options.showFloodlight)
         therow = parseFloodlight(v);
     else if ((v.reqType=='sitecatalyst') && dataslayer.options.showSitecatalyst)
-        therow = parseSiteCatalyst(v,allParams,index + '_' + q);
+        therow = parseSiteCatalyst(v,index + '_' + q);
     else
         return;  
 
