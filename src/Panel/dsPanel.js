@@ -364,6 +364,7 @@ function updateUI(pageIndex,type) {
           else
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
           }
+        else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
         
     }
   }
@@ -384,6 +385,7 @@ function updateUI(pageIndex,type) {
           else
             $('#sub'+a+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
           }
+        else $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
     });
   } //end refresh all
 
@@ -461,12 +463,16 @@ function messageListener(message,sender,sendResponse){
       dataslayer.loading = false;
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
       
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
       
     }
     else{   
