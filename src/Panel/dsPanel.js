@@ -551,7 +551,7 @@ function newRequest(request){
                                                     forEach(function(pair){
                                                       pair = pair.split('=');
                                                       try{
-                                                        queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
+                                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
                                                       }
                                                       catch(e) {
                                                         console.log(e+' error with '+pair[0]+' = '+pair[1]);
@@ -564,7 +564,7 @@ function newRequest(request){
     requestURI.split(';').slice(1).
                                       forEach(function(pair){
                                         pair = pair.split('=');
-                                        queryParams[pair[0]] = decodeURIComponent(unescape(pair[1]) || '');
+                                        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
                                       }
                                       );
   
