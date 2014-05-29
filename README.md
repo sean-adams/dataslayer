@@ -23,7 +23,7 @@ To collapse and expand page groups, simply click the URL associated with each pa
 
 To clear history up to the current page, click the X on the top right.
 
-The extension options page (found in the [Chrome extensions page](chrome://extensions/)) will allow you to hide or show certain tag types. All tags are shown by default. Settings **should** sync across devices if you're signed in to Chrome.
+The extension options page (found in the [Chrome extensions page](chrome://extensions/)) will allow you to hide or show certain tag types, as well as specific Google Analytics UA-IDs (separated by semicolons). All tags are shown by default. Settings **should** sync across devices if you're signed in to Chrome.
 
 Misc
 ----

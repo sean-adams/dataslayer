@@ -7,7 +7,7 @@ dataslayer.tags = [[]];
 dataslayer.gtmIDs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true};
+dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true, ignoredTags: []};
 dataslayer.loading = false;
 
 dataslayer.port = chrome.runtime.connect();
@@ -20,6 +20,7 @@ function loadSettings(){
     $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
+    if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
   });
 
 }
@@ -311,10 +312,11 @@ function datalayerHTML(index) {
 function tagHTML(index){
   var allrows = '';
   $.each(dataslayer.tags[index],function(q,v){
+    if (v.tid && (dataslayer.options.ignoredTags.indexOf(v.tid)>-1)) return;
+    if (v.utmac && (dataslayer.options.ignoredTags.indexOf(v.utmac)>-1)) return;
+
     var therow = '';
-
     
-
     if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic)
         therow = parseClassic(v,index + '_' + q);
     else if ((v.reqType=='universal') && dataslayer.options.showUniversal)
@@ -343,6 +345,7 @@ function updateUI(pageIndex,type) {
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
+  if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
 
   if (pageIndex !== 0) pageIndex = pageIndex || -1;
   type = type || 'all';

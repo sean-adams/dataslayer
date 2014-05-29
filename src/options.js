@@ -18,16 +18,23 @@ function loadSettings(){
 		$.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
 			if (!ourItems.hasOwnProperty(prop)) ourItems[prop] = true;  
 		});
+		if(!ourItems.hasOwnProperty('ignoredTags')) ourItems.ignoredTags = [];
 
 		$.each(ourItems,function(i,v){
-			$('#'+i).prop('checked',v);
+			if (i==='ignoredTags')
+				$('#ignoredTags').val(v.join(';'));
+			else
+				$('#'+i).prop('checked',v);
 		});		
 	});
 }
 
 function saveSettings(){
 	$('input').each(function(){
-		dataslayer.options[$(this).attr('id')] = $(this).prop('checked');
+		if ($(this).attr('id')=='ignoredTags')
+			dataslayer.options[$(this).attr('id')] = $(this).val().split(';');
+		else
+			dataslayer.options[$(this).attr('id')] = $(this).prop('checked');
 	});
 	chrome.storage.sync.set(dataslayer.options);
 	chrome.runtime.sendMessage({type: 'dataslayer_loadsettings',data: dataslayer.options});

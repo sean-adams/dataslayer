@@ -8,6 +8,7 @@ dataslayer Changelog
 + click open/close is now persistent
 + added option to clear history
 + fixed character parsing
++ added option to ignore specific UA-IDs
 
 0.7.12
 ------
