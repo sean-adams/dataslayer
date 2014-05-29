@@ -351,6 +351,7 @@ function updateUI(pageIndex,type) {
   type = type || 'all';
 
   if (pageIndex > -1){
+    $('.pure-menu:not(#sub'+pageIndex+') li.newpage').removeClass('seeking');
     if ($('#sub'+pageIndex).length>0){
       if (type!=='tag')
         $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(pageIndex));
