@@ -21,10 +21,16 @@ All items are in reverse chronological order (newest on top).
 
 To collapse and expand page groups, simply click the URL associated with each page.
 
+To clear history up to the current page, click the X on the top right.
+
 The extension options page (found in the [Chrome extensions page](chrome://extensions/)) will allow you to hide or show certain tag types. All tags are shown by default. Settings **should** sync across devices if you're signed in to Chrome.
 
 Misc
 ----
-dataslayer was built with the [Google Data Layer Helper Library](https://github.com/google/data-layer-helper), [Pure](http://purecss.io/), and [jQuery](http://jquery.com/).
+dataslayer was built with the following:
+- [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
+- [Pure](http://purecss.io/)
+- [jQuery](http://jquery.com/)
+- [leanModal](http://leanmodal.finelysliced.com.au/)
 
 dataslayer is under the MIT License. See LICENSE.md.

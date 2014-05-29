@@ -626,7 +626,20 @@ function newRequest(request){
 
 loadSettings();
 
+
+//set up UI
 $('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
+$('a.clearbtn').leanModal({ top : 0});
+$('#clearbtnyes').click(function(){
+    dataslayer.datalayers = [dataslayer.datalayers[dataslayer.activeIndex]];
+    dataslayer.tags = [dataslayer.tags[dataslayer.activeIndex]];
+    dataslayer.gtmIDs = [dataslayer.gtmIDs[dataslayer.activeIndex]];
+    dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
+    dataslayer.activeIndex = 0;
+    updateUI();
+    $('.dlnum0').toggleClass('submenu-hidden');
+    $("#lean_overlay").fadeOut(200);$('#clearconfirm').css({"display":"none"});
+});
 
 // chrome.devtools.inspectedWindow.eval('window.location.href',
 //   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}

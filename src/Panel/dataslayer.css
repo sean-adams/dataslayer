@@ -123,8 +123,10 @@ li td {overflow: hidden; white-space: nowrap;}
 
 .event td a {display: inline;}
 
-a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.5; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
+a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
 a.settings img:hover {opacity: 1;}
+a.clearbtn img {position: fixed; top:50px; right: 2px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
+a.clearbtn img:hover {opacity: 1;}
 
 a.toggle { padding: 0 5 0 5 !important;}
 
@@ -134,4 +136,25 @@ li.options { background: #eee;}
 label.pure-checkbox {
 	cursor: pointer;
 	margin-bottom: 0 !important;
+}
+
+#lean_overlay {
+    position: fixed;
+    z-index:100;
+    top: 0px;
+    left: 0px;
+    height:100%;
+    width:100%;
+    background: #000;
+    display: none;
+}
+
+#clearconfirm {
+	display: none;
+	width:50%;
+	background: white;
+	border: 1px black;
+	padding:30px;
+	height:100px;
+	text-align: center;
 }
