@@ -7,6 +7,7 @@ dataslayer Changelog
 + added option to display dataLayer presence in the panel (and removed content console logging)
 + click open/close is now persistent
 + added option to clear history
++ fixed character parsing
 
 0.7.12
 ------
