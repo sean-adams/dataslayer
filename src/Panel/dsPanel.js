@@ -653,6 +653,14 @@ $('#clearbtnyes').click(function(){
 
 testDL();
 
+chrome.devtools.network.getHAR(function(harlog){
+  if(harlog && harlog.entries)
+    harlog.entries.forEach(function(v,i,a){
+      newRequest(v);
+    });
+  });
+
+
 chrome.devtools.network.onNavigated.addListener(newPageLoad);
 chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
