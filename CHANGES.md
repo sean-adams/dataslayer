@@ -9,6 +9,7 @@ dataslayer Changelog
 + added option to clear history
 + fixed character parsing
 + added option to ignore specific UA-IDs
++ updated to jQuery 2.1.1
 
 0.7.12
 ------
