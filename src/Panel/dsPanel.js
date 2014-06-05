@@ -5,6 +5,7 @@ var dataslayer = {};
 dataslayer.datalayers = [[]];
 dataslayer.tags = [[]];
 dataslayer.gtmIDs = [];
+dataslayer.dLNs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true, ignoredTags: []};
@@ -301,7 +302,7 @@ function datalayerHTML(index) {
   });
 
   if(dataslayer.gtmIDs[index])
-    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[index]+'</u></td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[index]+'</u>'+(dataslayer.dLNs[index]=='dataLayer'||typeof dataslayer.dLNs[index]=='undefined'?'':' <i>('+dataslayer.dLNs[index]+')</i>')+'</td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
@@ -439,7 +440,7 @@ function updateUI(pageIndex,type) {
 }
 
 
-function testDL() {
+function testDL(dlName) {
   function onEval(result, isException) {
     if (result) {
         dataslayer.datalayers[dataslayer.activeIndex]=result;
@@ -448,18 +449,19 @@ function testDL() {
     chrome.devtools.inspectedWindow.eval('window.location.href',
       function(url,error){
         dataslayer.urls[dataslayer.activeIndex]=url;
+        // console.log(url);
         // find first GTM tag and get its ID
         chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
           function(gtm,error){
             if (!error)
-              dataslayer.gtmIDs[dataslayer.activeIndex]=gtm;
+              dataslayer.gtmIDs[dataslayer.activeIndex]=gtm[0].split('&')[0];
             updateUI();
           }
         );
       }
     );
   }
-  chrome.devtools.inspectedWindow.eval('dataLayer', onEval);
+  chrome.devtools.inspectedWindow.eval(dlName, onEval);
 }
 
 function messageListener(message,sender,sendResponse){
@@ -484,12 +486,19 @@ function messageListener(message,sender,sendResponse){
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
       
+      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+      dataslayer.dLNs[dataslayer.activeIndex]=message.dLN;
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+
     }
     else{   
+      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
       dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
       
       dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
+      dataslayer.dLNs[dataslayer.activeIndex]=message.dLN;
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
@@ -545,7 +554,7 @@ function newRequest(request){
   }
   else if (request.request.method=='POST') {
     requestURI = request.request.postData.text;
-    console.log(requestURI);
+    // console.log(requestURI);
   }
 
   // parse query string into key/value pairs
@@ -638,6 +647,7 @@ $('#clearbtnyes').click(function(){
     dataslayer.datalayers = [dataslayer.datalayers[dataslayer.activeIndex]];
     dataslayer.tags = [dataslayer.tags[dataslayer.activeIndex]];
     dataslayer.gtmIDs = [dataslayer.gtmIDs[dataslayer.activeIndex]];
+    dataslayer.dLNs = [dataslayer.dLNs[dataslayer.activeIndex]];
     dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
     dataslayer.activeIndex = 0;
     updateUI();
@@ -652,7 +662,7 @@ $('#clearbtnyes').click(function(){
 //   function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
 //   );
 
-testDL();
+
 
 chrome.devtools.network.getHAR(function(harlog){
   if(harlog && harlog.entries)
@@ -667,4 +677,16 @@ chrome.devtools.network.onRequestFinished.addListener(newRequest);
 
 dataslayer.port.onMessage.addListener(messageListener);
 
-chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
+
+chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
+  // if (!error) chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
+  if (!error) { //was already injected
+    dataslayer.gtmIDs[dataslayer.activeIndex]=exists.gtmID;
+    dataslayer.dLNs[dataslayer.activeIndex]=exists.dLN;
+    testDL(exists.dLN);
+  }
+  else {  //was not already injected
+    chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
+    testDL('dataLayer');
+  }
+});
