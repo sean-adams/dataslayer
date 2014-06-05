@@ -26,3 +26,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 		});
 });
 
+chrome.runtime.onInstalled.addListener(function(details){
+	if (details.reason=='update'||details.reason=='install')
+		chrome.tabs.create({url:'chrome-extension://'+chrome.runtime.id+'/options.html#install',active:true});
+});
