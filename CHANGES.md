@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.8.2
+-----
++ support for variables not named 'dataLayer'
+
 0.8.0
 -----
 + improved UI performance
