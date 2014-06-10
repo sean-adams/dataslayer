@@ -3,6 +3,7 @@ dataslayer.options = dataslayer.options || {};
 
 $(function(){
 	$('input').change(function(){saveSettings();});
+	$('#version').html(chrome.runtime.getManifest().version);
 	loadSettings();
 });
 
