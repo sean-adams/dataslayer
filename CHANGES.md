@@ -4,6 +4,7 @@ dataslayer Changelog
 0.8.2
 -----
 + support for variables not named 'dataLayer'
++ pull in more Floodlights, while reducing false positives
 
 0.8.0
 -----

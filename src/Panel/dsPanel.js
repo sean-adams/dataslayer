@@ -539,7 +539,7 @@ function newRequest(request){
   else if (/google-analytics\.com\/collect/i.test(request.request.url)){
     reqType = 'universal';
   }
-  else if (/\.fls\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0])){
+  else if ((/\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0]))&&(request.response.status!==302)){
     reqType = 'floodlight';
   }
   else if (/\/b\/ss\//i.test(request.request.url)){
