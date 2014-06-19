@@ -691,6 +691,7 @@ chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   }
 });
 
+// look for existing SiteCatalyst tags
 chrome.devtools.inspectedWindow.eval('(function(){ var abla=[]; for (var attr in window)if (((typeof window[attr]==="object")&&(window[attr]))&&("src" in window[attr])) if ((attr.substring(0,4)==="s_i_")&&(window[attr].src.indexOf("/b/ss/"))) abla.push(window[attr].src); return abla; })();',
   function(exists,error){
     if(!error) for (var a in exists)newRequest({request:{url:exists[a],method:'GET'}});
