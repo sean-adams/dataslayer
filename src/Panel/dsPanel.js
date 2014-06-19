@@ -631,7 +631,7 @@ function newRequest(request){
     if (scEvars!={}) utmParams.scEvars=scEvars;
     if (scProps!={}) utmParams.scProps=scProps;    
   }
-
+  utmParams.__url = request.request.url;
   dataslayer.tags[dataslayer.activeIndex].push(utmParams);
   updateUI(dataslayer.activeIndex,'tag');
 }
