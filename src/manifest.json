@@ -16,5 +16,5 @@
     "persistent": false
   },
   
-  "permissions": [ "tabs", "storage", "http://*/*", "https://*/*" ]
+  "permissions": [ "tabs", "storage", "http://*/*", "https://*/*", "notifications" ]
 }

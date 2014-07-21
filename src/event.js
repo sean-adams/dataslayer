@@ -1,4 +1,5 @@
 var devtoolsPort = [];
+var notifId = '';
 chrome.runtime.onConnect.addListener(function(port){
 	devtoolsPort.push(port);
 });
@@ -27,6 +28,9 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 });
 
 chrome.runtime.onInstalled.addListener(function(details){
-	if (details.reason=='update'||details.reason=='install')
+	if (details.reason=='install')
 		chrome.tabs.create({url:'chrome-extension://'+chrome.runtime.id+'/options.html#install',active:true});
+	else if (details.reason=='update')
+		{chrome.notifications.create('', {type:'basic',title:'dataslayer', message:'dataslayer has been updated to version '+chrome.runtime.getManifest().version+'.\nClick here to see what\'s new.',iconUrl: 'i128.png'},function(notificationId){notifId=notificationId;});
+				chrome.notifications.onClicked.addListener(function(notificationId){if (notificationId==notifId) chrome.tabs.create({url:'chrome-extension://'+chrome.runtime.id+'/options.html#install',active:true});});}
 });
