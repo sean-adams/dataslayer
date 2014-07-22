@@ -1,7 +1,7 @@
 dataslayer Changelog
 ====================
 
-0.8.3
+0.8.5
 -----
 + capture SiteCatalyst tags fired before DevTools was opened
 + added option to block tags from being collected (experimental, requires Chrome beta or dev channel)
