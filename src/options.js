@@ -5,6 +5,8 @@ $(function(){
 	$('input').change(function(){saveSettings();});
 	$('#version').html(chrome.runtime.getManifest().version);
 	loadSettings();
+	if (!chrome.declarativeWebRequest)
+		$('#blockTags').prop('disabled',true);
 });
 
 function loadSettings(){
