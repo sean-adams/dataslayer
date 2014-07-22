@@ -4,8 +4,44 @@ chrome.runtime.onConnect.addListener(function(port){
 	devtoolsPort.push(port);
 });
 
+
+
+function addBlocking(){
+	removeBlocking();
+	chrome.declarativeWebRequest.onRequest.addRules([{
+		id: 'dataslayerBlocking',
+		conditions: [
+			new chrome.declarativeWebRequest.RequestMatcher({
+				url: { hostSuffix: 'google-analytics.com', pathPrefix: '/collect', schemes: ['http','https'] },
+			}),
+			new chrome.declarativeWebRequest.RequestMatcher({
+				url: { hostSuffix: 'google-analytics.com', pathPrefix: '/__utm.gif', schemes: ['http','https'] },
+			}),
+			new chrome.declarativeWebRequest.RequestMatcher({
+				url: { hostSuffix: 'stats.g.doubleclick.net', pathPrefix: '/__utm.gif', schemes: ['http','https'] },
+			}),
+			new chrome.declarativeWebRequest.RequestMatcher({
+				url: { hostSuffix: 'doubleclick.net', pathPrefix: '/activity', schemes: ['http','https'] },
+			}),
+			new chrome.declarativeWebRequest.RequestMatcher({
+				url: { pathPrefix: '/b/ss', queryContains: 'AQB=1', schemes: ['http','https'] },
+			})
+			],
+		actions: [
+			new chrome.declarativeWebRequest.RedirectToTransparentImage()
+		]}]);
+}
+
+function removeBlocking(){
+	chrome.declarativeWebRequest.onRequest.removeRules(['dataslayerBlocking']);
+}
+
+chrome.storage.sync.get(null,function(items){
+	if (ourItems.hasOwnProperty('blockTags')&&ourItems.blockTags===true) addBlocking();
+	else removeBlocking();
+});
+
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	// console.log(message);
 	if (message.type=='dataslayer_gtm'){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){
@@ -21,10 +57,15 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 	}
 	else if (message.type=='dataslayer_unload')
 		chrome.tabs.executeScript(message.tabID,{ code: 'document.head.removeChild(document.getElementById(\'dataslayer_script\'));', runAt: "document_idle" });
-	else if (message.type=='dataslayer_loadsettings')
+	else if (message.type=='dataslayer_loadsettings'){
+		if (message.data.blockTags)
+			addBlocking();
+		else
+			removeBlocking();
 		devtoolsPort.forEach(function(v,i,x){
 			v.postMessage(message);
 		});
+	}
 });
 
 chrome.runtime.onInstalled.addListener(function(details){

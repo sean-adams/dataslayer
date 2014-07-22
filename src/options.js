@@ -19,6 +19,7 @@ function loadSettings(){
 		$.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
 			if (!ourItems.hasOwnProperty(prop)) ourItems[prop] = true;  
 		});
+		if(!ourItems.hasOwnProperty('blockTags')) ourItems.blockTags = false;
 		if(!ourItems.hasOwnProperty('ignoredTags')) ourItems.ignoredTags = [];
 
 		$.each(ourItems,function(i,v){
