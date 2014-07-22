@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.8.3
+-----
++ capture SiteCatalyst tags fired before DevTools was opened
+
 0.8.2
 -----
 + support for variables not named 'dataLayer'
