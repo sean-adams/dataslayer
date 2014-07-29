@@ -27,10 +27,11 @@ The extension options page (found in the [Chrome extensions page](chrome://exten
 
 Misc
 ----
-dataslayer was built with the following:
+dataslayer was built with and thanks to the following:
 - [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
 - [Pure](http://purecss.io/)
 - [jQuery](http://jquery.com/)
 - [leanModal](http://leanmodal.finelysliced.com.au/)
+- [Open Sans](http://www.google.com/fonts/specimen/Open+Sans)
 
 dataslayer is under the MIT License. See LICENSE.md.

@@ -1,6 +1,24 @@
+
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Open Sans Light'), local('OpenSans-Light'), url(OpenSans-Light.woff) format('woff');
+}
+@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(OpenSans.woff) format('woff');
+}
+
 body,
-.pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] { font-family: Georgia, Times, "Times New Roman", serif; margin: 10px; }
-body {font-size:80%;}
+.pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] {
+	/*font-family: Georgia, Times, "Times New Roman", serif;*/
+	font-family: 'Open Sans';
+	margin: 10px; 
+}
+body {font-size:75%;}
 table {font-size:1em;}
 
 .pure-menu a { transition: all 0.2s; -webkit-transition: all 0.2s; white-space: normal; padding: 0px;}
