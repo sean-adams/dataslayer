@@ -21,7 +21,7 @@ body,
 body {font-size:75%;}
 table {font-size:1em;}
 
-.pure-menu a { transition: all 0.2s; -webkit-transition: all 0.2s; white-space: normal; padding: 0px;}
+/*.pure-menu a { transition: max-height 0.2s; -webkit-transition: max-height 0.2s; white-space: normal; padding: 0px;}*/
 
 .pure-menu li a { padding-right: 30px; cursor: pointer !important;}
 .pure-menu.pure-menu-open, .pure-menu.pure-menu-horizontal li .pure-menu-children {  background: white;}
@@ -37,15 +37,12 @@ table {font-size:1em;}
 .content .pure-menu { position: absolute; left: 0; top: 7px; right: 0; }
 .content .pure-menu-heading { margin-top: 0px;}
 
-div.content {visibility:hidden; opacity:0; max-height:0; height:0; position:relative; width:auto; transition: all 0.5s ease; -webkit-transition: all 0.5s ease; z-index:0;}
-div.content ul {visibility:hidden; opacity:0;}
-div.content-visible {max-height:500px; opacity:1; visibility:visible; z-index:100;}
-div.content-visible ul {visibility:visible; opacity:1;}
+div.content {visibility:hidden; max-height:0; height:0; position:relative; width:auto; transition: all 0.5s ease; -webkit-transition: all 0.5s ease; z-index:0;}
+div.content ul {visibility:hidden; }
+div.content-visible {max-height:500px; visibility:visible; z-index:100;}
+div.content-visible ul {visibility:visible;}
 
-/*.submenu a {font-size: 75%}*/
-li.submenu {opacity: 1; transition: all 1s ease; -webkit-transition: all 1s ease; overflow:hidden;}
-li.submenu-hidden {opacity:0; max-height:0;}
-li.submenu-hidden a {visibility: hidden; height: 0; max-height: 0; opacity: 0; transition: all 0.5s ease; -webkit-transition: all 0.5s ease; }
+li.submenu { overflow:hidden;}
 
 a.newpage {padding-top: 0; padding-bottom: 0;}
 a.currentpage {font-weight: bolder;}
@@ -55,7 +52,7 @@ a.currentpage {font-weight: bolder;}
 .project-description {font-size: 75%; font-style:italic; padding-left: 30px; padding-right: 30px; opacity:0.5;}
 
 li.submenu-hidden hr { margin: 0;}
-li.submenu-hidden.eventbreak {border:0;}
+li.submenu-hidden.eventbreak {border:0; -webkit-transition: none !important;}
 
 ul li table {margin-left: 30px;}
 ul li table td {padding-right: 30px;}
@@ -65,7 +62,7 @@ ul li table td {padding-right: 30px;}
 
 .pure-menu { margin: 20px;}
 
-li.eventbreak {text-align:left; border:1px dashed lightgrey;}
+li.eventbreak {text-align:left; border:1px dashed lightgrey;  -webkit-transition: none !important;}
 
 .pure-menu.pure-menu-open {
 width: auto !important;
@@ -176,3 +173,14 @@ label.pure-checkbox {
 	height:100px;
 	text-align: center;
 }
+
+li.newpage {border-bottom: 1px solid lightgrey;}
+
+#datalayeritems>.pure-menu tr ul {
+	overflow-y: hidden;
+}
+
+.clicked-closed>table>tbody ul {
+	display: none;
+}
+

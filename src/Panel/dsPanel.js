@@ -375,7 +375,8 @@ function updateUI(pageIndex,type) {
         else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
         
     }
-    $('#sub'+pageIndex+'.clicked-closed .dlnum'+pageIndex).addClass('submenu-hidden');
+    // $('#sub'+pageIndex+'.clicked-closed .dlnum'+pageIndex).addClass('submenu-hidden');
+    // $('#sub'+pageIndex+'.clicked-closed').addClass('ds-hidden');
   }
   else if (pageIndex === -1) {  //refresh all
     $('#datalayeritems').html('');
@@ -400,7 +401,8 @@ function updateUI(pageIndex,type) {
 
   // click setup and various cleanup
   for (var i=0;i<dataslayer.datalayers.length-1;i++){
-      $('#sub'+i+':not(.clicked-open) .dlnum'+i).addClass('submenu-hidden');
+      // $('#sub'+i+':not(.clicked-open) .dlnum'+i).addClass('submenu-hidden');
+      $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
       $('.page'+i).removeClass('currentpage');
     }
 
@@ -429,10 +431,16 @@ function updateUI(pageIndex,type) {
 
   $('a.newpage').off('click.dataslayer');
   $('a.newpage').on('click.dataslayer',function(){
-      $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
-      $('#sub'+$(this).data('dlnum')).addClass('clicked');
-      if ($('.dlnum'+$(this).data('dlnum')).hasClass('submenu-hidden')) $('#sub'+$(this).data('dlnum')).addClass('clicked-closed').removeClass('clicked-open');
-      else $('#sub'+$(this).data('dlnum')).addClass('clicked-open').removeClass('clicked-closed');
+
+
+      // $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
+      $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle(200);
+      // $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle();
+      $('#sub'+$(this).data('dlnum')).toggleClass('clicked-open');
+      // $('#sub'+$(this).data('dlnum')).addClass('clicked');
+
+      // if ($('#sub'+$(this).data('dlnum')).hasClass('ds-hidden')) $('#sub'+$(this).data('dlnum')).addClass('clicked-closed').removeClass('clicked-open');
+      // else $('#sub'+$(this).data('dlnum')).addClass('clicked-open').removeClass('clicked-closed');
     }
   );
   // end click setup and various cleanup
@@ -651,7 +659,7 @@ $('#clearbtnyes').click(function(){
     dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
     dataslayer.activeIndex = 0;
     updateUI();
-    $('.dlnum0').toggleClass('submenu-hidden');
+    // $('.dlnum0').toggleClass('submenu-hidden');
     $("#lean_overlay").fadeOut(200);$('#clearconfirm').css({"display":"none"});
 });
 
