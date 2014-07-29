@@ -31,17 +31,6 @@ table {font-size:1em;}
 
 .pure-menu .pure-menu-heading { margin-top: 0px !important;}
 
-.content { padding: 0;}
-.content .pure-menu a:hover, .content .pure-menu a:focus { background: none !important; transition: all 0.2s; -webkit-transition: all 0.2s; }
-.content .pure-menu a[href]:hover, .content .pure-menu a[href]:focus {  text-shadow: 0 -2px 0 rgb(50,50,50) !important; }
-.content .pure-menu { position: absolute; left: 0; top: 7px; right: 0; }
-.content .pure-menu-heading { margin-top: 0px;}
-
-div.content {visibility:hidden; max-height:0; height:0; position:relative; width:auto; transition: all 0.5s ease; -webkit-transition: all 0.5s ease; z-index:0;}
-div.content ul {visibility:hidden; }
-div.content-visible {max-height:500px; visibility:visible; z-index:100;}
-div.content-visible ul {visibility:visible;}
-
 li.submenu { overflow:hidden;}
 
 a.newpage {padding-top: 0; padding-bottom: 0;}
