@@ -21,8 +21,6 @@ body,
 body {font-size:75%;}
 table {font-size:1em;}
 
-/*.pure-menu a { transition: max-height 0.2s; -webkit-transition: max-height 0.2s; white-space: normal; padding: 0px;}*/
-
 .pure-menu li a { padding-right: 30px; cursor: pointer !important;}
 .pure-menu.pure-menu-open, .pure-menu.pure-menu-horizontal li .pure-menu-children {  background: white;}
 .pure-menu-heading { font-weight: bold; border-bottom: none !important; text-transform: none !important; cursor: default !important; background: white !important; }
@@ -66,7 +64,6 @@ visibility: visible !important;
 .pure-menu ul {position:static !important;}
 
 td.utm, td.dlt {vertical-align:top !important;}
-/*td.dlt ul li {border-right: 1px dashed black;}*/
 
 li.newpage:not(.options):after,td>span:after {
 content: '';
