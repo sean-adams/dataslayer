@@ -1,9 +1,3 @@
 *.zip
 src/Panel/.jshintrc
-webstore_large.pdn
-webstore_large.png
-webstore_marquee.pdn
-webstore_marquee.png
-webstore_small.pdn
-webstore_small.png
-screenshot.PNG
+assets/
