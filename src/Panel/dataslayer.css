@@ -31,7 +31,7 @@ table {font-size:1em;}
 
 li.submenu { overflow:hidden;}
 
-a.newpage {padding-top: 0; padding-bottom: 0;}
+a.newpage {padding-top: 0; padding-bottom: 0; padding-left: 24px !important;}
 a.currentpage {font-weight: bolder;}
 
 .pure-menu a.a-selected {color: rgba(0,0,0,.7);}
@@ -77,7 +77,7 @@ background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255,
 }
 
 li.newpage.hasGTM:before{
-	content: '\2713';
+	content: url(gtm.png);
 	position: absolute;
 	top: 0;
 	left: 0;
