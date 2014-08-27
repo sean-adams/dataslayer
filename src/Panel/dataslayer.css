@@ -89,7 +89,7 @@ li.newpage.hasGTM:before{
 }
 
 li.newpage.hasTLM:before{
-	content: url('img/tealium.png');
+	content: url('img/tlm.png');
 	position: absolute;
 	top: 0;
 	left: 0;
