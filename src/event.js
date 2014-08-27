@@ -44,7 +44,7 @@ chrome.storage.sync.get(null,function(items){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
-	if (message.type=='dataslayer_gtm'){
+	if ((message.type=='dataslayer_gtm')||(message.type=='dataslayer_tlm')){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){
 			try{v.postMessage(message);}catch(e){console.log(e);}
