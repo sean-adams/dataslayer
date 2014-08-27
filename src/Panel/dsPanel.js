@@ -4,8 +4,7 @@
 var dataslayer = {};
 dataslayer.datalayers = [[]];
 dataslayer.tags = [[]];
-dataslayer.gtmIDs = [];
-dataslayer.dLNs = [];
+dataslayer.GTMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true, ignoredTags: []};
@@ -301,8 +300,8 @@ function datalayerHTML(index) {
     allrows = therow + allrows;
   });
 
-  if(dataslayer.gtmIDs[index])
-    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.gtmIDs[index]+'</u>'+(dataslayer.dLNs[index]=='dataLayer'||typeof dataslayer.dLNs[index]=='undefined'?'':' <i>('+dataslayer.dLNs[index]+')</i>')+'</td></tr></table></li>\n' + allrows;
+  if(dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))
+    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.GTMs[index].id+'</u>'+(dataslayer.GTMs[index].name=='dataLayer'||typeof dataslayer.GTMs[index].name=='undefined'?'':' <i>('+dataslayer.GTMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
@@ -461,8 +460,10 @@ function testDL(dlName) {
         // find first GTM tag and get its ID
         chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
           function(gtm,error){
-            if (!error)
-              dataslayer.gtmIDs[dataslayer.activeIndex]=gtm[0].split('&')[0];
+            if (!error){
+              if (dataslayer.GTMs[dataslayer.activeIndex]) dataslayer.GTMs[dataslayer.activeIndex].id = gtm[0].split('&')[0];
+              else dataslayer.GTMs[dataslayer.activeIndex] = {id: gtm[0].split('&')[0]};
+            }
             updateUI();
           }
         );
@@ -489,13 +490,13 @@ function messageListener(message,sender,sendResponse){
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
+
+      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
-      
-      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
-      dataslayer.dLNs[dataslayer.activeIndex]=message.dLN;
 
       updateUI(dataslayer.activeIndex,'datalayer');
 
@@ -505,8 +506,7 @@ function messageListener(message,sender,sendResponse){
       dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
       
-      dataslayer.gtmIDs[dataslayer.activeIndex]=message.gtmID;
-      dataslayer.dLNs[dataslayer.activeIndex]=message.dLN;
+      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
@@ -654,8 +654,7 @@ $('a.clearbtn').leanModal({ top : 0});
 $('#clearbtnyes').click(function(){
     dataslayer.datalayers = [dataslayer.datalayers[dataslayer.activeIndex]];
     dataslayer.tags = [dataslayer.tags[dataslayer.activeIndex]];
-    dataslayer.gtmIDs = [dataslayer.gtmIDs[dataslayer.activeIndex]];
-    dataslayer.dLNs = [dataslayer.dLNs[dataslayer.activeIndex]];
+    dataslayer.GTMs = [dataslayer.GTMs[dataslayer.activeIndex]];
     dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
     dataslayer.activeIndex = 0;
     updateUI();
@@ -689,8 +688,7 @@ dataslayer.port.onMessage.addListener(messageListener);
 chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   // if (!error) chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
   if (!error) { //was already injected
-    dataslayer.gtmIDs[dataslayer.activeIndex]=exists.gtmID;
-    dataslayer.dLNs[dataslayer.activeIndex]=exists.dLN;
+    dataslayer.GTMs[dataslayer.activeIndex]={id: exists.gtmID, name: exists.dLN};
     testDL(exists.dLN);
   }
   else {  //was not already injected
