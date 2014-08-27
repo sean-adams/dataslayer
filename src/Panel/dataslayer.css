@@ -77,7 +77,7 @@ background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255,
 }
 
 li.newpage.hasGTM:before{
-	content: url(gtm.png);
+	content: url('img/gtm.png');
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -101,7 +101,7 @@ li.newpage.noGTM:before{
 }
 
 li.newpage.seeking:before{
-	content:url('loader.gif');
+	content:url('img/loader.gif');
 	position: absolute;
 	top: 0;
 	left: 0;
