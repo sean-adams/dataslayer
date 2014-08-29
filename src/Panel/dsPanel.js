@@ -267,6 +267,40 @@ function parseFloodlight(v){
   return therow;
 }
 
+// collapseStack
+// - obj: object to populate based on keys
+// - keys: array of key names (i.e. to populate test.demo.property, ['test','demo','property'])
+// - val: value for key to be assigned
+// returns stacked object
+function collapseStack(obj,keys,val){
+  var result = obj;
+  if ((keys.length<2)&&(Array.isArray(val)))
+    result[keys[0]] = val.slice(0);
+  else if (keys.length<2)
+    result[keys[0]] = val;
+  else
+    result[keys[0]] = collapseStack(obj[keys[0]]||{},keys.slice(1),val);
+  return result;
+}
+
+// collapseUDO
+// - udo: Tealium-style data object
+// returns data object with properties converted to object paradigm
+function collapseUDO(udo){
+  var newUDO = {};
+  var props = Object.getOwnPropertyNames(udo);
+  for (var i in props){
+    var stack = props[i].split('.');
+    if (stack.length==1)
+      newUDO[stack[0]] = udo[stack[0]];
+    else {
+      newUDO[stack[0]] = newUDO[stack[0]] || {};
+      newUDO[stack[0]] = collapseStack(newUDO[stack[0]],stack.slice(1),udo[props[i]]);
+    }
+  }
+  return newUDO;
+}
+
 
 
 // addSpaces
