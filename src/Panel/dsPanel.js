@@ -3,8 +3,10 @@
 
 var dataslayer = {};
 dataslayer.datalayers = [[]];
+dataslayer.utag_datas = [{}];
 dataslayer.tags = [[]];
 dataslayer.GTMs = [];
+dataslayer.TLMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = {
@@ -314,12 +316,17 @@ function addSpaces(obj){
 }
 
 // datalayerHTML
-// - index: index of dataslayer.datalayers
+// - datalayers: dataslayer.dataLayers | dataslayer.utag_datas
+// - index: index of dataslayer.datalayers | dataslayer.utag_datas
+// - type: 'tlm' | 'gtm'
 // returns contents of td.dlt > ul
-function datalayerHTML(index) {
-  var allrows = '';
+function datalayerHTML(datalayers,index,type) {
+  if ($.isEmptyObject(datalayers[index])) return '';  //if empty utag_data get us out of here
 
-  $.each(dataslayer.datalayers[index],function(i,v){ //iterate each push group on the page
+  var allrows = '';
+  var arrLayer = (Array.isArray(datalayers[index])?datalayers[index]:[datalayers[index]]); //cast utag_data as length 1 array so the entire rest of this function doesn't have to be rewritten
+
+  $.each(arrLayer,function(i,v){ //iterate each push group on the page
     var therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n' + '<li class="event submenu dlnum'+index+'"><table cols=2>';
 
     $.each(v,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
@@ -366,8 +373,10 @@ function datalayerHTML(index) {
 
   });
 
-  if(dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))
+  if((dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))&&(type=='gtm'))
     allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.GTMs[index].id+'</u>'+(dataslayer.GTMs[index].name=='dataLayer'||typeof dataslayer.GTMs[index].name=='undefined'?'':' <i>('+dataslayer.GTMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+  else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
+    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
@@ -421,22 +430,24 @@ function updateUI(pageIndex,type) {
     $('.pure-menu:not(#sub'+pageIndex+') li.newpage').removeClass('seeking');
     if ($('#sub'+pageIndex).length>0){
       if (type!=='tag')
-        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(pageIndex));
+        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')).append(datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm'));
       if (type!=='datalayer')
         $('#sub'+pageIndex+'>table td.utm>ul').html(tagHTML(pageIndex));
     }
     else{
         $('#datalayeritems').prepend('<div id="sub'+pageIndex+'" class="pure-menu pure-menu-open"><ul>'+
         '<li class="newpage" data-dlnum="'+pageIndex+'"><a class="newpage page'+pageIndex+' currentpage" data-dlnum="'+pageIndex+'">'+dataslayer.urls[pageIndex]+'</a></li>\n'+
-        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(pageIndex)+'</ul></td>'+
+        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')+datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(pageIndex)+'</ul></td></tr></tbody></table></div>\n');
         if (dataslayer.options.showGTMLoad){
           if (dataslayer.datalayers[pageIndex].length>0)
-            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
+          else if (!($.isEmptyObject(dataslayer.utag_datas[pageIndex])))
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
-            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM');
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
           else
-            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
+            $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
           }
         else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
         
@@ -448,18 +459,20 @@ function updateUI(pageIndex,type) {
     $.each(dataslayer.datalayers,function(a,dL){  //iterate each page's dataLayer
       $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul>'+
         '<li class="newpage" data-dlnum="'+a+'"><a class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n'+
-        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(a)+'</ul></td>'+
+        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,a,'gtm')+datalayerHTML(dataslayer.utag_datas,a,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
 
         if (dataslayer.options.showGTMLoad){
           if (dataslayer.datalayers[a].length>0)
-            $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+            $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
+          else if (!($.isEmptyObject(dataslayer.utag_datas[a])))
+            $('#sub'+a+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
-            $('#sub'+a+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM');
+            $('#sub'+a+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
           else
-            $('#sub'+a+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM');
+            $('#sub'+a+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
           }
-        else $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
+        else $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
     });
   } //end refresh all
 
@@ -512,7 +525,7 @@ function updateUI(pageIndex,type) {
   if (dataslayer.options.collapseNested){
     $('tr.object-row').each(function(){
       $('.child-of-'+$(this).attr('id')).slideUp().find('.object-row').text('+');
-    })
+    });
     $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
   }
 
@@ -576,6 +589,42 @@ function messageListener(message,sender,sendResponse){
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+
+    }
+    else{   
+      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+      // get the current URL and grab it
+      
+      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+    }
+  }
+  else if ((message.type=='dataslayer_tlm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+      );
+
+    if (message.data=='notfound'){
+      dataslayer.loading = false;
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
+      
+    }
+    else if (message.data=='found'){
+      dataslayer.loading = false;
+
+      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
 
