@@ -3,7 +3,7 @@ dataslayer Changelog
 
 0.9.0
 -----
-+ new way to look at nested variables
++ a new way to look at nested variables
 
 0.8.6
 -----

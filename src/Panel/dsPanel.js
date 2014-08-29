@@ -441,8 +441,6 @@ function updateUI(pageIndex,type) {
         else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
         
     }
-    // $('#sub'+pageIndex+'.clicked-closed .dlnum'+pageIndex).addClass('submenu-hidden');
-    // $('#sub'+pageIndex+'.clicked-closed').addClass('ds-hidden');
   }
   else if (pageIndex === -1) {  //refresh all
     $('#datalayeritems').html('');
@@ -467,7 +465,6 @@ function updateUI(pageIndex,type) {
 
   // click setup and various cleanup
   for (var i=0;i<dataslayer.datalayers.length-1;i++){
-      // $('#sub'+i+':not(.clicked-open) .dlnum'+i).addClass('submenu-hidden');
       $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
       $('.page'+i).removeClass('currentpage');
     }
