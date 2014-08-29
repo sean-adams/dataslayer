@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.9.0
+-----
++ new way to look at nested variables
+
 0.8.6
 -----
 + capture SiteCatalyst tags fired before DevTools was opened

@@ -14,7 +14,7 @@ dataslayer.options = {
   showSitecatalyst: true, 
   showGTMLoad: true, 
   ignoredTags: [],
-  collapseNested: true
+  collapseNested: false
 };
 dataslayer.loading = false;
 
@@ -25,10 +25,11 @@ dataslayer.port = chrome.runtime.connect();
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
     dataslayer.options = items;
-    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad','collapseNested'],function(i,prop){
+    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
     if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
+    if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
   });
 
 }
@@ -323,34 +324,34 @@ function datalayerHTML(index) {
 
     $.each(v,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
-          if (dataslayer.options.collapseNested)
-            therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+k1+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+          var level1Id = k1+'-'+Math.ceil(Math.random()*10000000);
+          therow = therow + '\n' + '<tr class="object-row" id="'+level1Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+k1+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
           for (var k2 in x){
             if(typeof x[k2] == 'object'){
-              if (dataslayer.options.collapseNested)
-                therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+              var level2Id = k1+k2+'-'+Math.ceil(Math.random()*10000000);
+              therow = therow + '\n' + '<tr class="object-row child-of-'+level1Id+'" id="'+level2Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
               for (var k3 in x[k2]) {
                 if (typeof x[k2][k3] == 'object'){
-                  if (dataslayer.options.collapseNested)
-                    therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+                  var level3Id = k1+k2+k3+'-'+Math.ceil(Math.random()*10000000);
+                  therow = therow + '\n' + '<tr class="object-row child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level3Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                   for (var k4 in x[k2][k3]){
                     if (typeof x[k2][k3][k4] == 'object'){
-                      if (dataslayer.options.collapseNested)
-                        therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+                      var level4Id = k1+k2+k3+k4+'-'+Math.ceil(Math.random()*10000000);
+                      therow = therow + '\n' + '<tr class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                       for (var k5 in x[k2][k3][k4]){
-                        therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
+                        therow = therow + '\n' + '<tr class="child-of-'+level4Id+' child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
                       }
                     }
                     else
-                      therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
+                      therow = therow + '\n' + '<tr class="child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
                   }
                 }
                 else
-                  therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
+                  therow = therow + '\n' + '<tr class="child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
               }
             }
             else
-              therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
+              therow = therow + '\n' + '<tr class="child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
           }          
         }
         else
@@ -359,6 +360,10 @@ function datalayerHTML(index) {
     );
     therow = therow +  '</table></li>';
     allrows = therow + allrows;
+
+    
+
+
   });
 
   if(dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))
@@ -403,10 +408,11 @@ return allrows;
 // - pageIndex: page index or -1 (default: -1)
 // - type: datalayer|tag|all (default: all)
 function updateUI(pageIndex,type) {
-  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad','collapseNested'],function(i,prop){
+  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
   if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
+  if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
 
   if (pageIndex !== 0) pageIndex = pageIndex || -1;
   type = type || 'all';
@@ -489,18 +495,35 @@ function updateUI(pageIndex,type) {
     }
   });
 
+  $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
+    if (e.shiftKey){
+      e.preventDefault();
+    }
+    switch($(this).text()){
+      case '-':
+        $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+        $(this).text('+');
+        break;
+      case '+':
+        $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
+        $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+        $(this).text('-');
+        break;
+    }
+  });
+
+  if (dataslayer.options.collapseNested){
+    $('tr.object-row').each(function(){
+      $('.child-of-'+$(this).attr('id')).slideUp().find('.object-row').text('+');
+    })
+    $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+  }
+
+
   $('a.newpage').off('click.dataslayer');
   $('a.newpage').on('click.dataslayer',function(){
-
-
-      // $('.dlnum'+$(this).data('dlnum')).toggleClass('submenu-hidden');
       $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle(200);
-      // $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle();
       $('#sub'+$(this).data('dlnum')).toggleClass('clicked-open');
-      // $('#sub'+$(this).data('dlnum')).addClass('clicked');
-
-      // if ($('#sub'+$(this).data('dlnum')).hasClass('ds-hidden')) $('#sub'+$(this).data('dlnum')).addClass('clicked-closed').removeClass('clicked-open');
-      // else $('#sub'+$(this).data('dlnum')).addClass('clicked-open').removeClass('clicked-closed');
     }
   );
   // end click setup and various cleanup
