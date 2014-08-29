@@ -182,3 +182,16 @@ li.newpage {border-bottom: 1px solid lightgrey;}
 	display: none;
 }
 
+/*.object-row em{
+	all: initial;
+	position: absolute;
+	left: 1em;
+	font-style: normal;
+}*/
+
+.object-row em a{
+	all: initial;
+	position: absolute;
+	left: 1em;
+	font-style: normal;
+}

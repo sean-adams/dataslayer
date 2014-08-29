@@ -7,7 +7,15 @@ dataslayer.tags = [[]];
 dataslayer.GTMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = {showFloodlight: true, showUniversal: true, showClassic: true, showSitecatalyst: true, showGTMLoad: true, ignoredTags: []};
+dataslayer.options = {
+  showFloodlight: true, 
+  showUniversal: true, 
+  showClassic: true, 
+  showSitecatalyst: true, 
+  showGTMLoad: true, 
+  ignoredTags: [],
+  collapseNested: true
+};
 dataslayer.loading = false;
 
 dataslayer.port = chrome.runtime.connect();
@@ -17,7 +25,7 @@ dataslayer.port = chrome.runtime.connect();
 function loadSettings(){
   chrome.storage.sync.get(null,function(items){
     dataslayer.options = items;
-    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
+    $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad','collapseNested'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
     if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
@@ -260,6 +268,16 @@ function parseFloodlight(v){
 }
 
 
+
+// addSpaces
+// returns as many HTML nbsp entities as argument length
+function addSpaces(obj){
+  var spaces = '';
+  for (var i=0;i<obj.length;i++)
+    spaces = spaces + '&nbsp;';
+  return spaces;
+}
+
 // datalayerHTML
 // - index: index of dataslayer.datalayers
 // returns contents of td.dlt > ul
@@ -268,28 +286,37 @@ function datalayerHTML(index) {
 
   $.each(dataslayer.datalayers[index],function(i,v){ //iterate each push group on the page
     var therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n' + '<li class="event submenu dlnum'+index+'"><table cols=2>';
+
     $.each(v,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
+          if (dataslayer.options.collapseNested)
+            therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+k1+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
           for (var k2 in x){
             if(typeof x[k2] == 'object'){
+              if (dataslayer.options.collapseNested)
+                therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
               for (var k3 in x[k2]) {
                 if (typeof x[k2][k3] == 'object'){
+                  if (dataslayer.options.collapseNested)
+                    therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                   for (var k4 in x[k2][k3]){
                     if (typeof x[k2][k3][k4] == 'object'){
+                      if (dataslayer.options.collapseNested)
+                        therow = therow + '\n' + '<tr class="object-row"><td><em><a href="#">+</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                       for (var k5 in x[k2][k3][k4]){
-                        therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'.'+k4+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
+                        therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
                       }
                     }
                     else
-                      therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
+                      therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
                   }
                 }
                 else
-                  therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
+                  therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
               }
             }
             else
-              therow = therow + '\n' + '<tr><td><b>'+k1+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
+              therow = therow + '\n' + '<tr><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
           }          
         }
         else
@@ -342,7 +369,7 @@ return allrows;
 // - pageIndex: page index or -1 (default: -1)
 // - type: datalayer|tag|all (default: all)
 function updateUI(pageIndex,type) {
-  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
+  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad','collapseNested'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
   });
   if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
