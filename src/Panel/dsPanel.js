@@ -148,7 +148,6 @@ function parseClassic(v,ref){
   switch(v.utmt){
     case 'event':
       if (v.utme.indexOf('5(')>=0){
-        // console.log(v.utme);
         var eventdata = v.utme.match(/5\([^)]+(?=\))/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').substring(2).split('*'); //find events and unescape
         $.each(eventdata,function(a,b){eventdata[a]=eventdata[a].replace(/\'2/g,'*').replace(/\'0/g,'\'');});
         therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+
@@ -550,7 +549,6 @@ function testDL(dlName) {
     chrome.devtools.inspectedWindow.eval('window.location.href',
       function(url,error){
         dataslayer.urls[dataslayer.activeIndex]=url;
-        // console.log(url);
         // find first GTM tag and get its ID
         chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
           function(gtm,error){
@@ -716,7 +714,6 @@ function newRequest(request){
   }
   else if (request.request.method=='POST') {
     requestURI = request.request.postData.text;
-    // console.log(requestURI);
   }
 
   // parse query string into key/value pairs
