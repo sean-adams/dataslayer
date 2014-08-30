@@ -1,7 +1,7 @@
 dataslayer
 ==========
 
-A Chrome extension to enhance Google Tag Manager dataLayer debugging (and other tags as well).
+A Chrome extension to enhance debugging of some frequently-used tag management platforms (Google Tag Manager and Tealium) in combination with some frequently-used tags.
 
 Installation
 ------------
@@ -11,11 +11,11 @@ The latest official version will always be available at the [Chrome Web Store](h
 
 Use
 ---
-A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each dataLayer.push appearing in a subgroup.
+A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each push to the dataLayer variable (in the case of GTM) appearing in a subgroup.
 
 ![](http://i.imgur.com/2H2t85K.png)
 
-If Google Analytics, Floodlight, or SiteCatalyst tags are fired, they will appear on the right side of the page group, with dataLayer information on the left side. Note that vertical alignment does not necessarily indicate a tie between dataLayer items and tags fired. Click the + next to each tag to see all parameters in the request, in case the parameter you're looking for is not pulled out.
+If Google Analytics, Floodlight, or SiteCatalyst tags are fired, they will appear on the right side of the page group, with data layer information on the left side. Note that vertical alignment does not necessarily indicate a tie between data layer items and tags fired. Click the + next to each tag to see all parameters in the request, in case the parameter you're looking for is not pulled out.
 
 All items are in reverse chronological order (newest on top).
 

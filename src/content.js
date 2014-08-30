@@ -1,6 +1,6 @@
 var dataslayer = {};
 dataslayer.helperListener = function(event){
-	if ((event.source == window)&&(event.data.type && (event.data.type=='dataslayer_gtm'))){
+	if ((event.source == window)&&(event.data.type && (event.data.type.substr(0,10)=='dataslayer'))){
 		try{
 			chrome.runtime.sendMessage(event.data);
 		}

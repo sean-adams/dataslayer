@@ -446,7 +446,7 @@ function updateUI(pageIndex,type) {
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
-          else
+          else if (!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM')))
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
           }
         else $('li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM');
@@ -469,7 +469,7 @@ function updateUI(pageIndex,type) {
             $('#sub'+a+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
             $('#sub'+a+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
-          else
+          else if (!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM')))
             $('#sub'+a+' li.newpage').addClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
           }
         else $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('noGTM').removeClass('seeking').removeClass('hasGTM').removeClass('hasTLM');
@@ -493,7 +493,6 @@ function updateUI(pageIndex,type) {
   $('td.utm>ul>li:first-child.eventbreak').remove();
 
   $('a.toggle').off('click.dataslayer');
-
   $('a.toggle').on('click.dataslayer',function(){
     if($(this).html()=='+'){
       $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
@@ -505,6 +504,7 @@ function updateUI(pageIndex,type) {
     }
   });
 
+  $('tr.object-row>td>em>a').off('click.dataslayer');
   $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
     if (e.shiftKey){
       e.preventDefault();
@@ -567,8 +567,32 @@ function testDL(dlName) {
   chrome.devtools.inspectedWindow.eval(dlName, onEval);
 }
 
+function testUDO(dlName) {
+  function onEval(result, isException) {
+    if (result) {
+        dataslayer.utag_datas[dataslayer.activeIndex]=result;
+    }
+    // get the current URL and grab it
+    chrome.devtools.inspectedWindow.eval('window.location.href',
+      function(url,error){
+        dataslayer.urls[dataslayer.activeIndex]=url;
+        // find Tealium ID
+        chrome.devtools.inspectedWindow.eval('utag.id',
+          function(uid,error){
+            if (!error){
+              if (dataslayer.TLMs[dataslayer.activeIndex]) dataslayer.TLMs[dataslayer.activeIndex].id = uid;
+              else dataslayer.TLMs[dataslayer.activeIndex] = {id: uid};
+            }
+            updateUI();
+          }
+        );
+      }
+    );
+  }
+  chrome.devtools.inspectedWindow.eval(dlName, onEval);
+}
+
 function messageListener(message,sender,sendResponse){
-  // console.log(message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     chrome.devtools.inspectedWindow.eval('window.location.href',
       function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
@@ -576,7 +600,7 @@ function messageListener(message,sender,sendResponse){
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
-      if (dataslayer.options.showGTMLoad)
+      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM'))))
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
@@ -612,7 +636,7 @@ function messageListener(message,sender,sendResponse){
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
-      if (dataslayer.options.showGTMLoad)
+      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM'))))
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
@@ -633,16 +657,16 @@ function messageListener(message,sender,sendResponse){
     }
     else{   
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
-      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+      dataslayer.utag_datas[dataslayer.activeIndex]=collapseUDO(JSON.parse(message.data));
       // get the current URL and grab it
       
-      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
   }
   else if (message.type=='dataslayer_loadsettings'){
-    // console.log(message.data);
+    console.log(message.data);
     for (var a in message.data) { dataslayer.options[a] = message.data[a]; }
     updateUI();
   }
@@ -819,6 +843,7 @@ chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   // if (!error) chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
   if (!error) { //was already injected
     dataslayer.GTMs[dataslayer.activeIndex]={id: exists.gtmID, name: exists.dLN};
+    dataslayer.TLMs[dataslayer.activeIndex]={id: exists.utagID, name: exists.udoname};
     testDL(exists.dLN);
   }
   else {  //was not already injected

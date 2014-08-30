@@ -17,6 +17,7 @@ function loadSettings(){
 
 	chrome.storage.sync.get(null,function(items){
 		var ourItems = items;
+		console.log(items);
 
 		$.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
 			if (!ourItems.hasOwnProperty(prop)) ourItems[prop] = true;  

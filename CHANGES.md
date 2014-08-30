@@ -3,6 +3,7 @@ dataslayer Changelog
 
 0.9.0
 -----
++ rudimentary support for Tealium
 + a new way to look at nested variables
 
 0.8.6
