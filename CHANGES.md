@@ -4,7 +4,7 @@ dataslayer Changelog
 0.9.0
 -----
 + rudimentary support for Tealium
-+ a new way to look at nested variables
++ a new way to look at nested variables (shift-click + to expand all children)
 
 0.8.6
 -----
