@@ -507,17 +507,30 @@ function updateUI(pageIndex,type) {
   $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
     if (e.shiftKey){
       e.preventDefault();
+      switch($(this).text()){
+        case '-':
+          $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+          $(this).text('+');
+          break;
+        case '+':
+          $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
+          // $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+          $(this).text('-');
+          break;
+      }
     }
-    switch($(this).text()){
-      case '-':
-        $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
-        $(this).text('+');
-        break;
-      case '+':
-        $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
-        $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-        $(this).text('-');
-        break;
+    else{
+      switch($(this).text()){
+        case '-':
+          $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+          $(this).text('+');
+          break;
+        case '+':
+          $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
+          $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+          $(this).text('-');
+          break;
+      }
     }
   });
 
