@@ -553,61 +553,12 @@ function updateUI(pageIndex,type) {
 }
 
 
-function testDL(dlName) {
-  function onEval(result, isException) {
-    if (result) {
-        dataslayer.datalayers[dataslayer.activeIndex]=result;
-    }
-    // get the current URL and grab it
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){
-        dataslayer.urls[dataslayer.activeIndex]=url;
-        // find first GTM tag and get its ID
-        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-          function(gtm,error){
-            if (!error){
-              if (dataslayer.GTMs[dataslayer.activeIndex]) dataslayer.GTMs[dataslayer.activeIndex].id = gtm[0].split('&')[0];
-              else dataslayer.GTMs[dataslayer.activeIndex] = {id: gtm[0].split('&')[0]};
-            }
-            updateUI();
-          }
-        );
-      }
-    );
-  }
-  chrome.devtools.inspectedWindow.eval(dlName, onEval);
-}
-
-function testUDO(dlName) {
-  function onEval(result, isException) {
-    if (result) {
-        dataslayer.utag_datas[dataslayer.activeIndex]=result;
-    }
-    // get the current URL and grab it
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){
-        dataslayer.urls[dataslayer.activeIndex]=url;
-        // find Tealium ID
-        chrome.devtools.inspectedWindow.eval('utag.id',
-          function(uid,error){
-            if (!error){
-              if (dataslayer.TLMs[dataslayer.activeIndex]) dataslayer.TLMs[dataslayer.activeIndex].id = uid;
-              else dataslayer.TLMs[dataslayer.activeIndex] = {id: uid};
-            }
-            updateUI();
-          }
-        );
-      }
-    );
-  }
-  chrome.devtools.inspectedWindow.eval(dlName, onEval);
-}
-
 function messageListener(message,sender,sendResponse){
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-      );
+    dataslayer.urls[dataslayer.activeIndex]=message.url;
+    // chrome.devtools.inspectedWindow.eval('window.location.href',
+    //   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
+    //   );
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
@@ -615,7 +566,7 @@ function messageListener(message,sender,sendResponse){
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
-      
+      updateUI();
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
@@ -641,9 +592,7 @@ function messageListener(message,sender,sendResponse){
     }
   }
   else if ((message.type=='dataslayer_tlm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
-      );
+    dataslayer.urls[dataslayer.activeIndex]=message.url;
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
@@ -651,7 +600,7 @@ function messageListener(message,sender,sendResponse){
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
-      
+      updateUI();
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
@@ -824,15 +773,6 @@ $('#clearbtnyes').click(function(){
     $("#lean_overlay").fadeOut(200);$('#clearconfirm').css({"display":"none"});
 });
 
-// chrome.devtools.inspectedWindow.eval('window.location.href',
-//   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url; updateUI();}
-//   );
-// chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-//   function(gtm,error){dataslayer.gtmIDs[dataslayer.activeIndex]=gtm; updateUI();}
-//   );
-
-
-
 chrome.devtools.network.getHAR(function(harlog){
   if(harlog && harlog.entries)
     harlog.entries.forEach(function(v,i,a){
@@ -852,11 +792,11 @@ chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   if (!error) { //was already injected
     dataslayer.GTMs[dataslayer.activeIndex]={id: exists.gtmID, name: exists.dLN};
     dataslayer.TLMs[dataslayer.activeIndex]={id: exists.utagID, name: exists.udoname};
-    testDL(exists.dLN);
+    // testDL(exists.dLN);
   }
   else {  //was not already injected
     chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
-    testDL('dataLayer');
+    // testDL('dataLayer');
   }
 });
 

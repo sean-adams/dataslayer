@@ -47,12 +47,14 @@ dataslayer.timerID = window.setInterval(function() {
             type: "dataslayer_gtm",
             data: "found",
             gtmID: dataslayer.gtmID,
-            dLN: dataslayer.dLN,
+	        url: window.location.href,
+            dLN: dataslayer.dLN
         }, "*");
         dataslayer.helper = new DataLayerHelper(window[dataslayer.dLN], dataslayer.helperListener, true);
         window.clearInterval(dataslayer.timerID);
-    } else if ((document.readyState == "complete") && (typeof window[dataslayer.dLN] == "undefined") && (document.querySelector("script[src*=googletagmanager\\\\.com]") === null)) {
+    } else if ((document.readyState == "complete") && (typeof window[dataslayer.dLN] == "undefined") && (document.querySelector("script[src*=googletagmanager\\.com]") === null)) {
         window.postMessage({
+	        url: window.location.href,
             type: "dataslayer_gtm",
             data: "notfound"
         }, "*");
@@ -65,6 +67,7 @@ dataslayer.tlmHelperListener = function(change) {
         type: "dataslayer_tlm",
         gtmID: dataslayer.utagID,
         dLN: dataslayer.udoname,
+        url: window.location.href,
         data: JSON.stringify(dataslayer.sanitize(window[dataslayer.udoname]))
     }, "*");
 };
@@ -79,6 +82,7 @@ dataslayer.tlmTimerID = window.setInterval(function() {
             type: "dataslayer_tlm",
             data: "found",
             gtmID: dataslayer.utagID,
+	        url: window.location.href,
             dLN: dataslayer.udoname
         }, "*");
         Object.observe(window[dataslayer.udoname], dataslayer.tlmHelperListener);
@@ -87,6 +91,7 @@ dataslayer.tlmTimerID = window.setInterval(function() {
     } else if ((document.readyState == "complete") && (typeof window[dataslayer.udoname] == "undefined")) {
         window.postMessage({
             type: "dataslayer_tlm",
+	        url: window.location.href,
             data: "notfound"
         }, "*");
         window.clearInterval(dataslayer.tlmTimerID);
