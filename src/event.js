@@ -53,7 +53,6 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 	}
 	else if ((message.type=='dataslayer_pageload')||(message.type=='dataslayer_opened')){
 			chrome.tabs.executeScript(message.tabID,{ file: 'content.js', runAt: 'document_idle' });
-			chrome.tabs.executeScript(message.tabID,{ file: 'insert.js', runAt: 'document_idle' });
 		}
 	// else if (message.type=='dataslayer_refresh'){
 	// 	chrome.tabs.executeScript(message.tabID,{code:'window.postMessage({type:"dataslayer_gtm",gtmID:dataslayer.gtmID,dLN:dataslayer.dLN,data: "found"},"*");'});
