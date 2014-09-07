@@ -190,14 +190,12 @@ li.newpage {border-bottom: 1px solid lightgrey;}
 }*/
 
 .object-row em a{
-	all: initial;
 	position: absolute;
 	left: 1em;
 	font-style: normal;
 	padding: 0px;
 }
 .object-row em a:hover,.object-row em a:focus{
-	all: initial;
 	cursor: pointer;
 	position: absolute;
 	left: 1em;
