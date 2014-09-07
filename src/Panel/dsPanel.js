@@ -326,29 +326,29 @@ function datalayerPushHTML(push,index){
           for (var k2 in x){
             if(typeof x[k2] == 'object'){
               var level2Id = k1+k2+'-'+Math.ceil(Math.random()*10000000);
-              therow = therow + '\n' + '<tr class="object-row child-of-'+level1Id+'" id="'+level2Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+              therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level1Id+'" id="'+level2Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
               for (var k3 in x[k2]) {
                 if (typeof x[k2][k3] == 'object'){
                   var level3Id = k1+k2+k3+'-'+Math.ceil(Math.random()*10000000);
-                  therow = therow + '\n' + '<tr class="object-row child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level3Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+                  therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level3Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                   for (var k4 in x[k2][k3]){
                     if (typeof x[k2][k3][k4] == 'object'){
                       var level4Id = k1+k2+k3+k4+'-'+Math.ceil(Math.random()*10000000);
-                      therow = therow + '\n' + '<tr class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
+                      therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
                       for (var k5 in x[k2][k3][k4]){
-                        therow = therow + '\n' + '<tr class="child-of-'+level4Id+' child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
+                        therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level4Id+' child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
                       }
                     }
                     else
-                      therow = therow + '\n' + '<tr class="child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
+                      therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
                   }
                 }
                 else
-                  therow = therow + '\n' + '<tr class="child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
+                  therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
               }
             }
             else
-              therow = therow + '\n' + '<tr class="child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
+              therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
           }          
         }
         else
@@ -494,54 +494,59 @@ function updateUI(pageIndex,type) {
   $('td.utm').has('li').css('width','auto');
   $('td.utm>ul>li:first-child.eventbreak').remove();
 
-  $('a.toggle').off('click.dataslayer');
-  $('a.toggle').on('click.dataslayer',function(){
-    if($(this).html()=='+'){
-      $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
-      $(this).html('-');
-    }
-    else{
-      $('.allparams'+$(this).data('toggle')).removeClass('allparams-visible');
-      $(this).html('+');
-    }
-  });
 
-  $('tr.object-row>td>em>a').off('click.dataslayer');
-  $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
-    if (e.shiftKey){
-      e.preventDefault();
-      switch($(this).text()){
-        case '-':
-          $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
-          $(this).text('+');
-          break;
-        case '+':
-          $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
-          // $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-          $(this).text('-');
-          break;
+  if (type!='datalayer'){
+    $('a.toggle').off('click.dataslayer');
+    $('a.toggle').on('click.dataslayer',function(){
+      if($(this).html()=='+'){
+        $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
+        $(this).html('-');
       }
-    }
-    else{
-      switch($(this).text()){
-        case '-':
-          $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
-          $(this).text('+');
-          break;
-        case '+':
-          $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
-          $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-          $(this).text('-');
-          break;
+      else{
+        $('.allparams'+$(this).data('toggle')).removeClass('allparams-visible');
+        $(this).html('+');
       }
-    }
-  });
-
-  if (dataslayer.options.collapseNested){
-    $('tr.object-row').each(function(){
-      $('.child-of-'+$(this).attr('id')).slideUp().find('.object-row').text('+');
     });
-    $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+  }
+
+  if (type!='tag'){
+    $('tr.object-row>td>em>a').off('click.dataslayer');
+    $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
+      if (e.shiftKey){
+        e.preventDefault();
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
+            // $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+            $(this).text('-');
+            break;
+        }
+      }
+      else{
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
+            $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+            $(this).text('-');
+            break;
+        }
+      }
+    });
+  
+    // if (dataslayer.options.collapseNested){
+    //   $('tr.object-row').each(function(){
+    //     $('.child-of-'+$(this).attr('id')).slideUp().find('.object-row').text('+');
+    //   });
+    //   $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
+    // }
   }
 
 
