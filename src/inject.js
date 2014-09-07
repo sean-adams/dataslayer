@@ -12,20 +12,22 @@ var dataslayer = {
     utagID: ""
 };
 dataslayer.helperListener = function(message, model) {
-    var localDL = window[dataslayer.dLN];
-    for (var ddl in localDL) {
-        for (var ddel in localDL[ddl]) {
-            if (localDL[ddl][ddel] instanceof Element) localDL[ddl][ddel] = "<i>element</i>";
+    var localDL = [];
+    for (var ddl in window[dataslayer.dLN]) {
+    	localDL[ddl] = {};
+        for (var ddel in window[dataslayer.dLN][ddl]) {
+            if (window[dataslayer.dLN][ddl][ddel] instanceof Element) localDL[ddl][ddel] = "<i>element</i>";
+            else localDL[ddl][ddel] = window[dataslayer.dLN][ddl][ddel];
         }
     }
-    var poster = {
+    window.postMessage({
         type: "dataslayer_gtm",
         gtmID: dataslayer.gtmID,
         dLN: dataslayer.dLN,
         data: JSON.stringify(localDL)
-    };
-    window.postMessage(poster, "*");
+    }, "*");
 };
+
 dataslayer.timerID = window.setInterval(function() {
     if (window.hasOwnProperty("google_tag_manager"))
         for (var p in google_tag_manager) {
@@ -51,6 +53,7 @@ dataslayer.timerID = window.setInterval(function() {
         window.clearInterval(dataslayer.timerID);
     }
 }, 200);
+
 dataslayer.tlmHelperListener = function(change) {
     var localDL = window[dataslayer.udoname];
     for (var ddl in localDL) {
@@ -66,6 +69,7 @@ dataslayer.tlmHelperListener = function(change) {
     };
     window.postMessage(poster, "*");
 };
+
 dataslayer.tlmTimerID = window.setInterval(function() {
     if (window.hasOwnProperty("utag")) {
         dataslayer.udoname = utag.udoname;
