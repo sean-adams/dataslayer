@@ -34,6 +34,49 @@ dataslayer.helperListener = function(message, model) {
     }, "*");
 };
 
+dataslayer.refresh = function(){
+	if (typeof window[dataslayer.dLN] !== "undefined") {
+        window.postMessage({
+            type: "dataslayer_gtm",
+            data: "found",
+            gtmID: dataslayer.gtmID,
+	        url: window.location.href,
+            dLN: dataslayer.dLN
+        }, "*");
+        for (var i = 0;i<window[dataslayer.dLN].length;i++)
+	        window.postMessage({
+		        type: "dataslayer_gtm_push",
+		        gtmID: dataslayer.gtmID,
+		        dLN: dataslayer.dLN,
+		        url: window.location.href,
+		        data: JSON.stringify(dataslayer.sanitize(window[dataslayer.dLN][i]))
+		    }, "*");
+    } else if ((document.readyState == "complete") && (typeof window[dataslayer.dLN] == "undefined") && (document.querySelector("script[src*=googletagmanager\\.com]") === null)) {
+        window.postMessage({
+	        url: window.location.href,
+            type: "dataslayer_gtm",
+            data: "notfound"
+        }, "*");
+    }
+
+    if (typeof window[dataslayer.udoname] !== "undefined") {
+        window.postMessage({
+            type: "dataslayer_tlm",
+            data: "found",
+            gtmID: dataslayer.utagID,
+	        url: window.location.href,
+            dLN: dataslayer.udoname
+        }, "*");
+        dataslayer.tlmHelperListener();
+    } else if ((document.readyState == "complete") && (typeof window[dataslayer.udoname] == "undefined")) {
+        window.postMessage({
+            type: "dataslayer_tlm",
+	        url: window.location.href,
+            data: "notfound"
+        }, "*");
+    }
+};
+
 dataslayer.timerID = window.setInterval(function() {
     if (window.hasOwnProperty("google_tag_manager"))
         for (var p in google_tag_manager) {

@@ -20,3 +20,12 @@ dataslayer.helperListener = function(event){
 };
 window.addEventListener('message',dataslayer.helperListener);
 
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+  	if (request.ask=='refresh')
+  		var refreshTag = document.createElement('script');
+  		refreshTag.type = 'text/javascript';
+  		refreshTag.innerHTML = 'dataslayer.refresh();';
+	  	document.head.appendChild(refreshTag);
+  }
+);

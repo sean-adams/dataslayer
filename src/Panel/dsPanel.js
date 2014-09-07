@@ -548,32 +548,6 @@ function updateUI(pageIndex,type) {
 
 }
 
-
-function testDL(dlName) {
-  function onEval(result, isException) {
-    if (result) {
-        dataslayer.datalayers[dataslayer.activeIndex]=result;
-    }
-    // get the current URL and grab it
-    chrome.devtools.inspectedWindow.eval('window.location.href',
-      function(url,error){
-        dataslayer.urls[dataslayer.activeIndex]=url;
-        // find first GTM tag and get its ID
-        chrome.devtools.inspectedWindow.eval('document.querySelector(\'script[src*=googletagmanager\\\\.com]\').getAttribute(\'src\').match(/GTM.*/)',
-          function(gtm,error){
-            if (!error){
-              if (dataslayer.GTMs[dataslayer.activeIndex]) dataslayer.GTMs[dataslayer.activeIndex].id = gtm[0].split('&')[0];
-              else dataslayer.GTMs[dataslayer.activeIndex] = {id: gtm[0].split('&')[0]};
-            }
-            updateUI();
-          }
-        );
-      }
-    );
-  }
-  chrome.devtools.inspectedWindow.eval(dlName, onEval);
-}
-
 function messageListener(message,sender,sendResponse){
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.urls[dataslayer.activeIndex]=message.url;
@@ -813,7 +787,8 @@ chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   if (!error) { //was already injected
     dataslayer.GTMs[dataslayer.activeIndex]={id: exists.gtmID, name: exists.dLN};
     dataslayer.TLMs[dataslayer.activeIndex]={id: exists.utagID, name: exists.udoname};
-    testDL(exists.dLN);
+    chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
+    // testDL(exists.dLN);
   }
   else {  //was not already injected
     chrome.runtime.sendMessage({type: 'dataslayer_opened',tabID: chrome.devtools.inspectedWindow.tabId});
