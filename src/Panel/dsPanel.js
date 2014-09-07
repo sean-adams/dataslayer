@@ -687,8 +687,6 @@ function messageListener(message,sender,sendResponse){
 function newPageLoad(newurl){
   dataslayer.loading = true;
   loadSettings();
-  dataslayer.port = chrome.runtime.connect();
-  dataslayer.port.onMessage.addListener(messageListener);
 
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
   dataslayer.datalayers[dataslayer.activeIndex] = [];
