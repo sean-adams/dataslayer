@@ -413,6 +413,80 @@ function tagHTML(index){
 return allrows;
 }
 
+// clickSetup: called by UI updates
+// makes sure interactive behavior and various CSS settings are in place
+// - type: datalayer|tag|all (default: all)
+function clickSetup(type){
+  for (var i=0;i<dataslayer.datalayers.length-1;i++){
+    $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
+    $('.page'+i).removeClass('currentpage');
+  }
+
+  $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
+  $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
+  $('.pure-menu').not($('.pure-menu').has('td.dlt li')).find('td.utm').has('li').css('border-left','none');
+  $('.pure-menu').not($('.pure-menu').has('td.utm li')).find('td.dlt').has('li').css('border-right','none');
+  $('td.dlt').not($('td.dlt').has('li')).css('width','0');
+  $('td.utm').not($('td.utm').has('li')).css('width','0');
+  $('td.dlt').has('li').css('width','auto');
+  $('td.utm').has('li').css('width','auto');
+  $('td.utm>ul>li:first-child.eventbreak').remove();
+
+
+  if (type!='datalayer'){
+    $('a.toggle').off('click.dataslayer');
+    $('a.toggle').on('click.dataslayer',function(){
+      if($(this).html()=='+'){
+        $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
+        $(this).html('-');
+      }
+      else{
+        $('.allparams'+$(this).data('toggle')).removeClass('allparams-visible');
+        $(this).html('+');
+      }
+    });
+  }
+
+  if (type!='tag'){
+    $('tr.object-row>td>em>a').off('click.dataslayer');
+    $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
+      e.preventDefault();
+      if (e.shiftKey){
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
+            $(this).text('-');
+            break;
+        }
+      }
+      else{
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
+            $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+            $(this).text('-');
+            break;
+        }
+      }
+    });
+  }
+
+
+  $('a.newpage').off('click.dataslayer');
+  $('a.newpage').on('click.dataslayer',function(){
+      $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle(200);
+      $('#sub'+$(this).data('dlnum')).toggleClass('clicked-open');
+    }
+  );
+}
 
 // updateUI: called whenever dataLayer changes or a new tag fires
 // parses dataslayer.tags and dataslayer.datalayers arrays and displays them
@@ -478,86 +552,7 @@ function updateUI(pageIndex,type) {
     });
   } //end refresh all
 
-  // click setup and various cleanup
-  for (var i=0;i<dataslayer.datalayers.length-1;i++){
-      $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
-      $('.page'+i).removeClass('currentpage');
-    }
-
-  $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
-  $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
-  $('.pure-menu').not($('.pure-menu').has('td.dlt li')).find('td.utm').has('li').css('border-left','none');
-  $('.pure-menu').not($('.pure-menu').has('td.utm li')).find('td.dlt').has('li').css('border-right','none');
-  $('td.dlt').not($('td.dlt').has('li')).css('width','0');
-  $('td.utm').not($('td.utm').has('li')).css('width','0');
-  $('td.dlt').has('li').css('width','auto');
-  $('td.utm').has('li').css('width','auto');
-  $('td.utm>ul>li:first-child.eventbreak').remove();
-
-
-  if (type!='datalayer'){
-    $('a.toggle').off('click.dataslayer');
-    $('a.toggle').on('click.dataslayer',function(){
-      if($(this).html()=='+'){
-        $('.allparams'+$(this).data('toggle')).addClass('allparams-visible')  ;
-        $(this).html('-');
-      }
-      else{
-        $('.allparams'+$(this).data('toggle')).removeClass('allparams-visible');
-        $(this).html('+');
-      }
-    });
-  }
-
-  if (type!='tag'){
-    $('tr.object-row>td>em>a').off('click.dataslayer');
-    $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
-      e.preventDefault();
-      if (e.shiftKey){
-        switch($(this).text()){
-          case '-':
-            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
-            $(this).text('+');
-            break;
-          case '+':
-            $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
-            // $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-            $(this).text('-');
-            break;
-        }
-      }
-      else{
-        switch($(this).text()){
-          case '-':
-            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
-            $(this).text('+');
-            break;
-          case '+':
-            $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
-            $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-            $(this).text('-');
-            break;
-        }
-      }
-    });
-  
-    // if (dataslayer.options.collapseNested){
-    //   $('tr.object-row').each(function(){
-    //     $('.child-of-'+$(this).attr('id')).slideUp().find('.object-row').text('+');
-    //   });
-    //   $('.child-of-'+$(this).closest('tr.object-row').attr('id')).slideUp().find('.object-row').text('+');
-    // }
-  }
-
-
-  $('a.newpage').off('click.dataslayer');
-  $('a.newpage').on('click.dataslayer',function(){
-      $('#sub'+$(this).data('dlnum')+'>table>tbody ul').slideToggle(200);
-      $('#sub'+$(this).data('dlnum')).toggleClass('clicked-open');
-    }
-  );
-  // end click setup and various cleanup
-
+  clickSetup(type);
 }
 
 function messageListener(message,sender,sendResponse){
@@ -637,8 +632,8 @@ function messageListener(message,sender,sendResponse){
     $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
     dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
     dataslayer.datalayers[dataslayer.activeIndex].push(JSON.parse(message.data));
-    // updateUI(dataslayer.activeIndex,'datalayer');
     $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex));
+    clickSetup('datalayer');
   }
   else if (message.type=='dataslayer_loadsettings'){
     console.log(message.data);
