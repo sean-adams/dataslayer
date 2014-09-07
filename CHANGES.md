@@ -5,6 +5,7 @@ dataslayer Changelog
 -----
 + rudimentary support for Tealium
 + a new way to look at nested variables (shift-click + to expand all children)
++ fixed issue with overwriting passed DOM elements (e.g. for link click listening)
 
 0.8.6
 -----
