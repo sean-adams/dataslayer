@@ -314,21 +314,12 @@ function addSpaces(obj){
   return spaces;
 }
 
-// datalayerHTML
-// - datalayers: dataslayer.dataLayers | dataslayer.utag_datas
+// datalayerPushHTML
+// - push: object 
 // - index: index of dataslayer.datalayers | dataslayer.utag_datas
-// - type: 'tlm' | 'gtm'
-// returns contents of td.dlt > ul
-function datalayerHTML(datalayers,index,type) {
-  if ($.isEmptyObject(datalayers[index])) return '';  //if empty utag_data get us out of here
-
-  var allrows = '';
-  var arrLayer = (Array.isArray(datalayers[index])?datalayers[index]:[datalayers[index]]); //cast utag_data as length 1 array so the entire rest of this function doesn't have to be rewritten
-
-  $.each(arrLayer,function(i,v){ //iterate each push group on the page
-    var therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n' + '<li class="event submenu dlnum'+index+'"><table cols=2>';
-
-    $.each(v,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
+function datalayerPushHTML(push,index){
+  var therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n' + '<li class="event submenu dlnum'+index+'"><table cols=2>';
+  $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
           var level1Id = k1+'-'+Math.ceil(Math.random()*10000000);
           therow = therow + '\n' + '<tr class="object-row" id="'+level1Id+'"><td>'+(dataslayer.options.collapseNested?'<em><a href="#">+</a></em>':'<em><a href="#">-</a></em>')+'<b>'+k1+'</b></td><td><span>'+'<i>(Object)</i>'+'</span></td></tr>';
@@ -365,13 +356,29 @@ function datalayerHTML(datalayers,index,type) {
       }
     );
     therow = therow +  '</table></li>';
-    allrows = therow + allrows;
+  return therow;
+}
+
+
+// datalayerHTML
+// - datalayers: dataslayer.dataLayers | dataslayer.utag_datas
+// - index: index of dataslayer.datalayers | dataslayer.utag_datas
+// - type: 'tlm' | 'gtm'
+// returns contents of td.dlt > ul
+function datalayerHTML(datalayers,index,type) {
+  if ($.isEmptyObject(datalayers[index])) return '';  //if empty utag_data get us out of here
+
+  var allrows = '';
+  var arrLayer = (Array.isArray(datalayers[index])?datalayers[index]:[datalayers[index]]); //cast utag_data as length 1 array so the entire rest of this function doesn't have to be rewritten
+
+  $.each(arrLayer,function(i,v){ //iterate each push group on the page
+    allrows = datalayerPushHTML(v,index) + allrows;
   });
 
   if((dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))&&(type=='gtm'))
-    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.GTMs[index].id+'</u>'+(dataslayer.GTMs[index].name=='dataLayer'||typeof dataslayer.GTMs[index].name=='undefined'?'':' <i>('+dataslayer.GTMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.GTMs[index].id+'</u>'+(dataslayer.GTMs[index].name=='dataLayer'||typeof dataslayer.GTMs[index].name=='undefined'?'':' <i>('+dataslayer.GTMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
   else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
-    allrows = '<li class="event submenu dlnum'+index+'"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
