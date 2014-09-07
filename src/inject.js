@@ -22,15 +22,12 @@ dataslayer.sanitize = function(obj){
 };
 
 dataslayer.helperListener = function(message, model) {
-    var localDL = [];
-    for (var ddl in window[dataslayer.dLN]) {
-    	localDL[ddl] = dataslayer.sanitize(window[dataslayer.dLN][ddl]);
-    }
-    window.postMessage({
-        type: "dataslayer_gtm",
+	window.postMessage({
+        type: "dataslayer_gtm_push",
         gtmID: dataslayer.gtmID,
         dLN: dataslayer.dLN,
-        data: JSON.stringify(localDL)
+        url: window.location.href,
+        data: JSON.stringify(dataslayer.sanitize(model))
     }, "*");
 };
 

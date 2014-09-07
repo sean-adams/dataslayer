@@ -590,7 +590,7 @@ function messageListener(message,sender,sendResponse){
     }
     else{   
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
-      dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
+      // dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
       // get the current URL and grab it
       
       dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
@@ -631,6 +631,14 @@ function messageListener(message,sender,sendResponse){
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
+  }
+  if ((message.type=='dataslayer_gtm_push')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
+    dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+    dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+    dataslayer.datalayers[dataslayer.activeIndex].push(JSON.parse(message.data));
+    // updateUI(dataslayer.activeIndex,'datalayer');
+    $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex));
   }
   else if (message.type=='dataslayer_loadsettings'){
     console.log(message.data);
