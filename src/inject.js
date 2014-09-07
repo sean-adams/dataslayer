@@ -11,14 +11,20 @@ var dataslayer = {
     udoname: "utag_data",
     utagID: ""
 };
+
+dataslayer.sanitize = function(obj){
+	var localDL = {};
+	for (var ddel in obj){
+		if (obj[ddel] instanceof Element) localDL[ddel] = "<i>element</i>";
+		else localDL[ddel] = obj[ddel];
+	}
+	return localDL;
+};
+
 dataslayer.helperListener = function(message, model) {
     var localDL = [];
     for (var ddl in window[dataslayer.dLN]) {
-    	localDL[ddl] = {};
-        for (var ddel in window[dataslayer.dLN][ddl]) {
-            if (window[dataslayer.dLN][ddl][ddel] instanceof Element) localDL[ddl][ddel] = "<i>element</i>";
-            else localDL[ddl][ddel] = window[dataslayer.dLN][ddl][ddel];
-        }
+    	localDL[ddl] = dataslayer.sanitize(window[dataslayer.dLN][ddl]);
     }
     window.postMessage({
         type: "dataslayer_gtm",
@@ -55,19 +61,12 @@ dataslayer.timerID = window.setInterval(function() {
 }, 200);
 
 dataslayer.tlmHelperListener = function(change) {
-    var localDL = window[dataslayer.udoname];
-    for (var ddl in localDL) {
-        for (var ddel in localDL[ddl]) {
-            if (localDL[ddl][ddel] instanceof Element) localDL[ddl][ddel] = "<i>element</i>";
-        }
-    }
-    var poster = {
+    window.postMessage({
         type: "dataslayer_tlm",
         gtmID: dataslayer.utagID,
         dLN: dataslayer.udoname,
-        data: JSON.stringify(localDL)
-    };
-    window.postMessage(poster, "*");
+        data: JSON.stringify(dataslayer.sanitize(window[dataslayer.udoname]))
+    }, "*");
 };
 
 dataslayer.tlmTimerID = window.setInterval(function() {
