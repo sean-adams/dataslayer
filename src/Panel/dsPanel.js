@@ -290,7 +290,7 @@ function collapseStack(obj,keys,val){
 // returns data object with properties converted to object paradigm
 function collapseUDO(udo){
   var newUDO = {};
-  var props = Object.getOwnPropertyNames(udo);
+  var props = Object.getOwnPropertyNames(udo).sort();
   for (var i in props){
     var stack = props[i].split('.');
     if (stack.length==1)
@@ -619,9 +619,8 @@ function messageListener(message,sender,sendResponse){
     }
     else{   
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
-      dataslayer.utag_datas[dataslayer.activeIndex]=collapseUDO(JSON.parse(message.data));
-      // get the current URL and grab it
-      
+      dataslayer.utag_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
+            
       dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
 
       updateUI(dataslayer.activeIndex,'datalayer');
