@@ -366,7 +366,7 @@ function datalayerPushHTML(push,index){
 // - type: 'tlm' | 'gtm'
 // returns contents of td.dlt > ul
 function datalayerHTML(datalayers,index,type) {
-  if ($.isEmptyObject(datalayers[index])) return '';  //if empty utag_data get us out of here
+  if ((type=='tlm')&&($.isEmptyObject(datalayers[index]))) return '';  //if empty utag_data get us out of here
 
   var allrows = '';
   var arrLayer = (Array.isArray(datalayers[index])?datalayers[index]:[datalayers[index]]); //cast utag_data as length 1 array so the entire rest of this function doesn't have to be rewritten
@@ -539,9 +539,9 @@ function updateUI(pageIndex,type) {
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
 
         if (dataslayer.options.showGTMLoad){
-          if (dataslayer.datalayers[a].length>0)
+          if ((dataslayer.datalayers[a].length>0)||(dataslayer.GTMs.hasOwnProperty(a)&&!($.isEmptyObject(dataslayer.GTMs[a]))))
             $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
-          else if (!($.isEmptyObject(dataslayer.utag_datas[a])))
+          else if ((!($.isEmptyObject(dataslayer.utag_datas[a])))||(dataslayer.TLMs.hasOwnProperty(a)&&!($.isEmptyObject(dataslayer.TLMs[a]))))
             $('#sub'+a+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
             $('#sub'+a+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
@@ -772,9 +772,11 @@ loadSettings();
 $('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
 $('a.clearbtn').leanModal({ top : 0});
 $('#clearbtnyes').click(function(){
-    dataslayer.datalayers = [dataslayer.datalayers[dataslayer.activeIndex]];
-    dataslayer.tags = [dataslayer.tags[dataslayer.activeIndex]];
+    dataslayer.datalayers = [[]];
+    dataslayer.tags = [[]];
+    dataslayer.utag_datas = [{}];
     dataslayer.GTMs = [dataslayer.GTMs[dataslayer.activeIndex]];
+    dataslayer.TLMs = [dataslayer.TLMs[dataslayer.activeIndex]];
     dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
     dataslayer.activeIndex = 0;
     updateUI();
