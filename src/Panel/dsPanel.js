@@ -9,14 +9,15 @@ dataslayer.GTMs = [];
 dataslayer.TLMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = {
+dataslayer.options = typeof localStorage['options'] !== 'undefined' ? JSON.parse(localStorage['options']) : {
   showFloodlight: true, 
   showUniversal: true, 
   showClassic: true, 
   showSitecatalyst: true, 
   showGTMLoad: true, 
   ignoredTags: [],
-  collapseNested: false
+  collapseNested: false,
+  blockTags: false
 };
 dataslayer.loading = false;
 
@@ -25,6 +26,23 @@ dataslayer.port = chrome.runtime.connect();
 
 // loadSettings:
 function loadSettings(){
+  dataslayer.options = typeof localStorage['options'] !== 'undefined' ? JSON.parse(localStorage['options']) : {
+    showFloodlight: true, 
+    showUniversal: true, 
+    showClassic: true, 
+    showSitecatalyst: true, 
+    showGTMLoad: true, 
+    ignoredTags: [],
+    collapseNested: false,
+    blockTags: false
+  };
+  $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
+      if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
+    });
+  if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
+  if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
+  if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
+  
   chrome.storage.sync.get(null,function(items){
     dataslayer.options = items;
     $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
@@ -32,6 +50,8 @@ function loadSettings(){
     });
     if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
     if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
+    if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
+    localStorage['options'] = JSON.stringify(dataslayer.options);
   });
 
 }
