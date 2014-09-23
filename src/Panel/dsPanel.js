@@ -616,6 +616,7 @@ function messageListener(message,sender,sendResponse){
   }
   else if ((message.type=='dataslayer_tlm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(message.url);
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
