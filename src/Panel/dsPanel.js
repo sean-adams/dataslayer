@@ -338,7 +338,7 @@ function addSpaces(obj){
 // - push: object 
 // - index: index of dataslayer.datalayers | dataslayer.utag_datas
 function datalayerPushHTML(push,index){
-  var therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n' + '<li class="event submenu dlnum'+index+'"><table cols=2>';
+  var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer"><table cols=2>';
   $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
           var level1Id = k1+'-'+Math.ceil(Math.random()*10000000);
@@ -414,7 +414,7 @@ function tagHTML(index){
 
     var therow = '';
     
-    if(((v.reqType=='classic') || (v.reqType=='dc.js')) && dataslayer.options.showClassic)
+    if(((v.reqType=='classic') || (v.reqType=='dc_js')) && dataslayer.options.showClassic)
         therow = parseClassic(v,index + '_' + q);
     else if ((v.reqType=='universal') && dataslayer.options.showUniversal)
         therow = parseUniversal(v,index + '_' + q);
@@ -425,8 +425,8 @@ function tagHTML(index){
     else
         return;  
 
-    therow = '<li class="event submenu dlnum'+index+'"><table cols=2>'+therow+'</table></li>\n';
-    if (q<(dataslayer.tags[index].length-1)) therow = '<li class="eventbreak submenu dlnum'+index+'"></li>\n'+therow;
+    therow = '<li class="event submenu dlnum'+index+' '+v.reqType+'"><table cols=2>'+therow+'</table></li>\n';
+    if (q<(dataslayer.tags[index].length-1)) therow = '<li class="eventbreak submenu dlnum'+index+' '+v.reqType+'"></li>\n'+therow;
   allrows = therow + allrows;
   }
   );
@@ -655,9 +655,15 @@ function messageListener(message,sender,sendResponse){
     clickSetup('datalayer');
   }
   else if (message.type=='dataslayer_loadsettings'){
-    console.log(message.data);
+    // console.log(message.data);
     for (var a in message.data) { dataslayer.options[a] = message.data[a]; }
-    updateUI();
+    if (!dataslayer.options.showGTMLoad)
+      $('li.newpage').removeClass('seeking').removeClass('hasTLM').removeClass('hasGTM').removeClass('noGTM');
+    for (var i in dataslayer.datalayers){
+      updateUI(i,'datalayer');
+      updateUI(i,'tag');
+    }
+    $('td.utm>ul>li:first-child.eventbreak').remove();
   }
 }
 
@@ -682,7 +688,7 @@ function newRequest(request){
   var reqType = '';
   if (/__utm\.gif/i.test(request.request.url)){
     if (/stats\.g\.doubleclick\.net/i.test(request.request.url))
-      reqType = 'dc.js';
+      reqType = 'dc_js';
     else reqType = 'classic';
   }
   else if (/google-analytics\.com\/collect/i.test(request.request.url)){
@@ -707,7 +713,7 @@ function newRequest(request){
 
   // parse query string into key/value pairs
   var queryParams = {};
-  if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc.js') || (reqType == 'sitecatalyst'))
+  if ((reqType == 'classic') || (reqType == 'universal') || (reqType == 'dc_js') || (reqType == 'sitecatalyst'))
       {try{requestURI.split('&').
                                                     forEach(function(pair){
                                                       pair = pair.split('=');
