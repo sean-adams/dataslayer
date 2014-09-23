@@ -578,6 +578,7 @@ function updateUI(pageIndex,type) {
 function messageListener(message,sender,sendResponse){
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(message.url);
     // chrome.devtools.inspectedWindow.eval('window.location.href',
     //   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
     //   );
