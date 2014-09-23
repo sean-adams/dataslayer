@@ -536,9 +536,9 @@ function updateUI(pageIndex,type) {
         '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')+datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(pageIndex)+'</ul></td></tr></tbody></table></div>\n');
         if (dataslayer.options.showGTMLoad){
-          if (dataslayer.datalayers[pageIndex].length>0)
+          if ((dataslayer.datalayers[pageIndex].length>0)||(dataslayer.GTMs.hasOwnProperty(pageIndex)&&!($.isEmptyObject(dataslayer.GTMs[pageIndex]))))
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
-          else if (!($.isEmptyObject(dataslayer.utag_datas[pageIndex])))
+          else if ((!($.isEmptyObject(dataslayer.utag_datas[pageIndex])))||(dataslayer.TLMs.hasOwnProperty(pageIndex)&&!($.isEmptyObject(dataslayer.TLMs[pageIndex]))))
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
           else if (dataslayer.loading)
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('seeking').removeClass('hasGTM').removeClass('noGTM').removeClass('hasTLM');
@@ -640,7 +640,7 @@ function messageListener(message,sender,sendResponse){
 
     }
     else{   
-      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
+      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM');
       dataslayer.utag_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
             
       dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
