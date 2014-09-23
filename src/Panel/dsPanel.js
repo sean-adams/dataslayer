@@ -589,7 +589,7 @@ function messageListener(message,sender,sendResponse){
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
-      updateUI();
+      // updateUI();
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
@@ -624,7 +624,7 @@ function messageListener(message,sender,sendResponse){
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
-      updateUI();
+      // updateUI();
     }
     else if (message.data=='found'){
       dataslayer.loading = false;
