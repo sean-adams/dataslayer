@@ -168,7 +168,8 @@ function parseClassic(v,ref){
   switch(v.utmt){
     case 'event':
       if (v.utme.indexOf('5(')>=0){
-        var eventdata = v.utme.match(/5\([^)]+(?=\))/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').substring(2).split('*'); //find events and unescape
+        var eventdata = v.utme.match(/5\([^)]+\)(\(\d+\))?/i)[0].replace(/\'1/g,')').replace(/\'3/g,'!').replace(')(','*').substring(2).split('*'); //find events and unescape
+        eventdata[eventdata.length-1] = eventdata[eventdata.length-1].substring(0,eventdata[eventdata.length-1].length-1); //chop trailing paren
         $.each(eventdata,function(a,b){eventdata[a]=eventdata[a].replace(/\'2/g,'*').replace(/\'0/g,'\'');});
         therow = therow + '\n<tr><td><b>category</b></td><td><span>'+eventdata[0]+
           '</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+eventdata[1]+
