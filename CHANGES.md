@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.9.1
+-----
++ fixed missing event value for GA classic
+
 0.9.0
 -----
 + initial support for Tealium
