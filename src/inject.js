@@ -6,7 +6,7 @@ function r(a,b,c){for(a.c.push.apply(a.c,b);!1===a.d&&0<a.c.length;){b=a.c.shift
 function p(a){return{set:function(b,c){s(t(b,c),a.a)},get:function(b){return a.get(b)}}}function t(a,b){for(var c={},d=c,e=a.split("."),f=0;f<e.length-1;f++)d=d[e[f]]={};d[e[e.length-1]]=b;return c}function s(a,b){for(var c in a)if(k(a,c)){var d=a[c];"array"==h(d)?("array"==h(b[c])||(b[c]=[]),s(d,b[c])):m(d)?(m(b[c])||(b[c]={}),s(d,b[c])):b[c]=d}};})();
 
 var dataslayer = {
-    helper: [],
+    helper: {},
     dLN: [],
     gtmID: [],
     udoname: "utag_data",
@@ -25,7 +25,7 @@ dataslayer.sanitize = function(obj){
 dataslayer.helperListener = function(message, model) {
 	window.postMessage({
         type: "dataslayer_gtm_push",
-        gtmID: dataslayer.gtmID[this.z],
+        // gtmID: dataslayer.gtmID[this.z],
         dLN: dataslayer.dLN[this.z],
         url: window.location.href,
         data: JSON.stringify(dataslayer.sanitize(model))
@@ -101,7 +101,7 @@ dataslayer.timerID = window.setInterval(function() {
                 dataslayer.dLN[i]='dataLayer';
             }
 
-            if ((typeof window[dataslayer.dLN[i]] !== "undefined")&&(typeof dataslayer.helper[i] === "undefined")) {
+            if ((typeof window[dataslayer.dLN[i]] !== "undefined")) {
                 window.postMessage({
                     type: "dataslayer_gtm",
                     data: "found",
@@ -109,7 +109,8 @@ dataslayer.timerID = window.setInterval(function() {
                     url: window.location.href,
                     dLN: dataslayer.dLN[i]
                 }, "*");
-                dataslayer.helper[i] = new DataLayerHelper(window[dataslayer.dLN[i]], dataslayer.helperListener, true,i);
+                if (!dataslayer.helper.hasOwnProperty(dataslayer.dLN[i]))
+                    dataslayer.helper[dataslayer.dLN[i]] = new DataLayerHelper(window[dataslayer.dLN[i]], dataslayer.helperListener, true,i);
             }
 
         }
