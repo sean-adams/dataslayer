@@ -2,10 +2,10 @@
 // this is where the magic happens
 
 var dataslayer = {};
-dataslayer.datalayers = [[]];
+dataslayer.datalayers = [{}];
 dataslayer.utag_datas = [{}];
 dataslayer.tags = [[]];
-dataslayer.GTMs = [];
+dataslayer.GTMs = [[]];
 dataslayer.TLMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
@@ -337,7 +337,7 @@ function addSpaces(obj){
 
 // datalayerPushHTML
 // - push: object 
-// - index: index of dataslayer.datalayers | dataslayer.utag_datas
+// - index: index of dataslayer.datalayers[data layer name] | dataslayer.utag_datas
 function datalayerPushHTML(push,index){
   var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer"><table cols=2>';
   $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
@@ -382,11 +382,13 @@ function datalayerPushHTML(push,index){
 
 
 // datalayerHTML
-// - datalayers: dataslayer.dataLayers | dataslayer.utag_datas
+// - datalayers: dataslayer.datalayers | dataslayer.utag_datas
 // - index: index of dataslayer.datalayers | dataslayer.utag_datas
 // - type: 'tlm' | 'gtm'
+// - gtmIndex: which GTM container (defaults to index 0)
 // returns contents of td.dlt > ul
-function datalayerHTML(datalayers,index,type) {
+function datalayerHTML(datalayers,index,type,gtmIndex) {
+  gtmIndex = gtmIndex || 0;
   if ((type=='tlm')&&($.isEmptyObject(datalayers[index]))) return '';  //if empty utag_data get us out of here
 
   var allrows = '';
@@ -396,8 +398,16 @@ function datalayerHTML(datalayers,index,type) {
     allrows = datalayerPushHTML(v,index) + allrows;
   });
 
-  if((dataslayer.GTMs[index]&&dataslayer.GTMs[index].hasOwnProperty('id'))&&(type=='gtm'))
-    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.GTMs[index].id+'</u>'+(dataslayer.GTMs[index].name=='dataLayer'||typeof dataslayer.GTMs[index].name=='undefined'?'':' <i>('+dataslayer.GTMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+  if(((dataslayer.GTMs[index]&&dataslayer.GTMs[index][gtmIndex])&&dataslayer.GTMs[index][gtmIndex].hasOwnProperty('id'))&&(type=='gtm')){
+    var dropdown = '';
+    if (dataslayer.GTMs[index].length>1){
+      for (var i=0;i<dataslayer.GTMs[index].length;i++){
+        dropdown = dropdown+'<option value="'+i+'">'+dataslayer.GTMs[index][i].id+(dataslayer.GTMs[index][i].name=='dataLayer'?'':' ('+dataslayer.GTMs[index][i].name+')')+'</option>';
+      }
+      dropdown = '<select id="gtmSelect'+index+'">'+dropdown+'</select>';
+    }
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+(dropdown.length===0?dataslayer.GTMs[index][gtmIndex].id:dropdown)+'</u>'+(dataslayer.GTMs[index][gtmIndex].name=='dataLayer'||typeof dataslayer.GTMs[index][gtmIndex].name=='undefined'?'':' <i>('+dataslayer.GTMs[index][gtmIndex].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+  }
   else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
     allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
 
@@ -537,7 +547,7 @@ function updateUI(pageIndex,type) {
         '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')+datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(pageIndex)+'</ul></td></tr></tbody></table></div>\n');
         if (dataslayer.options.showGTMLoad){
-          if ((dataslayer.datalayers[pageIndex].length>0)||(dataslayer.GTMs.hasOwnProperty(pageIndex)&&!($.isEmptyObject(dataslayer.GTMs[pageIndex]))))
+          if ((dataslayer.datalayers[pageIndex].length>0)||(dataslayer.GTMs.hasOwnProperty(pageIndex)&&!(dataslayer.GTMs[pageIndex].length>0)))
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
           else if ((!($.isEmptyObject(dataslayer.utag_datas[pageIndex])))||(dataslayer.TLMs.hasOwnProperty(pageIndex)&&!($.isEmptyObject(dataslayer.TLMs[pageIndex]))))
             $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
@@ -560,7 +570,7 @@ function updateUI(pageIndex,type) {
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
 
         if (dataslayer.options.showGTMLoad){
-          if ((dataslayer.datalayers[a].length>0)||(dataslayer.GTMs.hasOwnProperty(a)&&!($.isEmptyObject(dataslayer.GTMs[a]))))
+          if ((dataslayer.datalayers[a].length>0)||(dataslayer.GTMs.hasOwnProperty(a)&&!(dataslayer.GTMs[pageIndex].length>0)))
             $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
           else if ((!($.isEmptyObject(dataslayer.utag_datas[a])))||(dataslayer.TLMs.hasOwnProperty(a)&&!($.isEmptyObject(dataslayer.TLMs[a]))))
             $('#sub'+a+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
@@ -595,7 +605,7 @@ function messageListener(message,sender,sendResponse){
     else if (message.data=='found'){
       dataslayer.loading = false;
 
-      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.GTMs[dataslayer.activeIndex].push({id: message.gtmID, name: message.dLN});
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
@@ -608,9 +618,8 @@ function messageListener(message,sender,sendResponse){
     else{   
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
       // dataslayer.datalayers[dataslayer.activeIndex]=JSON.parse(message.data);
-      // get the current URL and grab it
       
-      dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      // dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
@@ -652,8 +661,11 @@ function messageListener(message,sender,sendResponse){
   if ((message.type=='dataslayer_gtm_push')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.urls[dataslayer.activeIndex]=message.url;
     $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
-    dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
-    dataslayer.datalayers[dataslayer.activeIndex].push(JSON.parse(message.data));
+    // dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+    if (dataslayer.datalayers[dataslayer.activeIndex].hasOwnProperty(message.dLN))
+      dataslayer.datalayers[dataslayer.activeIndex][message.dLN].push(JSON.parse(message.data));
+    else 
+      dataslayer.datalayers[dataslayer.activeIndex][message.dLN] = [JSON.parse(message.data)];
     $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex));
     clickSetup('datalayer');
   }
@@ -676,7 +688,8 @@ function newPageLoad(newurl){
   loadSettings();
 
   dataslayer.activeIndex = dataslayer.activeIndex + 1;
-  dataslayer.datalayers[dataslayer.activeIndex] = [];
+  dataslayer.datalayers[dataslayer.activeIndex] = {};
+  dataslayer.GTMs[dataslayer.activeIndex] = [];
   dataslayer.urls[dataslayer.activeIndex] = newurl;
   dataslayer.tags[dataslayer.activeIndex] = [];
 
@@ -801,7 +814,7 @@ loadSettings();
 $('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
 $('a.clearbtn').leanModal({ top : 0});
 $('#clearbtnyes').click(function(){
-    dataslayer.datalayers = [[]];
+    dataslayer.datalayers = [{}];
     dataslayer.tags = [[]];
     dataslayer.utag_datas = [{}];
     dataslayer.GTMs = [dataslayer.GTMs[dataslayer.activeIndex]];
@@ -830,7 +843,9 @@ dataslayer.port.onMessage.addListener(messageListener);
 chrome.devtools.inspectedWindow.eval('dataslayer',function(exists,error){
   // if (!error) chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
   if (!error) { //was already injected
-    dataslayer.GTMs[dataslayer.activeIndex]={id: exists.gtmID, name: exists.dLN};
+    dataslayer.GTMs[dataslayer.activeIndex] = [];
+    for (var i in exists.gtmID)
+      dataslayer.GTMs[dataslayer.activeIndex].push({id: exists.gtmID[i], name: exists.dLN[i]});
     dataslayer.TLMs[dataslayer.activeIndex]={id: exists.utagID, name: exists.udoname};
     chrome.runtime.sendMessage({type: 'dataslayer_refresh',tabID: chrome.devtools.inspectedWindow.tabId});
     // testDL(exists.dLN);
