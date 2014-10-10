@@ -52,7 +52,7 @@ function loadSettings(){
     if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
     if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
     if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
-    localStorage['options'] = JSON.stringify(dataslayer.options);
+    localStorage.options = JSON.stringify(dataslayer.options);
   });
 
 }
