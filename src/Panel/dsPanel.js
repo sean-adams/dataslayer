@@ -607,7 +607,15 @@ function messageListener(message,sender,sendResponse){
     else if (message.data=='found'){
       dataslayer.loading = false;
 
-      dataslayer.GTMs[dataslayer.activeIndex].push({id: message.gtmID, name: message.dLN});
+      var exists = false;
+
+      if (dataslayer.GTMs[dataslayer.activeIndex].length>0)
+        for (var i=0;i<dataslayer.GTMs[dataslayer.activeIndex].length;i++)
+          if (dataslayer.GTMs[dataslayer.activeIndex][i].id == message.gtmID)
+            exists = true;
+
+      if (!exists)
+        dataslayer.GTMs[dataslayer.activeIndex].push({id: message.gtmID, name: message.dLN});
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
