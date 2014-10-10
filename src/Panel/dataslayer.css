@@ -203,3 +203,8 @@ li.newpage {border-bottom: 1px solid lightgrey;}
 	padding: 0px;
 	background: none;
 }
+
+select {
+	font-family: 'Open Sans';
+	border: 0;
+}
