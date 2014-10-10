@@ -9,7 +9,7 @@ dataslayer.GTMs = [[]];
 dataslayer.TLMs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = typeof localStorage['options'] !== 'undefined' ? JSON.parse(localStorage['options']) : {
+dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
   showFloodlight: true, 
   showUniversal: true, 
   showClassic: true, 
@@ -27,7 +27,7 @@ dataslayer.debug = (chrome.runtime.id == 'ikbablmmjldhamhcldjjigniffkkjgpo' ? fa
 
 // loadSettings:
 function loadSettings(){
-  dataslayer.options = typeof localStorage['options'] !== 'undefined' ? JSON.parse(localStorage['options']) : {
+  dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
     showFloodlight: true, 
     showUniversal: true, 
     showClassic: true, 
