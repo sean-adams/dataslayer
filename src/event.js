@@ -57,7 +57,6 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 	}
 	else if (message.type=='dataslayer_refresh'){
 		chrome.tabs.sendMessage(message.tabID,{ask: 'refresh'});
-		// chrome.tabs.executeScript(message.tabID,{code:'dataslayer.refresh();'});
 	}
 	else if (message.type=='dataslayer_unload')
 		chrome.tabs.executeScript(message.tabID,{ code: 'document.head.removeChild(document.getElementById(\'dataslayer_script\'));', runAt: "document_idle" });
