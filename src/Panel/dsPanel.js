@@ -396,7 +396,7 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
 
   if (!((type=='gtm')&&(dataslayer.GTMs[index].length===0)))
   {
-    var arrLayer = (type=='tlm'?datalayers[index]:datalayers[index][dataslayer.GTMs[index][gtmIndex].name]);
+    var arrLayer = (type=='tlm'?[datalayers[index]]:datalayers[index][dataslayer.GTMs[index][gtmIndex].name]);
   
     if (typeof arrLayer!= 'undefined')
       $.each(arrLayer,function(i,v){ //iterate each push group on the page
