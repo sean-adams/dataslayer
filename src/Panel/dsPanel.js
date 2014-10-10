@@ -408,7 +408,7 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
     var dropdown = '';
     if (dataslayer.GTMs[index].length>1){
       for (var i=0;i<dataslayer.GTMs[index].length;i++){
-        dropdown = dropdown+'<option '+(gtmIndex==i?'selected':'')+' value="'+i+'">'+dataslayer.GTMs[index][i].id+(dataslayer.GTMs[index][i].name=='dataLayer'?'':' ('+dataslayer.GTMs[index][i].name+')')+'</option>';
+        dropdown = dropdown+'<option '+(gtmIndex==i?'selected':'')+' value="'+i+'">'+dataslayer.GTMs[index][i].id+' ('+dataslayer.GTMs[index][i].name+')</option>';
       }
       dropdown = '<select id="gtmSelect'+index+'" data-index="'+index+'">'+dropdown+'</select>';
     }
