@@ -23,6 +23,7 @@ dataslayer.loading = false;
 
 dataslayer.port = chrome.runtime.connect();
 
+dataslayer.debug = (chrome.runtime.id == 'ikbablmmjldhamhcldjjigniffkkjgpo' ? false : true);
 
 // loadSettings:
 function loadSettings(){
@@ -587,6 +588,7 @@ function updateUI(pageIndex,type) {
 }
 
 function messageListener(message,sender,sendResponse){
+  if (dataslayer.debug) console.log(message.type+' received: ',message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
     dataslayer.urls[dataslayer.activeIndex]=message.url;
     $('a.currentpage').text(message.url);

@@ -4,6 +4,7 @@ chrome.runtime.onConnect.addListener(function(port){
 	devtoolsPort.push(port);
 });
 
+var debug = (chrome.runtime.id == 'ikbablmmjldhamhcldjjigniffkkjgpo' ? false : true);
 
 
 function addBlocking(){
@@ -44,6 +45,7 @@ chrome.storage.sync.get(null,function(items){
 });
 
 chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
+	if (debug) console.log(message);
 	if ((message.type=='dataslayer_gtm_push')||((message.type=='dataslayer_gtm')||(message.type=='dataslayer_tlm'))){
 		message.tabID=sender.tab.id;
 		devtoolsPort.forEach(function(v,i,x){
@@ -73,7 +75,7 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 chrome.runtime.onInstalled.addListener(function(details){
 	if (details.reason=='install')
 		chrome.tabs.create({url:'chrome-extension://'+chrome.runtime.id+'/options.html#install',active:true});
-	else if (details.reason=='update')
+	else if ((details.reason=='update')&&(!debug))
 		{chrome.notifications.create('', {type:'basic',title:'dataslayer', message:'dataslayer has been updated to version '+chrome.runtime.getManifest().version+'.\nClick here to see what\'s new.',iconUrl: 'i128.png'},function(notificationId){notifId=notificationId;});
 				chrome.notifications.onClicked.addListener(function(notificationId){if (notificationId==notifId) chrome.tabs.create({url:'chrome-extension://'+chrome.runtime.id+'/options.html#whatsnew',active:true});});}
 });
