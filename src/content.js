@@ -5,11 +5,38 @@ dataslayers.src = chrome.runtime.getURL('inject.js');
 dataslayers.type = 'text/javascript';
 document.head.appendChild(dataslayers);}
 
+
+function iframeCheck(){
+	iframeDS = [];
+	var iframes = document.querySelectorAll('iframe');
+	if (iframes.length > 0){
+		for (i=0;i<iframes.length;i++){
+			if (iframes[i].contentWindow.document.getElementById('dataslayer_script') === null){
+				iframeDS[i] = document.createElement('script');
+				iframeDS[i].id = 'dataslayer_script';
+				iframeDS[i].src = chrome.runtime.getURL('inject.js');
+				iframeDS[i].type = 'text/javascript';
+				if (iframes[i].contentWindow.document.head) iframes[i].contentWindow.document.head.appendChild(iframeDS[i]);
+			}
+		}
+	}
+}
+
+if (document.readyState == 'complete')
+	iframeCheck();
+else
+	document.onreadystatechange = function(){ if (document.readyState == 'complete') {console.log('ready'); window.setTimeout(iframeCheck,500);}};
+
 var dataslayer = {};
 dataslayer.helperListener = function(event){
-	if ((event.source == window)&&(event.data.type && (event.data.type.substr(0,10)=='dataslayer'))){
+	if ((event.data.type && (event.data.type.substr(0,10)=='dataslayer'))){
 		try{
-			chrome.runtime.sendMessage(event.data);
+			if (event.source == window)
+				chrome.runtime.sendMessage(event.data);
+			else{
+				event.data.iframed = true;
+				chrome.runtime.sendMessage(event.data);
+			}
 		}
 		catch(e){
 			// nothing to be done here, really, as generally an error here 

@@ -605,8 +605,8 @@ function updateUI(pageIndex,type) {
 function messageListener(message,sender,sendResponse){
   if (dataslayer.debug) console.log(message.type+' received: ',message);
   if ((message.type=='dataslayer_gtm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    dataslayer.urls[dataslayer.activeIndex]=message.url;
-    $('a.currentpage').text(message.url);
+    if (message.url!= 'iframe') dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(dataslayer.urls[dataslayer.activeIndex]);
     // chrome.devtools.inspectedWindow.eval('window.location.href',
     //   function(url,error){dataslayer.urls[dataslayer.activeIndex]=url;}
     //   );
@@ -650,8 +650,8 @@ function messageListener(message,sender,sendResponse){
     }
   }
   else if ((message.type=='dataslayer_tlm')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    dataslayer.urls[dataslayer.activeIndex]=message.url;
-    $('a.currentpage').text(message.url);
+    if (message.url!= 'iframe') dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(dataslayer.urls[dataslayer.activeIndex]);
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
@@ -684,7 +684,7 @@ function messageListener(message,sender,sendResponse){
     }
   }
   if ((message.type=='dataslayer_gtm_push')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
-    dataslayer.urls[dataslayer.activeIndex]=message.url;
+    if (message.url!= 'iframe') dataslayer.urls[dataslayer.activeIndex]=message.url;
     $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM');
     // dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
     if (dataslayer.datalayers[dataslayer.activeIndex].hasOwnProperty(message.dLN))

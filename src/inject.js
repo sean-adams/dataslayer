@@ -23,19 +23,19 @@ dataslayer.sanitize = function(obj){
 };
 
 dataslayer.helperListener = function(message, model) {
-	window.postMessage({
+	window.parent.postMessage({
         type: "dataslayer_gtm_push",
         // gtmID: dataslayer.gtmID[this.z],
         dLN: dataslayer.dLN[this.z],
-        url: window.location.href,
+        url: (window == window.parent ? window.location.href : 'iframe'),
         data: JSON.stringify(dataslayer.sanitize(model))
     }, "*");
 };
 
 dataslayer.refresh = function(){
     if ((document.readyState == "complete") && (document.querySelectorAll("script[src*=googletagmanager\\.com]").length === 0)) {
-        window.postMessage({
-            url: window.location.href,
+        window.parent.postMessage({
+            url: (window == window.parent ? window.location.href : 'iframe'),
             type: "dataslayer_gtm",
             data: "notfound"
         }, "*");
@@ -43,19 +43,19 @@ dataslayer.refresh = function(){
     else {
         for (var d=0;d<dataslayer.gtmID.length;d++){
             if (typeof window[dataslayer.dLN[d]] !== "undefined") {
-                window.postMessage({
+                window.parent.postMessage({
                     type: "dataslayer_gtm",
                     data: "found",
                     gtmID: dataslayer.gtmID[d],
-                    url: window.location.href,
+                    url: (window == window.parent ? window.location.href : 'iframe'),
                     dLN: dataslayer.dLN[d]
                 }, "*");
                 for (var i = 0;i<window[dataslayer.dLN[d]].length;i++)
-                    window.postMessage({
+                    window.parent.postMessage({
                         type: "dataslayer_gtm_push",
                         gtmID: dataslayer.gtmID[d],
                         dLN: dataslayer.dLN[d],
-                        url: window.location.href,
+                        url: (window == window.parent ? window.location.href : 'iframe'),
                         data: JSON.stringify(dataslayer.sanitize(window[dataslayer.dLN[d]][i]))
                     }, "*");
             }
@@ -63,18 +63,18 @@ dataslayer.refresh = function(){
     }
 
     if (typeof window[dataslayer.udoname] !== "undefined") {
-        window.postMessage({
+        window.parent.postMessage({
             type: "dataslayer_tlm",
             data: "found",
             gtmID: dataslayer.utagID,
-	        url: window.location.href,
+	        url: (window == window.parent ? window.location.href : 'iframe'),
             dLN: dataslayer.udoname
         }, "*");
         dataslayer.tlmHelperListener();
     } else if ((document.readyState == "complete") && (typeof window[dataslayer.udoname] == "undefined")) {
-        window.postMessage({
+        window.parent.postMessage({
             type: "dataslayer_tlm",
-	        url: window.location.href,
+	        url: (window == window.parent ? window.location.href : 'iframe'),
             data: "notfound"
         }, "*");
     }
@@ -102,11 +102,11 @@ dataslayer.timerID = window.setInterval(function() {
             }
 
             if ((typeof window[dataslayer.dLN[i]] !== "undefined")) {
-                window.postMessage({
+                window.parent.postMessage({
                     type: "dataslayer_gtm",
                     data: "found",
                     gtmID: dataslayer.gtmID[i],
-                    url: window.location.href,
+                    url: (window == window.parent ? window.location.href : 'iframe'),
                     dLN: dataslayer.dLN[i]
                 }, "*");
                 if (!dataslayer.helper.hasOwnProperty(dataslayer.dLN[i]))
@@ -120,15 +120,15 @@ dataslayer.timerID = window.setInterval(function() {
     //         type: "dataslayer_gtm",
     //         data: "found",
     //         gtmID: dataslayer.gtmID[0],
-	   //      url: window.location.href,
+	   //      url: (window == window.parent ? window.location.href : 'iframe'),
     //         dLN: dataslayer.dLN[0]
     //     }, "*");
     //     dataslayer.helper[dataslayer.gtmCount-1] = new DataLayerHelper(window[dataslayer.dLN[0]], dataslayer.helperListener, true);
     //     window.clearInterval(dataslayer.timerID);
     // }
     else if ((document.readyState == "complete") && (document.querySelectorAll("script[src*=googletagmanager\\.com]").length === 0)) {
-        window.postMessage({
-	        url: window.location.href,
+        window.parent.postMessage({
+	        url: (window == window.parent ? window.location.href : 'iframe'),
             type: "dataslayer_gtm",
             data: "notfound"
         }, "*");
@@ -140,11 +140,11 @@ dataslayer.timerID = window.setInterval(function() {
 }, 200);
 
 dataslayer.tlmHelperListener = function(change) {
-    window.postMessage({
+    window.parent.postMessage({
         type: "dataslayer_tlm",
         gtmID: dataslayer.utagID,
         dLN: dataslayer.udoname,
-        url: window.location.href,
+        url: (window == window.parent ? window.location.href : 'iframe'),
         data: JSON.stringify(dataslayer.sanitize(window[dataslayer.udoname]))
     }, "*");
 };
@@ -155,20 +155,20 @@ dataslayer.tlmTimerID = window.setInterval(function() {
         dataslayer.utagID = utag.id;
     }
     if (typeof window[dataslayer.udoname] !== "undefined") {
-        window.postMessage({
+        window.parent.postMessage({
             type: "dataslayer_tlm",
             data: "found",
             gtmID: dataslayer.utagID,
-	        url: window.location.href,
+	        url: (window == window.parent ? window.location.href : 'iframe'),
             dLN: dataslayer.udoname
         }, "*");
         Object.observe(window[dataslayer.udoname], dataslayer.tlmHelperListener);
         window.clearInterval(dataslayer.tlmTimerID);
         dataslayer.tlmHelperListener();
     } else if ((document.readyState == "complete") && (typeof window[dataslayer.udoname] == "undefined")) {
-        window.postMessage({
+        window.parent.postMessage({
             type: "dataslayer_tlm",
-	        url: window.location.href,
+	        url: (window == window.parent ? window.location.href : 'iframe'),
             data: "notfound"
         }, "*");
         window.clearInterval(dataslayer.tlmTimerID);
