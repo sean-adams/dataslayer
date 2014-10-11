@@ -208,3 +208,35 @@ select {
 	font-family: 'Open Sans';
 	border: 0;
 }
+
+
+.pure-menu.containsTAG > table > tbody > tr > td.utm{
+	border-left:none;
+}
+
+.pure-menu.containsGTM > table > tbody > tr > td.dlt{
+	border-right:none;
+}
+
+td.dlt{
+	width:0;
+}
+
+td.utm{
+	width:0;
+}
+
+.pure-menu.containsGTM > table > tbody > tr > td.dlt{
+	width: auto;
+}
+
+.pure-menu.containsTAG > table > tbody > tr > td.utm{
+	width: auto;
+}
+
+.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.dlt{
+	border-right: 1px dashed rgb(112, 111, 111);
+}
+.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
+	border-left: 1px dashed rgb(112, 111, 111);
+}

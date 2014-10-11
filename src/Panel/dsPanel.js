@@ -494,15 +494,14 @@ function clickSetup(type){
     $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
     $('.page'+i).removeClass('currentpage');
   }
+  for (var i=0;i<dataslayer.datalayers.length;i++){
+    $('#sub'+i).removeClass('containsGTM').removeClass('containsTAG');
+    if (dataslayer.tags[i].length>0) $('#sub'+i).addClass('containsTAG');
+    if (!($.isEmptyObject(dataslayer.GTMs[i])&&$.isEmptyObject(dataslayer.TLMs[i])))
+      $('#sub'+i).addClass('containsGTM');
+  }
 
-  $('.pure-menu').has('td.dlt li').find('td.utm').has('li').css('border-left','1px dashed rgb(112, 111, 111)');
-  $('.pure-menu').has('td.utm li').find('td.dlt').has('li').css('border-right','1px dashed rgb(112, 111, 111)');
-  $('.pure-menu').not($('.pure-menu').has('td.dlt li')).find('td.utm').has('li').css('border-left','none');
-  $('.pure-menu').not($('.pure-menu').has('td.utm li')).find('td.dlt').has('li').css('border-right','none');
-  $('td.dlt').not($('td.dlt').has('li')).css('width','0');
-  $('td.utm').not($('td.utm').has('li')).css('width','0');
-  $('td.dlt').has('li').css('width','auto');
-  $('td.utm').has('li').css('width','auto');
+
   $('td.utm>ul>li:first-child.eventbreak').remove();
 
 
