@@ -450,6 +450,36 @@ function tagHTML(index){
 return allrows;
 }
 
+// dsObjPlusClick: handle clicks on plus/minus for datalayer objects
+function dsObjPlusClick(e){
+      e.preventDefault();
+      if (e.shiftKey){
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
+            $(this).text('-');
+            break;
+        }
+      }
+      else{
+        switch($(this).text()){
+          case '-':
+            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
+            $(this).text('+');
+            break;
+          case '+':
+            $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
+            $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
+            $(this).text('-');
+            break;
+        }
+      }
+    }
+
 // clickSetup: called by UI updates
 // makes sure interactive behavior and various CSS settings are in place
 // - type: datalayer|tag|all (default: all)
@@ -477,6 +507,7 @@ function clickSetup(type){
 
 
   if (type!='datalayer'){
+    //set up clicks for tags
     $('a.toggle').off('click.dataslayer');
     $('a.toggle').on('click.dataslayer',function(){
       if($(this).html()=='+'){
@@ -491,35 +522,8 @@ function clickSetup(type){
   }
 
   if (type!='tag'){
-    $('tr.object-row>td>em>a').off('click.dataslayer');
-    $('tr.object-row>td>em>a').on('click.dataslayer',function(e){
-      e.preventDefault();
-      if (e.shiftKey){
-        switch($(this).text()){
-          case '-':
-            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
-            $(this).text('+');
-            break;
-          case '+':
-            $('tr.child-of-'+$(this).closest('tr.object-row').attr('id')).slideDown().find('em>a').text('-');
-            $(this).text('-');
-            break;
-        }
-      }
-      else{
-        switch($(this).text()){
-          case '-':
-            $('.child-of-'+$(this).data('id')).css('display','none').find('.object-row').text('+');
-            $(this).text('+');
-            break;
-          case '+':
-            $('tr[class="child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown();
-            $('tr[class="object-row child-of-'+($(this).closest('tr.object-row').attr('id')+' '+$(this).closest('tr.object-row').attr('class').replace('object-row','').trim()).trim()+'"]').slideDown().find('a').text('+');
-            $(this).text('-');
-            break;
-        }
-      }
-    });
+    $('a[title="shift-click to expand all"]').off('click.dataslayer');
+    $('a[title="shift-click to expand all"]').on('click.dataslayer',dsObjPlusClick);
   }
 
 
