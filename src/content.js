@@ -25,7 +25,7 @@ function iframeCheck(){
 if (document.readyState == 'complete')
 	iframeCheck();
 else
-	document.onreadystatechange = function(){ if (document.readyState == 'complete') {console.log('ready'); window.setTimeout(iframeCheck,500);}};
+	document.onreadystatechange = function(){ if (document.readyState == 'complete') { window.setTimeout(iframeCheck,500);}};
 
 var dataslayer = {};
 dataslayer.helperListener = function(event){
