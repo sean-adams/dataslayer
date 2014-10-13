@@ -9,6 +9,7 @@ var dataslayer = {
     helper: {},
     dLN: [],
     gtmID: [],
+    gtmAnnounced: [],
     udoname: "utag_data",
     utagID: ""
 };
@@ -94,7 +95,8 @@ dataslayer.gtmSearch = function(){
                 dataslayer.dLN[i]='dataLayer';
             }
 
-            if ((typeof window[dataslayer.dLN[i]] !== "undefined")) {
+            if ((typeof window[dataslayer.dLN[i]] !== "undefined")&&(dataslayer.gtmAnnounced.indexOf(dataslayer.gtmID[i])==-1)) {
+                dataslayer.gtmAnnounced.push(dataslayer.gtmID[i]);
                 window.parent.postMessage({
                     type: "dataslayer_gtm",
                     data: "found",
