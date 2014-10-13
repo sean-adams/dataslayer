@@ -14,6 +14,7 @@ Use
 A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each push to the dataLayer variable (in the case of GTM's array-based data layer) appearing in a subgroup.
 
 ![](http://i.imgur.com/ffdmxmU.png)
+
 1. Current URL / TMS logo (or X if no TMS found); click to collapse/expand this page
 2. TMS container ID; becomes a dropdown menu if multiple containers are present
 3. Data layer items; items with a **+** are objects containing sub-items and can be expanded one level by clicking **+** or expanded fully by shift-clicking **+**
