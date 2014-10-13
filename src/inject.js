@@ -80,14 +80,7 @@ dataslayer.refresh = function(){
     }
 };
 
-dataslayer.timerID = window.setInterval(function() {
-    // if (window.hasOwnProperty("google_tag_manager"))
-    //     for (var p in google_tag_manager) {
-    //         if (google_tag_manager.hasOwnProperty(p) && typeof google_tag_manager[p] == "object") {
-    //             if (p.substring(0, 4) !== "GTM-") dataslayer.dLN[0] = p;
-    //             else dataslayer.gtmID[0] = p;
-    //         }
-    //     }
+dataslayer.gtmSearch = function(){
     var gtmList = document.querySelectorAll("script[src*=googletagmanager\\.com]");
     if (gtmList.length > 0){
         for (i=0;i<gtmList.length;i++){
@@ -115,29 +108,22 @@ dataslayer.timerID = window.setInterval(function() {
 
         }
     }
-    // if (typeof window[dataslayer.dLN[0]] !== "undefined") {
-    //     window.postMessage({
-    //         type: "dataslayer_gtm",
-    //         data: "found",
-    //         gtmID: dataslayer.gtmID[0],
-	   //      url: (window == window.parent ? window.location.href : 'iframe'),
-    //         dLN: dataslayer.dLN[0]
-    //     }, "*");
-    //     dataslayer.helper[dataslayer.gtmCount-1] = new DataLayerHelper(window[dataslayer.dLN[0]], dataslayer.helperListener, true);
-    //     window.clearInterval(dataslayer.timerID);
-    // }
     else if ((document.readyState == "complete") && (document.querySelectorAll("script[src*=googletagmanager\\.com]").length === 0)) {
         window.parent.postMessage({
-	        url: (window == window.parent ? window.location.href : 'iframe'),
+            url: (window == window.parent ? window.location.href : 'iframe'),
             type: "dataslayer_gtm",
             data: "notfound"
         }, "*");
         window.clearInterval(dataslayer.timerID);
     }
-    if (document.readyState == "complete"){
+    if ((document.readyState == "complete")&&(dataslayer.timerID !== null)){
         window.clearInterval(dataslayer.timerID);
+        dataslayer.timerID = null;
+        dataslayer.gtmSearch();
     }
-}, 200);
+};
+
+dataslayer.timerID = window.setInterval(dataslayer.gtmSearch, 200);
 
 dataslayer.tlmHelperListener = function(change) {
     window.parent.postMessage({
