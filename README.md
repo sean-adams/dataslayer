@@ -1,7 +1,7 @@
 dataslayer
 ==========
 
-A Chrome extension to enhance debugging of some frequently-used tag management platforms (Google Tag Manager and Tealium) in combination with some frequently-used tags.
+A Chrome extension to enhance debugging of some frequently-used tag management platforms (Google Tag Manager and Tealium) in combination with some frequently-used tags (Google Analytics, Adobe Analytics/Omniture, Floodlight).
 
 Installation
 ------------
@@ -11,19 +11,32 @@ The latest official version will always be available at the [Chrome Web Store](h
 
 Use
 ---
-A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each push to the dataLayer variable (in the case of GTM) appearing in a subgroup.
+A new panel will appear in Developer Tools titled **dataslayer**, containing a page group and URL for each pageload in the tab, with each push to the dataLayer variable (in the case of GTM's array-based data layer) appearing in a subgroup.
 
-![](http://i.imgur.com/2H2t85K.png)
-
-If Google Analytics, Floodlight, or SiteCatalyst tags are fired, they will appear on the right side of the page group, with data layer information on the left side. Note that vertical alignment does not necessarily indicate a tie between data layer items and tags fired. Click the + next to each tag to see all parameters in the request, in case the parameter you're looking for is not pulled out.
+![](http://i.imgur.com/ffdmxmU.png)
+1. Current URL / TMS logo (or X if no TMS found); click to collapse/expand this page
+2. TMS container ID; becomes a dropdown menu if multiple containers are present
+3. Data layer items; items with a **+** are objects containing sub-items and can be expanded one level by clicking **+** or expanded fully by shift-clicking **+**
+4. Information on fired tags (GA, Floodlight, SiteCatalyst); click **+** here to see all parameters in the request
+5. dataslayer settings and information
+6. Clear history
 
 All items are in reverse chronological order (newest on top).
 
-To collapse and expand page groups, simply click the URL associated with each page.
+Note that vertical alignment between the data layer and any fired tags does not necessarily indicate a tie between the two. If a page contains only a data layer, or only tags, that side of the panel will expand to take up the width of the entire panel.
 
-To clear history up to the current page, click the X on the top right.
+Settings
+--------
+### General
+- show data layer presence: enable (default) or disable the TMS logo / X in each page group. Useful for disabling if you are using dataslayer for e.g. pure GA debugging rather than tag management debugging.
+- auto-collapse nested data layer variables: when this option is enabled (default), nested variables such as Google Analytics enhanced ecommerce will automatically be collapsed to save space.
+- block tags from firing: requires use of the Chrome dev or beta channels. When this option is enabled, supported tags will be blocked from actually sending to the analytics platform. Note that blocking does not take the Tags selections into account (i.e. all supported tags are blocked, regardless of whether or not they are shown).
 
-The extension options page (found in the [Chrome extensions page](chrome://extensions/)) will allow you to hide or show certain tag types, as well as specific Google Analytics UA-IDs (separated by semicolons). All tags are shown by default. Settings **should** sync across devices if you're signed in to Chrome.
+### Tags
+All supported tag types are shown by default; these can be individually disabled.
+
+### Ignored IDs
+To filter out tags hitting specific analytics properties, enter the property IDs here.
 
 Misc
 ----
