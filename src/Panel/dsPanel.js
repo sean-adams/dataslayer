@@ -585,7 +585,7 @@ function updateUI(pageIndex,type) {
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
 
         if (dataslayer.options.showGTMLoad){
-          if ((dataslayer.datalayers[a].length>0)||(dataslayer.GTMs.hasOwnProperty(a)&&!(dataslayer.GTMs[pageIndex].length>0)))
+          if (!($.isEmptyObject(dataslayer.datalayers[a]))||(dataslayer.GTMs.hasOwnProperty(a)&&!(dataslayer.GTMs[a].length>0)))
             $('#sub'+a+' li.newpage').addClass('hasGTM').removeClass('seeking').removeClass('noGTM').removeClass('hasTLM');
           else if ((!($.isEmptyObject(dataslayer.utag_datas[a])))||(dataslayer.TLMs.hasOwnProperty(a)&&!($.isEmptyObject(dataslayer.TLMs[a]))))
             $('#sub'+a+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM').removeClass('hasGTM');
