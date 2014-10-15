@@ -240,14 +240,14 @@ function parseClassic(v,ref){
     }
 
     newspot = 0;
-    for (var row in gaCVs[2]){
-      if (gaCVs[2][row].indexOf('!')>=0){
-        newspot = gaCVs[2][row].substring(0,gaCVs[2][row].indexOf('!'))-1;
+    for (var s in gaCVs[2]){
+      if (gaCVs[2][s].indexOf('!')>=0){
+        newspot = gaCVs[2][s].substring(0,gaCVs[2][s].indexOf('!'))-1;
         for (i=0;i<newspot;i++){gaCVsfixed[2][i]='0';}
-        gaCVs[2][row] = gaCVs[2][row].substring(gaCVs[2][row].indexOf('!')+1);
+        gaCVs[2][s] = gaCVs[2][s].substring(gaCVs[2][s].indexOf('!')+1);
       }
       try{
-      gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? (typeof gaCVs[2][row] !== 'undefined' ? gaCVs[2][row].charAt(0) : '0') : '0';
+      gaCVsfixed[2][newspot] = typeof gaCVs[2] !== 'undefined' ? (typeof gaCVs[2][s] !== 'undefined' ? gaCVs[2][s].charAt(0) : '0') : '0';
       }
       catch(err){
         console.log(err+' @ CV '+newspot);
@@ -490,10 +490,11 @@ function clickSetup(type){
     clickSetup();
   });
 
-  for (var i=0;i<dataslayer.datalayers.length-1;i++){
-    $('#sub'+i+':not(.clicked-open)').addClass('clicked-closed');
-    $('.page'+i).removeClass('currentpage');
+  for (var q=0;q<dataslayer.datalayers.length-1;q++){
+    $('#sub'+q+':not(.clicked-open)').addClass('clicked-closed');
+    $('.page'+q).removeClass('currentpage');
   }
+
   for (var i=0;i<dataslayer.datalayers.length;i++){
     $('#sub'+i).removeClass('containsGTM').removeClass('containsTAG');
     if (dataslayer.tags[i].length>0) $('#sub'+i).addClass('containsTAG');
@@ -698,9 +699,9 @@ function messageListener(message,sender,sendResponse){
     for (var a in message.data) { dataslayer.options[a] = message.data[a]; }
     if (!dataslayer.options.showGTMLoad)
       $('li.newpage').removeClass('seeking').removeClass('hasTLM').removeClass('hasGTM').removeClass('noGTM');
-    for (var i in dataslayer.datalayers){
-      updateUI(i,'datalayer');
-      updateUI(i,'tag');
+    for (var eachPage in dataslayer.datalayers){
+      updateUI(eachPage,'datalayer');
+      updateUI(eachPage,'tag');
     }
     $('td.utm>ul>li:first-child.eventbreak').remove();
   }
