@@ -201,7 +201,7 @@ function parseClassic(v,ref){
       therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';
       break;
     }
-  if ((v.utme)&&(v.utme.indexOf('14(')>=0)) { //we have performance information
+  if (((v.utme)&&(v.utme.indexOf('14(')>=0))&&(v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)!==null)) { //we have performance information
     var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
     therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
   }
