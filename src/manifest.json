@@ -3,7 +3,7 @@
 
   "name": "dataslayer",
   "description": "Debug and test tag management (Google Tag Manager, Tealium) and analytics implementations.",
-  "version": "0.9.4",
+  "version": "0.9.5",
   "short_name": "dataslayer",
 
   "icons":{"48":"i48.png","128":"i128.png"},
