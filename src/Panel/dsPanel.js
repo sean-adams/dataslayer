@@ -63,9 +63,13 @@ function loadSettings(){
 // - ref: pageindex_tagindex e.g '2_3'
 function parseUniversal(v,ref){
   var allParams = '';
-  for (var param in v.allParams)
-    allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
+  var hasEnhanced = false;
+  for (var param in v.allParams){
+      allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
+      hasEnhanced = hasEnhanced||(param.match(/il[\d+]pi[\d+]id/)!==null||param.match(/il[\d+]pi[\d+]nm/)!==null)||(param.match(/promo[\d+]id/)!==null||param.match(/promo[\d+]nm/)!==null)||(param=='pa');
+    }
   var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
+  if(hasEnhanced) therow = therow + '\n<tr><td></td><td>+enhanced ecommerce</td></tr>\n';
   switch(v.t) {  // what type of hit is it?
     case 'event':
       therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
@@ -783,7 +787,7 @@ function newRequest(request){
   //push params we're looking for if it's not a floodlight (we'll just show them all)
   if ((reqType != 'floodlight') && (reqType != 'sitecatalyst')){
     var utmTestParams = ['tid','t','dl','dt','dp','ea','ec','ev','el','ti','ta','tr','ts','tt',  //UA
-                  'in','ip','iq','ic','iv','cu','sn','sa','st','uid','linkid',                    //UA
+                  'in','ip','iq','ic','iv','cu','sn','sa','st','uid','linkid','pa',              //UA
                   '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
                   'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
                   'utmiqt','utmipc','utmiva','utmipr',                                    //classic
