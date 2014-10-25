@@ -5,6 +5,10 @@ dataslayer Changelog
 -----
 + support for multiple GTM containers on a single page (including iframes)
 
+0.9.2
+-----
++ fixed GA classic performance data edge case
+
 0.9.1
 -----
 + fixed missing event value for GA classic
