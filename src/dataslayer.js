@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
-    'dataslayer',
+    'dataslayer'+(chrome.runtime.id == 'ikbablmmjldhamhcldjjigniffkkjgpo' ? '' : ' beta'),
     null, // No icon path
     'Panel/dsPanel.html',
     null // no callback needed
