@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.9.6
+-----
++ display GA enhanced ecommerce payloads
+
 0.9.5
 -----
 + support for multiple GTM containers on a single page (including iframes)
