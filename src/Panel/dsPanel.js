@@ -66,10 +66,10 @@ function parseUniversal(v,ref){
   var hasEnhanced = false;
   for (var param in v.allParams){
       allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
-      hasEnhanced = hasEnhanced||(param.match(/il[\d+]pi[\d+]id/)!==null||param.match(/il[\d+]pi[\d+]nm/)!==null)||(param.match(/promo[\d+]id/)!==null||param.match(/promo[\d+]nm/)!==null)||(param=='pa');
+      hasEnhanced = hasEnhanced||(param.match(/(pr[\d+].*|il[\d+].*|promo[\d+a].*|pa(l*)|tcc|co[sl])$/)!==null);
     }
   var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
-  if(hasEnhanced) therow = therow + '\n<tr><td></td><td>+enhanced ecommerce</td></tr>\n';
+  if(hasEnhanced) therow = therow + '\n<tr><td></td><td><i>(contains enhanced ecommerce)</i></td></tr>\n';
   switch(v.t) {  // what type of hit is it?
     case 'event':
       therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
