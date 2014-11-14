@@ -1,7 +1,7 @@
 dataslayer Changelog
 ====================
 
-0.9.6
+0.9.7
 -----
 + display GA enhanced ecommerce payloads
 
