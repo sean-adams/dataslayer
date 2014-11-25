@@ -11,13 +11,16 @@ var dataslayer = {
     gtmID: [],
     gtmAnnounced: [],
     udoname: "utag_data",
-    utagID: ""
+    utagID: "",
+    tcvname: "tc_vars",
+    tcoID: "TagCommander"
 };
 
 dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
 		if (obj[ddel] instanceof Element) localDL[ddel] = "<i>element</i>";
+        else if (obj[ddel] instanceof Function) localDL[ddel] = "<i>function</i>";
 		else localDL[ddel] = obj[ddel];
 	}
 	return localDL;
@@ -76,6 +79,23 @@ dataslayer.refresh = function(){
         window.parent.postMessage({
             type: "dataslayer_tlm",
 	        url: (window == window.parent ? window.location.href : 'iframe'),
+            data: "notfound"
+        }, "*");
+    }
+
+    if (typeof window[dataslayer.tcvname] !== "undefined") {
+        window.parent.postMessage({
+            type: "dataslayer_tco",
+            data: "found",
+            gtmID: dataslayer.tcoID,
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            dLN: dataslayer.tcvname
+        }, "*");
+        dataslayer.tcoHelperListener();
+    } else if ((document.readyState == "complete") && (typeof window[dataslayer.tcvname] == "undefined")) {
+        window.parent.postMessage({
+            type: "dataslayer_tco",
+            url: (window == window.parent ? window.location.href : 'iframe'),
             data: "notfound"
         }, "*");
     }
@@ -160,5 +180,41 @@ dataslayer.tlmTimerID = window.setInterval(function() {
             data: "notfound"
         }, "*");
         window.clearInterval(dataslayer.tlmTimerID);
+    }
+}, 200);
+
+dataslayer.tcoHelperListener = function(change) {
+    window.parent.postMessage({
+        type: "dataslayer_tco",
+        gtmID: dataslayer.tcoID,
+        dLN: dataslayer.tcvname,
+        url: (window == window.parent ? window.location.href : 'iframe'),
+        data: JSON.stringify(dataslayer.sanitize(window[dataslayer.tcvname]))
+    }, "*");
+};
+
+dataslayer.tcoTimerID = window.setInterval(function() {
+    // if (window.hasOwnProperty("utag")) {
+        // dataslayer.udoname = utag.udoname;
+        // dataslayer.utagID = utag.id;
+    // }
+    if (typeof window[dataslayer.tcvname] !== "undefined") {
+        window.parent.postMessage({
+            type: "dataslayer_tco",
+            data: "found",
+            gtmID: dataslayer.tcoID,
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            dLN: dataslayer.tcvname
+        }, "*");
+        Object.observe(window[dataslayer.tcvname], dataslayer.tcoHelperListener);
+        window.clearInterval(dataslayer.tcoTimerID);
+        dataslayer.tcoHelperListener();
+    } else if ((document.readyState == "complete") && (typeof window[dataslayer.tcvname] == "undefined")) {
+        window.parent.postMessage({
+            type: "dataslayer_tco",
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            data: "notfound"
+        }, "*");
+        window.clearInterval(dataslayer.tcoTimerID);
     }
 }, 200);
