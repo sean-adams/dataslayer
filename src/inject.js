@@ -19,8 +19,10 @@ var dataslayer = {
 dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
+        console.log(ddel);
 		if (obj[ddel] instanceof Element) localDL[ddel] = "<i>element</i>";
-        else if (obj[ddel] instanceof Function) localDL[ddel] = "<i>function</i>";
+        else if (obj[ddel] instanceof Function) { } //tag commander has many of these
+        else if (ddel.substr(0,9)=='function ') { } //tag commander has many of these
 		else localDL[ddel] = obj[ddel];
 	}
 	return localDL;

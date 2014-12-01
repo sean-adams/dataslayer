@@ -4,9 +4,11 @@
 var dataslayer = {};
 dataslayer.datalayers = [{}];
 dataslayer.utag_datas = [{}];
+dataslayer.tco_datas = [{}];
 dataslayer.tags = [[]];
 dataslayer.GTMs = [[]];
 dataslayer.TLMs = [];
+dataslayer.TCOs = [];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
@@ -420,6 +422,8 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
   }
   else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
     allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+  else if(dataslayer.TCOs[index]&&type=='tlm')
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+'TagCommander'+'</u></td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
@@ -502,7 +506,7 @@ function clickSetup(type){
   for (var i=0;i<dataslayer.datalayers.length;i++){
     $('#sub'+i).removeClass('containsGTM').removeClass('containsTAG');
     if (dataslayer.tags[i].length>0) $('#sub'+i).addClass('containsTAG');
-    if (!($.isEmptyObject(dataslayer.GTMs[i])&&$.isEmptyObject(dataslayer.TLMs[i])))
+    if (!($.isEmptyObject(dataslayer.GTMs[i])&&$.isEmptyObject(dataslayer.TLMs[i])&&$.isEmptyObject(dataslayer.TCOs[i])))
       $('#sub'+i).addClass('containsGTM');
   }
 
@@ -557,7 +561,7 @@ function updateUI(pageIndex,type) {
     $('.pure-menu:not(#sub'+pageIndex+') li.newpage').removeClass('seeking');
     if ($('#sub'+pageIndex).length>0){
       if (type!=='tag')
-        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')).append(datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm'));
+        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')).append(datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')).append(datalayerHTML(dataslayer.tco_datas,pageIndex,'tlm'));
       if (type!=='datalayer')
         $('#sub'+pageIndex+'>table td.utm>ul').html(tagHTML(pageIndex));
     }
@@ -617,7 +621,7 @@ function messageListener(message,sender,sendResponse){
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
-      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM'))))
+      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTCO'))))
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
@@ -659,7 +663,7 @@ function messageListener(message,sender,sendResponse){
 
     if (message.data=='notfound'){
       dataslayer.loading = false;
-      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM'))))
+      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTCO'))))
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
       else
         $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
@@ -683,6 +687,41 @@ function messageListener(message,sender,sendResponse){
       dataslayer.utag_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
             
       dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+    }
+  }
+  else if ((message.type=='dataslayer_tco')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
+    console.log(message);
+    if (message.url!= 'iframe') dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(dataslayer.urls[dataslayer.activeIndex]);
+
+    if (message.data=='notfound'){
+      dataslayer.loading = false;
+      if ((dataslayer.options.showGTMLoad)&&(!($('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasGTM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTLM')||$('#sub'+dataslayer.activeIndex+' li.newpage').hasClass('hasTCO'))))
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('noGTM').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
+      // updateUI();
+    }
+    else if (message.data=='found'){
+      dataslayer.loading = false;
+
+      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTCO').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+
+    }
+    else{   
+      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTCO').removeClass('seeking').removeClass('noGTM');
+      dataslayer.tco_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
+            
+      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
