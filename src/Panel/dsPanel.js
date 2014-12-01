@@ -19,7 +19,8 @@ dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(lo
   showGTMLoad: true, 
   ignoredTags: [],
   collapseNested: false,
-  blockTags: false
+  blockTags: false,
+  hideEmpty: false
 };
 dataslayer.loading = false;
 
@@ -37,13 +38,15 @@ function loadSettings(){
     showGTMLoad: true, 
     ignoredTags: [],
     collapseNested: false,
-    blockTags: false
+    blockTags: false,
+    hideEmpty: false
   };
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
   if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
   if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
+  if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;  
   if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
   
   chrome.storage.sync.get(null,function(items){
@@ -52,7 +55,8 @@ function loadSettings(){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
     if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];  
-    if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
+    if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
+    if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;  
     if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
     localStorage.options = JSON.stringify(dataslayer.options);
   });
@@ -364,22 +368,23 @@ function datalayerPushHTML(push,index){
                       var level4Id = k1+k2+k3+k4+'-'+Math.ceil(Math.random()*10000000);
                       therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level4Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>object</i>'+'</span></td></tr>';
                       for (var k5 in x[k2][k3][k4]){
+                        if (!(dataslayer.options.hideEmpty&&(x[k2][k3][k4][k5]==='')))
                         therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level4Id+' child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
                       }
                     }
-                    else
+                    else if (!(dataslayer.options.hideEmpty&&(x[k2][k3][k4]==='')))
                       therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+x[k2][k3][k4]+'</span></td></tr>';  
                   }
                 }
-                else
+                else if (!(dataslayer.options.hideEmpty&&(x[k2][k3]==='')))
                   therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+x[k2][k3]+'</span></td></tr>';
               }
             }
-            else
+            else if (!(dataslayer.options.hideEmpty&&(x[k2]==='')))
               therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+x[k2]+'</span></td></tr>';
           }          
         }
-        else
+        else if (!(dataslayer.options.hideEmpty&&(x==='')))
           therow = therow + '\n' + '<tr><td><b>'+k1+'</b></td><td><span>'+x+'</span></td></tr>';
       }
     );
@@ -553,6 +558,7 @@ function updateUI(pageIndex,type) {
   });
   if (!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
   if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
+  if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;
 
   if (pageIndex !== 0) pageIndex = pageIndex || -1;
   type = type || 'all';

@@ -7,7 +7,8 @@ dataslayer.options = dataslayer.options || {
   showGTMLoad: true, 
   ignoredTags: [],
   collapseNested: false,
-  blockTags: false
+  blockTags: false,
+  hideEmpty: false
 };
 
 $(function(){
@@ -27,7 +28,8 @@ function loadSettings(){
     showGTMLoad: true, 
     ignoredTags: [],
     collapseNested: false,
-    blockTags: false
+    blockTags: false,
+    hideEmpty: false
   };
 
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
@@ -35,6 +37,7 @@ function loadSettings(){
   });
   if(!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
   if(!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
+  if(!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;
   if(!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
 
   chrome.storage.sync.get(null,function(items){
@@ -45,6 +48,7 @@ function loadSettings(){
     });
     if(!ourItems.hasOwnProperty('blockTags')) ourItems.blockTags = false;
     if(!ourItems.hasOwnProperty('collapseNested')) ourItems.collapseNested = false;
+    if(!ourItems.hasOwnProperty('hideEmpty')) ourItems.hideEmpty = false;
     if(!ourItems.hasOwnProperty('ignoredTags')) ourItems.ignoredTags = [];
 
     localStorage['options'] = JSON.stringify(ourItems);
