@@ -419,11 +419,13 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
     var dropdown = '';
     if (dataslayer.GTMs[index].length>1){
       for (var i=0;i<dataslayer.GTMs[index].length;i++){
-        dropdown = dropdown+'<option '+(gtmIndex==i?'selected':'')+' value="'+i+'">'+dataslayer.GTMs[index][i].id+' ('+dataslayer.GTMs[index][i].name+')</option>';
+        dropdown = dropdown+'<option '+(gtmIndex==i?'selected':'')+' value="'+i+'">'+dataslayer.GTMs[index][i].id+' ('+dataslayer.GTMs[index][i].name+')'+
+        (dataslayer.GTMs[index][i].iframe?'[iframe]':'')+'</option>';
       }
       dropdown = '<select id="gtmSelect'+index+'" data-index="'+index+'">'+dropdown+'</select>';
     }
-    allrows = '<li class="event submenu dlnum'+index+' dlheader" data-dln="'+dataslayer.GTMs[index][gtmIndex].name+'"><table cols=2><tr><td></td><td><u>'+(dropdown.length===0?dataslayer.GTMs[index][gtmIndex].id:dropdown)+'</u>'+(dropdown.length>0||dataslayer.GTMs[index][gtmIndex].name=='dataLayer'||typeof dataslayer.GTMs[index][gtmIndex].name=='undefined'?'':' <i>('+dataslayer.GTMs[index][gtmIndex].name+')</i>')+'</td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+' dlheader" data-dln="'+dataslayer.GTMs[index][gtmIndex].name+'"><table cols=2><tr><td></td><td><u>'+
+    (dropdown.length===0?dataslayer.GTMs[index][gtmIndex].id+(dataslayer.GTMs[index].iframe?' [iframe]':''):dropdown)+'</u>'+(dropdown.length>0||dataslayer.GTMs[index][gtmIndex].name=='dataLayer'||typeof dataslayer.GTMs[index][gtmIndex].name=='undefined'?'':' <i>('+dataslayer.GTMs[index][gtmIndex].name+')</i>')+'</td></tr></table></li>\n' + allrows;
   }
   else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
     allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
@@ -644,7 +646,7 @@ function messageListener(message,sender,sendResponse){
             exists = true;
 
       if (!exists)
-        dataslayer.GTMs[dataslayer.activeIndex].push({id: message.gtmID, name: message.dLN});
+        dataslayer.GTMs[dataslayer.activeIndex].push({id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)});
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasGTM').removeClass('seeking');
@@ -678,7 +680,7 @@ function messageListener(message,sender,sendResponse){
     else if (message.data=='found'){
       dataslayer.loading = false;
 
-      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)};
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking');
@@ -692,7 +694,7 @@ function messageListener(message,sender,sendResponse){
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTLM').removeClass('seeking').removeClass('noGTM');
       dataslayer.utag_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
             
-      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.TLMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
@@ -713,7 +715,7 @@ function messageListener(message,sender,sendResponse){
     else if (message.data=='found'){
       dataslayer.loading = false;
 
-      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)};
 
       if (dataslayer.options.showGTMLoad)
         $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTCO').removeClass('seeking');
@@ -727,7 +729,7 @@ function messageListener(message,sender,sendResponse){
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasTCO').removeClass('seeking').removeClass('noGTM');
       dataslayer.tco_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
             
-      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
+      dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
