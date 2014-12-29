@@ -1,6 +1,13 @@
 dataslayer Changelog
 ====================
 
+0.9.9
+-----
++ added TagCommander support
++ added capture and display of custom data layers / variables
++ added option to hide empty variables
++ improved iframe display
+
 0.9.7
 -----
 + display GA enhanced ecommerce payloads
@@ -32,7 +39,7 @@ dataslayer Changelog
 
 0.8.2
 -----
-+ support for variables not named 'dataLayer'
++ support for GTM variables not named 'dataLayer'
 + pull in more Floodlights, while reducing false positives
 
 0.8.0
