@@ -3,7 +3,13 @@ dataslayers = document.createElement('script');
 dataslayers.id = 'dataslayer_script';
 dataslayers.src = chrome.runtime.getURL('inject.js');
 dataslayers.type = 'text/javascript';
-document.head.appendChild(dataslayers);}
+chrome.storage.sync.get(null,function(items){
+		if (items.hasOwnProperty('dataLayers'))
+			dataslayers.setAttribute('layers',items.dataLayers.join(';'));
+		document.head.appendChild(dataslayers);
+	});
+
+}
 
 
 function iframeCheck(){

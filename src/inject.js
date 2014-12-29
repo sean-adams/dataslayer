@@ -16,6 +16,7 @@ var dataslayer = {
     tcoID: "TagCommander"
 };
 
+
 dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
@@ -149,6 +150,8 @@ dataslayer.gtmSearch = function(){
 
 dataslayer.timerID = window.setInterval(dataslayer.gtmSearch, 200);
 
+
+// Tealium
 dataslayer.tlmHelperListener = function(change) {
     window.parent.postMessage({
         type: "dataslayer_tlm",
@@ -185,6 +188,8 @@ dataslayer.tlmTimerID = window.setInterval(function() {
     }
 }, 200);
 
+
+// TagCommader
 dataslayer.tcoHelperListener = function(change) {
     window.parent.postMessage({
         type: "dataslayer_tco",
@@ -196,10 +201,6 @@ dataslayer.tcoHelperListener = function(change) {
 };
 
 dataslayer.tcoTimerID = window.setInterval(function() {
-    // if (window.hasOwnProperty("utag")) {
-        // dataslayer.udoname = utag.udoname;
-        // dataslayer.utagID = utag.id;
-    // }
     if (typeof window[dataslayer.tcvname] !== "undefined") {
         window.parent.postMessage({
             type: "dataslayer_tco",
@@ -220,3 +221,44 @@ dataslayer.tcoTimerID = window.setInterval(function() {
         window.clearInterval(dataslayer.tcoTimerID);
     }
 }, 200);
+
+
+// other data layers 
+dataslayer.reduceIndex = function(obj,i) { return obj[i]; };
+
+dataslayer.loadOtherLayers = function(){
+    dataslayer.layers = document.getElementById('dataslayer_script').getAttribute('layers');
+    if (dataslayer.layers !== null){
+        dataslayer.layers = dataslayer.layers.split(';');
+
+        for (i=0;i<dataslayer.layers.length;i++){
+            dataslayer.layers[i] = dataslayer.layers[i].split('.');
+            if (typeof (dataslayer.layers[i].length===1?window[dataslayer.layers[i][0]]:dataslayer.layers[i].reduce(dataslayer.reduceIndex,window)) !== "undefined"){
+                window.parent.postMessage({
+                    type: "dataslayer_var",
+                    data: "found",
+                    url: (window == window.parent ? window.location.href : 'iframe'),
+                    dLN: (dataslayer.layers[i].length===1?dataslayer.layers[i][0]:dataslayer.layers[i].join('.'))
+                }, "*");
+                dataslayer.layers[i] = {
+                    variable: dataslayer.layers[i],
+                    listener: function(change){
+                        window.parent.postMessage({
+                            type: "dataslayer_var",
+                            dLN: (this.variable.length===1?this.variable[0]:this.variable.join('.')),
+                            url: (window == window.parent ? window.location.href : 'iframe'),
+                            data: JSON.stringify(dataslayer.sanitize((this.variable.length===1?window[this.variable[0]]:this.variable.reduce(dataslayer.reduceIndex,window))))
+                        }, "*");
+                    }
+                };
+                Object.observe((dataslayer.layers[i].variable.length===1?window[dataslayer.layers[i].variable[0]]:dataslayer.layers[i].variable.reduce(dataslayer.reduceIndex,window)),dataslayer.layers[i].listener);
+                dataslayer.layers[i].listener();
+            }
+        }
+    }
+};
+
+if (document.readyState == 'complete')
+    dataslayer.loadOtherLayers();
+else
+    document.addEventListener('readystatechange',function(){if (document.readyState == 'complete')dataslayer.loadOtherLayers();});
