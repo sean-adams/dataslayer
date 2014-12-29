@@ -202,6 +202,7 @@ dataslayer.tcoHelperListener = function(change) {
 
 dataslayer.tcoTimerID = window.setInterval(function() {
     if (typeof window[dataslayer.tcvname] !== "undefined") {
+        if (window.tC&&window.tC.containerVersion) dataslayer.tcoID = dataslayer.tcoID + ' [' + window.tC.containerVersion + ']';
         window.parent.postMessage({
             type: "dataslayer_tco",
             data: "found",
