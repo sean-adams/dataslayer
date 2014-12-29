@@ -233,7 +233,8 @@ dataslayer.loadOtherLayers = function(){
 
         for (i=0;i<dataslayer.layers.length;i++){
             dataslayer.layers[i] = dataslayer.layers[i].split('.');
-            if (typeof (dataslayer.layers[i].length===1?window[dataslayer.layers[i][0]]:dataslayer.layers[i].reduce(dataslayer.reduceIndex,window)) !== "undefined"){
+            var type = typeof (dataslayer.layers[i].length===1?window[dataslayer.layers[i][0]]:dataslayer.layers[i].reduce(dataslayer.reduceIndex,window));
+            if (type==='object'){
                 window.parent.postMessage({
                     type: "dataslayer_var",
                     data: "found",
@@ -254,6 +255,8 @@ dataslayer.loadOtherLayers = function(){
                 Object.observe((dataslayer.layers[i].variable.length===1?window[dataslayer.layers[i].variable[0]]:dataslayer.layers[i].variable.reduce(dataslayer.reduceIndex,window)),dataslayer.layers[i].listener);
                 dataslayer.layers[i].listener();
             }
+            else if (type!=='object'&&type!=='undefined')
+                console.warn('dataslayer: cannot watch non-object ',dataslayer.layers[i].join('.'));
         }
     }
 };
