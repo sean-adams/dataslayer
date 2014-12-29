@@ -85,7 +85,6 @@ li.newpage.hasGTM:before{
 	padding-left:5px;
 	height: 100%;
 	pointer-events: none;
-	/*color: rgba(0, 128, 0, 0.5);*/
 }
 
 li.newpage.hasTLM:before{
@@ -97,7 +96,6 @@ li.newpage.hasTLM:before{
 	padding-left:5px;
 	height: 100%;
 	pointer-events: none;
-	/*color: rgba(0, 128, 0, 0.5);*/
 }
 
 li.newpage.hasTCO:before{
@@ -109,7 +107,18 @@ li.newpage.hasTCO:before{
 	padding-left:5px;
 	height: 100%;
 	pointer-events: none;
-	/*color: rgba(0, 128, 0, 0.5);*/
+}
+
+li.newpage.hasVAR:before{
+	content: '\2713';
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding-top:5px;
+	padding-left:5px;
+	height: 100%;
+	pointer-events: none;
+	color: rgba(0, 128, 0, 0.5);
 }
 
 li.newpage.noGTM:before{

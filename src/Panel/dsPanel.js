@@ -5,10 +5,12 @@ var dataslayer = {};
 dataslayer.datalayers = [{}];
 dataslayer.utag_datas = [{}];
 dataslayer.tco_datas = [{}];
+dataslayer.var_datas = [{}];
 dataslayer.tags = [[]];
 dataslayer.GTMs = [[]];
 dataslayer.TLMs = [];
 dataslayer.TCOs = [];
+dataslayer.vars = [[]];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
 dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
@@ -401,13 +403,13 @@ function datalayerPushHTML(push,index){
 // returns contents of td.dlt > ul
 function datalayerHTML(datalayers,index,type,gtmIndex) {
   gtmIndex = gtmIndex || 0;
-  if ((type=='tlm')&&($.isEmptyObject(datalayers[index]))) return '';  //if empty utag_data get us out of here
+  if ((type=='tlm'||type=='var')&&($.isEmptyObject(datalayers[index]))) return '';  //if empty utag_data get us out of here
 
   var allrows = '';
 
   if (!((type=='gtm')&&(dataslayer.GTMs[index].length===0)))
   {
-    var arrLayer = (type=='tlm'?[datalayers[index]]:datalayers[index][dataslayer.GTMs[index][gtmIndex].name]);
+    var arrLayer = (type=='tlm'||type=='var'?[datalayers[index]]:datalayers[index][dataslayer.GTMs[index][gtmIndex].name]);
   
     if (typeof arrLayer!= 'undefined')
       $.each(arrLayer,function(i,v){ //iterate each push group on the page
@@ -430,9 +432,16 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
   else if((dataslayer.TLMs[index]&&dataslayer.TLMs[index].hasOwnProperty('id'))&&(type=='tlm'))
     allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TLMs[index].id+'</u>'+(dataslayer.TLMs[index].name=='utag_data'||typeof dataslayer.TLMs[index].name=='undefined'?'':' <i>('+dataslayer.TLMs[index].name+')</i>')+'</td></tr></table></li>\n' + allrows;
   else if(dataslayer.TCOs[index]&&type=='tlm')
-    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+'TagCommander'+'</u></td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>'+dataslayer.TCOs[index].id+'</u></td></tr></table></li>\n' + allrows;
+  else if(dataslayer.vars[index]&&dataslayer.vars[index][gtmIndex]&&type=='var')
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>Custom watch objects</u></td></tr></table></li>\n' + allrows+'<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n';
 
   return allrows;
+}
+
+
+function multivarDLHTML(pageIndex){
+  return datalayerHTML(dataslayer.var_datas,pageIndex,'var');
 }
 
 // tagHTML:
@@ -569,14 +578,18 @@ function updateUI(pageIndex,type) {
     $('.pure-menu:not(#sub'+pageIndex+') li.newpage').removeClass('seeking');
     if ($('#sub'+pageIndex).length>0){
       if (type!=='tag')
-        $('#sub'+pageIndex+'>table td.dlt>ul').html(datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')).append(datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')).append(datalayerHTML(dataslayer.tco_datas,pageIndex,'tlm'));
+        $('#sub'+pageIndex+'>table td.dlt>ul')
+          .html(multivarDLHTML(pageIndex))
+          .append(datalayerHTML(dataslayer.datalayers,pageIndex,'gtm'))
+          .append(datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm'))
+          .append(datalayerHTML(dataslayer.tco_datas,pageIndex,'tlm'));
       if (type!=='datalayer')
         $('#sub'+pageIndex+'>table td.utm>ul').html(tagHTML(pageIndex));
     }
     else{
         $('#datalayeritems').prepend('<div id="sub'+pageIndex+'" class="pure-menu pure-menu-open"><ul>'+
         '<li class="newpage" data-dlnum="'+pageIndex+'"><a class="newpage page'+pageIndex+' currentpage" data-dlnum="'+pageIndex+'">'+dataslayer.urls[pageIndex]+'</a></li>\n'+
-        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')+datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')+'</ul></td>'+
+        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+multivarDLHTML(pageIndex)+datalayerHTML(dataslayer.datalayers,pageIndex,'gtm')+datalayerHTML(dataslayer.utag_datas,pageIndex,'tlm')+datalayerHTML(dataslayer.tco_datas,pageIndex,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(pageIndex)+'</ul></td></tr></tbody></table></div>\n');
         if (dataslayer.options.showGTMLoad){
           if (dataslayer.GTMs.hasOwnProperty(pageIndex)&&(dataslayer.GTMs[pageIndex].length>0))
@@ -598,7 +611,7 @@ function updateUI(pageIndex,type) {
     $.each(dataslayer.datalayers,function(a,dL){  //iterate each page's dataLayer
       $('#datalayeritems').prepend('<div id="sub'+a+'" class="pure-menu pure-menu-open"><ul>'+
         '<li class="newpage" data-dlnum="'+a+'"><a class="newpage page'+a+' currentpage" data-dlnum="'+a+'">'+dataslayer.urls[a]+'</a></li>\n'+
-        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+datalayerHTML(dataslayer.datalayers,a,'gtm')+datalayerHTML(dataslayer.utag_datas,a,'tlm')+'</ul></td>'+
+        '</ul><table cols=2 width=100%><tbody><tr><td class="dlt"><ul>'+multivarDLHTML(a)+datalayerHTML(dataslayer.datalayers,a,'gtm')+datalayerHTML(dataslayer.utag_datas,a,'tlm')+datalayerHTML(dataslayer.tco_datas,a,'tlm')+'</ul></td>'+
         '<td class="utm"><ul>'+tagHTML(a)+'</ul></td></tr></tbody></table></div>\n');
 
         if (dataslayer.options.showGTMLoad){
@@ -730,6 +743,38 @@ function messageListener(message,sender,sendResponse){
       dataslayer.tco_datas[dataslayer.activeIndex] = collapseUDO(JSON.parse(message.data));
             
       dataslayer.TCOs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN, iframe: (message.url=='iframe'?true:false)};
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+    }
+  }
+  else if ((message.type=='dataslayer_var')&&(message.tabID==chrome.devtools.inspectedWindow.tabId)){
+    if (message.url!= 'iframe') dataslayer.urls[dataslayer.activeIndex]=message.url;
+    $('a.currentpage').text(dataslayer.urls[dataslayer.activeIndex]);
+
+    if (message.data=='found'){
+      dataslayer.loading = false;
+
+      if (dataslayer.vars[dataslayer.activeIndex])
+        dataslayer.vars[dataslayer.activeIndex].push({name: message.dLN, iframe: (message.url=='iframe'?true:false)});
+      else
+        dataslayer.vars[dataslayer.activeIndex] = [{name: message.dLN, iframe: (message.url=='iframe'?true:false)}];
+
+      if (!dataslayer.var_datas[dataslayer.activeIndex]) dataslayer.var_datas[dataslayer.activeIndex] = {};
+      dataslayer.var_datas[dataslayer.activeIndex][message.dLN] = {};
+
+      if (dataslayer.options.showGTMLoad)
+        $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasVAR').removeClass('seeking');
+      else
+        $('#sub'+dataslayer.activeIndex+' li.newpage').removeClass('seeking');
+
+      updateUI(dataslayer.activeIndex,'datalayer');
+
+    }
+    else{   
+      $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasVAR').removeClass('seeking').removeClass('noGTM');
+      dataslayer.var_datas[dataslayer.activeIndex][message.dLN] = collapseUDO(JSON.parse(message.data));
+            
+      // dataslayer.vars[dataslayer.activeIndex] = {name: message.dLN, iframe: (message.url=='iframe'?true:false)};
 
       updateUI(dataslayer.activeIndex,'datalayer');
     }
