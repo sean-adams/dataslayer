@@ -227,6 +227,18 @@ dataslayer.tcoTimerID = window.setInterval(function() {
 // other data layers 
 dataslayer.reduceIndex = function(obj,i) { return obj[i]; };
 
+dataslayer.createListener = function(variable){
+    var listener = function(){
+        window.parent.postMessage({
+            type: "dataslayer_var",
+            dLN: (variable.length===1?variable[0]:variable.join('.')),
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            data: JSON.stringify(dataslayer.sanitize((variable.length===1?window[variable[0]]:variable.reduce(dataslayer.reduceIndex,window))))
+        }, "*");
+    };
+    return listener;
+};
+
 dataslayer.loadOtherLayers = function(){
     dataslayer.layers = document.getElementById('dataslayer_script').getAttribute('layers');
     if (dataslayer.layers !== null){
@@ -244,14 +256,7 @@ dataslayer.loadOtherLayers = function(){
                 }, "*");
                 dataslayer.layers[i] = {
                     variable: dataslayer.layers[i],
-                    listener: function(change){
-                        window.parent.postMessage({
-                            type: "dataslayer_var",
-                            dLN: (this.variable.length===1?this.variable[0]:this.variable.join('.')),
-                            url: (window == window.parent ? window.location.href : 'iframe'),
-                            data: JSON.stringify(dataslayer.sanitize((this.variable.length===1?window[this.variable[0]]:this.variable.reduce(dataslayer.reduceIndex,window))))
-                        }, "*");
-                    }
+                    listener: dataslayer.createListener(dataslayer.layers[i])
                 };
                 Object.observe((dataslayer.layers[i].variable.length===1?window[dataslayer.layers[i].variable[0]]:dataslayer.layers[i].variable.reduce(dataslayer.reduceIndex,window)),dataslayer.layers[i].listener);
                 dataslayer.layers[i].listener();
