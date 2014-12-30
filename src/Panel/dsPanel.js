@@ -522,7 +522,7 @@ function clickSetup(type){
   for (var i=0;i<dataslayer.datalayers.length;i++){
     $('#sub'+i).removeClass('containsGTM').removeClass('containsTAG');
     if (dataslayer.tags[i].length>0) $('#sub'+i).addClass('containsTAG');
-    if (!($.isEmptyObject(dataslayer.GTMs[i])&&$.isEmptyObject(dataslayer.TLMs[i])&&$.isEmptyObject(dataslayer.TCOs[i])))
+    if (!($.isEmptyObject(dataslayer.GTMs[i])&&$.isEmptyObject(dataslayer.TLMs[i])&&$.isEmptyObject(dataslayer.TCOs[i])&&$.isEmptyObject(dataslayer.vars[i])))
       $('#sub'+i).addClass('containsGTM');
   }
 
