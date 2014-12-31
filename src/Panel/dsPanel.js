@@ -109,6 +109,18 @@ function parseUniversal(v,ref){
       if(v.iv) therow = therow + '<tr><td><b>variation</b></td><td><span>'+v.iv+'</span></td></tr>\n';
       if(v.ip) therow = therow + '<tr><td><b>price</b></td><td><span>'+v.ip+v.cu+'</span></td></tr>\n';
       break;
+    case 'timing':
+      therow = therow + '\n<tr><td></td><td><b>timing hit</b></td></tr>\n';
+      if(v.allParams.utc) therow = therow + '<tr><td><b>category</b></td><td><span>'+v.allParams.utc+'</span></td></tr>\n';
+      if(v.allParams.utv) therow = therow + '<tr><td><b>variable</b></td><td><span>'+v.allParams.utv+'</span></td></tr>\n';
+      if(v.allParams.utt) therow = therow + '<tr><td><b>time</b></td><td><span>'+v.allParams.utt+'</span></td></tr>\n';
+      if(v.allParams.utl) therow = therow + '<tr><td><b>label</b></td><td><span>'+v.allParams.utl+'</span></td></tr>\n';
+      if(v.allParams.dns) therow = therow + '<tr><td><b>DNS time</b></td><td><span>'+v.allParams.dns+'</span></td></tr>\n';
+      if(v.allParams.pdt) therow = therow + '<tr><td><b>page time</b></td><td><span>'+v.allParams.pdt+'</span></td></tr>\n';
+      if(v.allParams.rrt) therow = therow + '<tr><td><b>redirect time</b></td><td><span>'+v.allParams.rrt+'</span></td></tr>\n';
+      if(v.allParams.tcp) therow = therow + '<tr><td><b>TCP time</b></td><td><span>'+v.allParams.tcp+'</span></td></tr>\n';
+      if(v.allParams.srt) therow = therow + '<tr><td><b>server time</b></td><td><span>'+v.allParams.srt+'</span></td></tr>\n';
+      break;
   }
 
   // enumerate custom dimensions and metrics

@@ -7,6 +7,7 @@ dataslayer Changelog
 + added capture and display of custom data layers / variables
 + added option to hide empty variables
 + improved iframe display
++ identify Universal Analytics timing hits
 
 0.9.7
 -----
