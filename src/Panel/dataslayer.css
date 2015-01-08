@@ -47,7 +47,7 @@ ul li table td {padding-right: 30px;}
 .pure-menu-open>ul {border: 1px blue !important; overflow:hidden;}
 .pure-menu-open>ul>a.newpage {padding-left: 20px !important;}
 
-.pure-menu { margin: 20px;}
+.pure-menu { margin: 20px; box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);}
 
 li.eventbreak {text-align:left; border:1px dashed lightgrey;  -webkit-transition: none !important;}
 
