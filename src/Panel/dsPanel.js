@@ -237,7 +237,7 @@ function parseClassic(v,ref){
     var gaCVs = v.utme.substring(v.utme.indexOf('8(')).match(/[^\)]+(\))/g);
     
     $.each(gaCVs,function(i,d){
-      gaCVs[i]=gaCVs[i].replace(/^[891][01(]+/,'').match(/[^\*|^\)]+(?=[\*\)])/g); 
+      gaCVs[i]=gaCVs[i].replace(/^[8910]+\(/,'').match(/[^\*|^\)]+(?=[\*\)])/g); 
       }
     );
     var newspot=0;
