@@ -950,8 +950,12 @@ $('#clearbtnyes').click(function(){
     dataslayer.datalayers = [{}];
     dataslayer.tags = [[]];
     dataslayer.utag_datas = [{}];
+    dataslayer.tco_datas = [{}];
+    dataslayer.var_datas = [{}];
     dataslayer.GTMs = [dataslayer.GTMs[dataslayer.activeIndex]];
     dataslayer.TLMs = [dataslayer.TLMs[dataslayer.activeIndex]];
+    dataslayer.TCOs = [dataslayer.TCOs[dataslayer.activeIndex]];
+    dataslayer.vars = [dataslayer.vars[dataslayer.activeIndex]];
     dataslayer.urls = [dataslayer.urls[dataslayer.activeIndex]];
     dataslayer.activeIndex = 0;
     updateUI();
