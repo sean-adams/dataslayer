@@ -20,10 +20,19 @@ var dataslayer = {
 dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
-        // console.log(ddel);
 		if (obj[ddel] instanceof Element) localDL[ddel] = "<i>element</i>";
         else if (obj[ddel] instanceof Function) { } //tag commander has many of these
         else if (ddel.substr(0,9)=='function ') { } //tag commander has many of these
+        else if (Array.isArray(obj[ddel])) {
+            var convert = {};
+            for (var i in Object.keys(obj[ddel])) {
+                if (!(obj[ddel][i] instanceof Function)) convert[i]=obj[ddel][i];
+                if (Array.isArray(convert[i]))
+                    convert[i] = dataslayer.sanitize(convert[i]);
+
+            }
+            localDL[ddel] = convert;
+        }
 		else localDL[ddel] = obj[ddel];
 	}
 	return localDL;
