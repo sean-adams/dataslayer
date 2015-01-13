@@ -261,3 +261,9 @@ td.utm{
 .pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
 	border-left: 1px dashed rgb(112, 111, 111);
 }
+
+.event.submenu>table {
+margin-bottom: 3px;
+margin-top: 3px;
+}
+
