@@ -221,6 +221,15 @@ function parseClassic(v,ref){
               '</span></td></tr>\n<tr><td><b>action</b></td><td><span>'+v.utmsa+
               '</span></td></tr>\n<tr><td><b>target</b></td><td><span>'+v.utmsid+'</span></td></tr>';
       break;
+    case 'var':
+      therow = therow + '\n<tr><td></td><td><b>user-defined variable</b></td></tr>\n';
+      try{
+        if (v.utmcc&&v.utmcc.match(/__utmv=[^;]*/)[0]) therow = therow + '\n<tr><td><b>value</b></td><td><span>'+v.utmcc.match(/__utmv=[^;]*/)[0].replace('__utmv=','')+'</span></td></tr>';
+      }
+      catch(err){
+        console.log('user-defined variable error: '+err);
+      }
+      break;
     default:  //pageview
       therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';
       break;
