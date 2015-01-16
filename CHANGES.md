@@ -1,7 +1,7 @@
 dataslayer Changelog
 ====================
 
-0.9.13
+0.10.0
 -----
 + added TagCommander support
 + added capture and display of custom data layers / variables
