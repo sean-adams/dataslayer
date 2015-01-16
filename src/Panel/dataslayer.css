@@ -76,8 +76,7 @@ pointer-events: none;
 background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255, 1) 100%);
 }
 
-li.newpage.hasGTM:before{
-	content: url('img/gtm.png');
+li.newpage:before{
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -85,63 +84,38 @@ li.newpage.hasGTM:before{
 	padding-left:5px;
 	height: 100%;
 	pointer-events: none;
+} 
+
+li.newpage.hasGTM:before{
+	content: url('img/gtm.png');
 }
 
 li.newpage.hasTLM:before{
 	content: url('img/tlm.png');
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-top:5px;
-	padding-left:5px;
-	height: 100%;
-	pointer-events: none;
 }
 
 li.newpage.hasTCO:before{
 	content: url('img/tco.png');
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-top:5px;
-	padding-left:5px;
-	height: 100%;
-	pointer-events: none;
+}
+
+li.newpage.hasDTM:before{
+	content: url('img/dtm.png');
 }
 
 li.newpage.hasVAR:before{
 	content: '\2713';
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-top:5px;
-	padding-left:5px;
-	height: 100%;
-	pointer-events: none;
 	color: rgba(0, 128, 0, 0.5);
 }
 
 li.newpage.noGTM:before{
 	content: '\2717';
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-top:5px;
-	padding-left:5px;
-	height: 100%;
-	pointer-events: none;
 	color: rgba(255, 0, 0, 0.5);
 }
 
 li.newpage.seeking:before{
 	content:url('img/loader.gif');
-	position: absolute;
-	top: 0;
-	left: 0;
 	padding-top:6px;
 	padding-left:2px;
-	height: 100%;
-	pointer-events: none;
 	color: white;
 }
 
