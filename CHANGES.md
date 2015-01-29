@@ -1,8 +1,12 @@
 dataslayer Changelog
 ====================
 
+0.10.1
+------
++ bug fix for disabled third party cookies
+
 0.10.0
------
+------
 + added TagCommander support
 + added capture and display of custom data layers / variables
 + added option to hide empty variables
