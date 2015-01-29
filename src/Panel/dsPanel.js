@@ -13,7 +13,7 @@ dataslayer.TCOs = [];
 dataslayer.vars = [[]];
 dataslayer.activeIndex = 0;
 dataslayer.urls = [];
-dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
+dataslayer.options = {
   showFloodlight: true, 
   showUniversal: true, 
   showClassic: true, 
@@ -24,6 +24,15 @@ dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(lo
   blockTags: false,
   hideEmpty: false
 };
+
+
+try{
+  if (typeof localStorage.options !== 'undefined') dataslayer.options = JSON.parse(localStorage.options);
+}
+catch(error){
+  console.log(error);
+}
+
 dataslayer.loading = false;
 
 dataslayer.port = chrome.runtime.connect();
@@ -32,7 +41,7 @@ dataslayer.debug = (chrome.runtime.id == 'ikbablmmjldhamhcldjjigniffkkjgpo' ? fa
 
 // loadSettings:
 function loadSettings(){
-  dataslayer.options = typeof localStorage.options !== 'undefined' ? JSON.parse(localStorage.options) : {
+  dataslayer.options = {
     showFloodlight: true, 
     showUniversal: true, 
     showClassic: true, 
@@ -43,6 +52,15 @@ function loadSettings(){
     blockTags: false,
     hideEmpty: false
   };
+
+
+  try{
+    if (typeof localStorage.options !== 'undefined') dataslayer.options = JSON.parse(localStorage.options);
+  }
+  catch(error){
+    console.log(error);
+  }
+
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
       if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;  
     });
@@ -60,7 +78,12 @@ function loadSettings(){
     if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
     if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;  
     if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
-    localStorage.options = JSON.stringify(dataslayer.options);
+    try{
+      localStorage.options = JSON.stringify(dataslayer.options);
+    }
+    catch(error){
+      console.log(error);
+    }
   });
 
 }

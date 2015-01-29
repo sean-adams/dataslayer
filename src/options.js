@@ -21,7 +21,7 @@ $(function(){
 });
 
 function loadSettings(){
-  dataslayer.options = typeof localStorage['options'] !== 'undefined' ? JSON.parse(localStorage['options']) : {
+  dataslayer.options = {
     showFloodlight: true, 
     showUniversal: true, 
     showClassic: true, 
@@ -33,6 +33,13 @@ function loadSettings(){
     hideEmpty: false,
     dataLayers: []
   };
+
+  try{
+    if (typeof localStorage.options !== 'undefined') dataslayer.options = JSON.parse(localStorage.options);
+  }
+  catch(error){
+    console.log(error);
+  }
 
   $.each(['showFloodlight','showUniversal','showClassic','showSitecatalyst','showGTMLoad'],function(i,prop){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;
@@ -55,7 +62,12 @@ function loadSettings(){
     if(!ourItems.hasOwnProperty('ignoredTags')) ourItems.ignoredTags = [];
     if(!ourItems.hasOwnProperty('dataLayers')) ourItems.dataLayers = [];
 
-    localStorage['options'] = JSON.stringify(ourItems);
+    try{
+      localStorage['options'] = JSON.stringify(ourItems);
+    }
+    catch(error){
+      console.log(error);
+    }
 
     $.each(ourItems,function(i,v){
       if (i==='ignoredTags')
@@ -77,7 +89,12 @@ function saveSettings(){
     else
   	  dataslayer.options[$(this).attr('id')] = $(this).prop('checked');
   });
-  localStorage['options'] = JSON.stringify(dataslayer.options);
+  try{
+    localStorage['options'] = JSON.stringify(ourItems);
+  }
+  catch(error){
+    console.log(error);
+  }
   chrome.storage.sync.set(dataslayer.options);
   chrome.runtime.sendMessage({type: 'dataslayer_loadsettings',data: dataslayer.options});
 }
