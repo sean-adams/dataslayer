@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.10.2
+------
++ surface more SiteCatalyst variables
+
 0.10.1
 ------
 + bug fix for disabled third party cookies
