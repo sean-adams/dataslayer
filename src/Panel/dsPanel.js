@@ -179,6 +179,7 @@ function parseSiteCatalyst(v,ref){
     if (v.pev1) therow = therow + '<tr><td><b>link url</b></td><td><span>'+v.pev1+'</span></td></tr>\n';
   }
   if (v.pageName) therow = therow + '<tr><td><b>pageName</b></td><td><span>'+v.pageName+'</span></td></tr>\n';
+  if (v.ch) therow = therow + '<tr><td><b>site section</b></td><td><span>'+v.ch+'</span></td></tr>\n';
   if (v.events) therow = therow + '<tr><td><b>events</b></td><td><span>'+v.events+'</span></td></tr>\n';
   if (v.products){
     var productsArray = v.products.split(',');
@@ -189,6 +190,12 @@ function parseSiteCatalyst(v,ref){
     else
       therow = therow + '<tr><td><b>product</b></td><td><span>'+v.products+'</span></td></tr>\n';
   }
+
+  if (v.vid) therow = therow + '<tr><td><b>visitor ID</b></td><td><span>'+v.vid+'</span></td></tr>\n';
+  if (v.xact) therow = therow + '<tr><td><b>transaction ID</b></td><td><span>'+v.xact+'</span></td></tr>\n';
+  if (v.purchaseID) therow = therow + '<tr><td><b>purchase ID</b></td><td><span>'+v.purchaseID+'</span></td></tr>\n';
+  if (v.zip) therow = therow + '<tr><td><b>ZIP code</b></td><td><span>'+v.zip+'</span></td></tr>\n';
+  if (v.state) therow = therow + '<tr><td><b>state</b></td><td><span>'+v.state+'</span></td></tr>\n';
 
 
   // enumerate eVars and props
@@ -952,7 +959,7 @@ function newRequest(request){
     utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([^\/]+))(?=\/)/)[1];
     var scEvars = {};
     var scProps = {};
-    var scTestParams = ['pageName','pe','events','products','pev2','pev1'];
+    var scTestParams = ['pageName','pe','events','products','pev2','pev1','purchaseID','zip','vid','xact','state','ch'];
     $.each(queryParams,function(k,v){
         if ($.inArray(k,scTestParams)>=0){utmParams[k]=v;}
         else if (/v[0-9]{1,2}/i.test(k)){
