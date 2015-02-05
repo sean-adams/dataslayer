@@ -4,6 +4,7 @@ dataslayer Changelog
 0.10.2
 ------
 + surface more SiteCatalyst variables
++ catch classic GA page groupings
 
 0.10.1
 ------

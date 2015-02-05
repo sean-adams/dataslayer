@@ -264,6 +264,16 @@ function parseClassic(v,ref){
       therow = therow + '\n<tr><td><b>url</b></td><td><span>'+v.utmhn+v.utmp+'</span></td></tr>';
       break;
     }
+
+  // page groupings
+  if (v.utmpg) $.each(v.utmpg,function(pg,pgv){
+    try{
+      var grouping = pgv.split(':');
+      therow = therow + '<tr><td><b>page grouping '+grouping[0]+'</b></td><td><span>'+grouping[1]+'</span></td></tr>\n';
+    }
+    catch(e) { console.log('error parsing classic page groupings'); }
+  });
+
   if (((v.utme)&&(v.utme.indexOf('14(')>=0))&&(v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)!==null)) { //we have performance information
     var performancedata = v.utme.match(/14\([\d\*]+\)\([\d\*]+\)/i)[0].substring(2);
     therow = therow + '\n<tr><td><b>speed</b></td><td><span>'+performancedata.replace(')(',')<br>(')+'</span></td></tr>';
@@ -933,7 +943,7 @@ function newRequest(request){
                   'in','ip','iq','ic','iv','cu','sn','sa','st','uid','linkid','pa',              //UA
                   '_utmz','utmac','utmcc','utme','utmhn','utmdt','utmp','utmt','utmsn',   //classic
                   'utmsa','utmsid','utmtid','utmtto','utmtsp','utmttx','utmtst','utmipn', //classic
-                  'utmiqt','utmipc','utmiva','utmipr',                                    //classic
+                  'utmiqt','utmipc','utmiva','utmipr','utmpg'                             //classic
                   ];
     var utmCM = {};
     var utmCD = {};
@@ -954,6 +964,7 @@ function newRequest(request){
     if (utmCM!={}) utmParams.utmCM=utmCM;
     if (utmCD!={}) utmParams.utmCD=utmCD;
     if (utmCG!={}) utmParams.utmCG=utmCG;
+    if (utmParams.utmpg) utmParams.utmpg=utmParams.utmpg.split(',');
   }
   else if (reqType == 'sitecatalyst'){
     utmParams.rsid = request.request.url.match(/(?:\/b\/ss\/([^\/]+))(?=\/)/)[1];
