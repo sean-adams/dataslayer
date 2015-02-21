@@ -417,19 +417,19 @@ function datalayerPushHTML(push,index){
   $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
           var level1Id = k1+'-'+Math.ceil(Math.random()*10000000);
-          therow = therow + '\n' + '<tr class="object-row" id="'+level1Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level1Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+k1+'</b></td><td><span>'+'<i>object</i>'+'</span></td></tr>';
+          therow = therow + '\n' + '<tr class="object-row" id="'+level1Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level1Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+k1+'</b></td><td><span>'+(x===null?'<i>null</i>':'<i>object</i>')+'</span></td></tr>';
           for (var k2 in x){
             if(typeof x[k2] == 'object'){
               var level2Id = k1+k2+'-'+Math.ceil(Math.random()*10000000);
-              therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level1Id+'" id="'+level2Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level2Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+'<i>object</i>'+'</span></td></tr>';
+              therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level1Id+'" id="'+level2Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level2Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'.'+k2+'</b></td><td><span>'+(x[k2]===null?'<i>null</i>':'<i>object</i>')+'</span></td></tr>';
               for (var k3 in x[k2]) {
                 if (typeof x[k2][k3] == 'object'){
                   var level3Id = k1+k2+k3+'-'+Math.ceil(Math.random()*10000000);
-                  therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level3Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level3Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+'<i>object</i>'+'</span></td></tr>';
+                  therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level3Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level3Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'.'+k3+'</b></td><td><span>'+(x[k2][k3]===null?'<i>null</i>':'<i>object</i>')+'</span></td></tr>';
                   for (var k4 in x[k2][k3]){
                     if (typeof x[k2][k3][k4] == 'object'){
                       var level4Id = k1+k2+k3+k4+'-'+Math.ceil(Math.random()*10000000);
-                      therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level4Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+'<i>object</i>'+'</span></td></tr>';
+                      therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="object-row child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'" id="'+level4Id+'"><td><em><a href="#" title="shift-click to expand all" data-id="'+level4Id+'">'+(dataslayer.options.collapseNested?'+':'-')+'</a></em><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'.'+k4+'</b></td><td><span>'+(x[k2][k3][k4]===null?'<i>null</i>':'<i>object</i>')+'</span></td></tr>';
                       for (var k5 in x[k2][k3][k4]){
                         if (!(dataslayer.options.hideEmpty&&(x[k2][k3][k4][k5]==='')))
                         therow = therow + '\n' + '<tr'+(dataslayer.options.collapseNested?' style="display: none;"':'')+' class="child-of-'+level4Id+' child-of-'+level3Id+' child-of-'+level2Id+' child-of-'+level1Id+'"><td><b>'+addSpaces(k1)+'&nbsp;'+addSpaces(k2)+'&nbsp;'+addSpaces(k3)+'&nbsp;'+addSpaces(k4)+'.'+k5+'</b></td><td><span>'+x[k2][k3][k4][k5]+'</span></td></tr>';    
