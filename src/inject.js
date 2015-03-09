@@ -198,7 +198,7 @@ dataslayer.tlmTimerID = window.setInterval(function() {
 }, 200);
 
 
-// TagCommader
+// TagCommander
 dataslayer.tcoHelperListener = function(change) {
     window.parent.postMessage({
         type: "dataslayer_tco",
