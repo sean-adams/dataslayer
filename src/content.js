@@ -1,3 +1,5 @@
+var iframeBlacklist=['AddThis utility frame','Facebook Cross Domain Communication Frame','fb:like Facebook Social Plugin'];
+
 if (document.getElementById('dataslayer_script') === null){
 dataslayers = document.createElement('script');
 dataslayers.id = 'dataslayer_script';
@@ -8,7 +10,6 @@ chrome.storage.sync.get(null,function(items){
 			dataslayers.setAttribute('layers',items.dataLayers.join(';'));
 		document.head.appendChild(dataslayers);
 	});
-
 }
 
 
@@ -17,6 +18,8 @@ function iframeCheck(){
 	var iframes = document.querySelectorAll('iframe');
 	if (iframes.length > 0){
 		for (i=0;i<iframes.length;i++){
+			if (iframeBlacklist.indexOf(iframes[i].title)>-1)
+				break;
 			if (iframes[i].contentWindow.document.getElementById('dataslayer_script') === null){
 				iframeDS[i] = document.createElement('script');
 				iframeDS[i].id = 'dataslayer_script';
