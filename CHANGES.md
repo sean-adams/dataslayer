@@ -1,6 +1,16 @@
 dataslayer Changelog
 ====================
 
+0.10.4
+------
++ added donate button
++ initial support for Adobe DTM
++ fixed custom watch showing as missing when it wasn't
+
+0.10.3
+------
++ misc. fixes and improvements
+
 0.10.2
 ------
 + surface more SiteCatalyst variables
