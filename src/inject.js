@@ -233,6 +233,39 @@ dataslayer.tcoTimerID = window.setInterval(function() {
 }, 200);
 
 
+// Adobe DTM
+dataslayer.dtmLoad = function(){
+    if (!window._satellite)
+        window.parent.postMessage({
+            type: "dataslayer_dtm",
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            data: "notfound"
+        }, "*");
+    else{
+        //page load rules
+        var plrs = _satellite.configurationSettings.pageLoadRules;
+        var dtmNotif = [];
+        for (var rule in plrs)
+            for (var phase in _satellite.pageLoadPhases)
+                if (_satellite.ruleInScope(plrs[rule], {hostname: location.hostname,protocol: location.protocol,URI: _satellite.data.URI}) && _satellite.isRuleActive(plrs[rule]))
+                    if (_satellite.ruleMatches(plrs[rule],{target:document.location,type:_satellite.pageLoadPhases[phase]},document.location)){
+                        dtmNotif.push({});
+                        dtmNotif[dtmNotif.length-1][_satellite.pageLoadPhases[phase]]=plrs[rule].name;
+                    }
+        window.parent.postMessage({
+            type: "dataslayer_dtm",
+            url: (window == window.parent ? window.location.href : 'iframe'),
+            data: "found",
+            loadRules:JSON.stringify(dtmNotif)
+        }, "*");
+        }
+};
+
+if (document.readyState == 'complete')
+    dataslayer.dtmLoad();
+else
+    document.addEventListener('readystatechange',function(){if (document.readyState == 'complete')dataslayer.dtmLoad();});
+
 // other data layers 
 dataslayer.reduceIndex = function(obj,i) { return obj[i]; };
 
