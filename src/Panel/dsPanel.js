@@ -507,7 +507,7 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
   else if(dataslayer.vars[index]&&dataslayer.vars[index][gtmIndex]&&type=='var')
     allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>Custom watch objects</u></td></tr></table></li>\n' + allrows+'<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n';
   else if((type=='dtm')&&dataslayer.dtm_datas[index]&&dataslayer.dtm_datas[index].loadRules&&(dataslayer.dtm_datas[index].loadRules.length>0))
-    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>DTM load rules</u></td></tr></table></li>\n' + allrows;
+    allrows = '<li class="event submenu dlnum'+index+' dlheader"><table cols=2><tr><td></td><td><u>DTM load rules</u>'+(dataslayer.dtm_datas[index].buildDate?' (deployed '+dataslayer.dtm_datas[index].buildDate+')':'')+'</td></tr></table></li>\n' + allrows;
 
   return allrows;
 }
