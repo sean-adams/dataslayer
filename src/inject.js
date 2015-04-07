@@ -256,7 +256,8 @@ dataslayer.dtmLoad = function(){
             type: "dataslayer_dtm",
             url: (window == window.parent ? window.location.href : 'iframe'),
             data: "found",
-            loadRules:JSON.stringify(dtmNotif)
+            loadRules:JSON.stringify(dtmNotif),
+            buildDate:_satellite.buildDate||''
         }, "*");
         }
 };
