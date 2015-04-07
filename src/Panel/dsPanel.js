@@ -837,7 +837,7 @@ function messageListener(message,sender,sendResponse){
     else if (message.data=='found'){
       dataslayer.loading = false;
 
-      dataslayer.dtm_datas[dataslayer.activeIndex] = {loadRules:JSON.parse(message.loadRules)};
+      dataslayer.dtm_datas[dataslayer.activeIndex] = {loadRules:JSON.parse(message.loadRules),buildDate:message.buildDate};
       // {loadRules: JSON.parse(message.loadRules), iframe: (message.url=='iframe'?true:false)};
 
       if (dataslayer.options.showGTMLoad)
@@ -851,7 +851,7 @@ function messageListener(message,sender,sendResponse){
     else{   
       $('#sub'+dataslayer.activeIndex+' li.newpage').addClass('hasDTM').removeClass('seeking').removeClass('noGTM');
             
-      dataslayer.dtm_datas[dataslayer.activeIndex] = {loadRules:JSON.parse(message.loadRules)};
+      dataslayer.dtm_datas[dataslayer.activeIndex] = {loadRules:JSON.parse(message.loadRules),buildDate:message.buildDate};
       // dataslayer.DTMs[dataslayer.activeIndex] = {loadRules: JSON.parse(message.loadRules), iframe: (message.url=='iframe'?true:false)};
 
       updateUI(dataslayer.activeIndex,'datalayer');
