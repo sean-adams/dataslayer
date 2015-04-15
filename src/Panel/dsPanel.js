@@ -335,7 +335,7 @@ function parseClassic(v,ref){
 
     $.each(gaCVs[0],function(i,d){
           gaCVs[0][i]=gaCVs[0][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
-          gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
+          if (gaCVs[1][i]) gaCVs[1][i]=gaCVs[1][i].replace('\'1',')').replace('\'2','*').replace('\'3','!').replace('\'0','\'');
 
           therow = therow + '<tr><td><b>CV '+(parseInt(i)+1)+'</b></td><td><span>'+gaCVs[0][i]+' <b>=</b> '+gaCVs[1][i]+' <i>(';
           switch (String(gaCVs[2][i])){
