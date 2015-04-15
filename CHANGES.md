@@ -4,6 +4,7 @@ dataslayer Changelog
 0.10.5
 ------
 + added Adobe DTM container publish date
++ show when GTM is responsible for firing a GA tag
 + edge case GA fix
 
 0.10.4

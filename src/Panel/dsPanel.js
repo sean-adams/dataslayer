@@ -102,7 +102,12 @@ function parseUniversal(v,ref){
       hasEnhanced = hasEnhanced||(param.match(/(pr[\d+].*|il[\d+].*|promo[\d+a].*|pa(l*)|tcc|co[sl])$/)!==null);
     }
   var therow = '<tr><td></td><td><u>'+v.tid+'</u> (Universal) <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
+
+  if (v.allParams.gtm)
+    therow = therow + '\n<tr><td></td><td><i>(via '+v.allParams.gtm+')</i></td></tr>\n';
+
   if(hasEnhanced) therow = therow + '\n<tr><td></td><td><i>(contains enhanced ecommerce)</i></td></tr>\n';
+
   switch(v.t) {  // what type of hit is it?
     case 'event':
       therow = therow + '\n<tr><td><b>category</b></td><td><span>'+v.ec+'</span></td></tr>' +
@@ -222,6 +227,10 @@ function parseClassic(v,ref){
   for (var param in v.allParams)
     allParams = allParams + '<tr class="allparams allparams' + ref + '"><td>' + param + '</td><td>' + v.allParams[param]+'</td></tr>\n';
   var therow = '<tr><td></td><td><u>'+v.utmac+'</u> ('+v.reqType+') <a class="toggle" data-toggle="' + ref + '">+</a></td></tr>\n'+allParams;
+
+  if (v.allParams.gtm)
+    therow = therow + '\n<tr><td></td><td><i>(via '+v.allParams.gtm+')</i></td></tr>\n';
+
   switch(v.utmt){
     case 'event':
       if (v.utme.indexOf('5(')>=0){
