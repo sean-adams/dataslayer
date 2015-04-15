@@ -1,6 +1,10 @@
 dataslayer Changelog
 ====================
 
+0.10.5
+------
++ added Adobe DTM container publish date
+
 0.10.4
 ------
 + added donate button
