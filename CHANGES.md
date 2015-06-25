@@ -1,5 +1,8 @@
 dataslayer Changelog
 ====================
+0.10.6
+------
++ misc. fixes
 
 0.10.5
 ------

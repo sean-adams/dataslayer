@@ -941,6 +941,8 @@ function newPageLoad(newurl){
 // newRequest: called on a new network request of any kind
 // we use this to capture tags for parsing
 function newRequest(request){
+  if (request.response.status==307) return; //don't double count internally redirected requests
+
   var reqType = '';
   if (/__utm\.gif/i.test(request.request.url)){
     if (/stats\.g\.doubleclick\.net/i.test(request.request.url))
