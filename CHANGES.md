@@ -1,5 +1,9 @@
 dataslayer Changelog
 ====================
+0.10.7
+------
++ capture redirected GA /collects
+
 0.10.6
 ------
 + misc. fixes
