@@ -949,7 +949,7 @@ function newRequest(request){
       reqType = 'dc_js';
     else reqType = 'classic';
   }
-  else if (/google-analytics\.com\/collect/i.test(request.request.url)){
+  else if (/google-analytics\.com\/(r\/)?collect/i.test(request.request.url)){
     reqType = 'universal';
   }
   else if ((/\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0]))&&(request.response.status!==302)){
