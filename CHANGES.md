@@ -1,5 +1,9 @@
 dataslayer Changelog
 ====================
+0.10.8
+------
++ fix DTM breaking load rules
+
 0.10.7
 ------
 + capture redirected GA /collects
