@@ -247,7 +247,7 @@ dataslayer.dtmLoad = function(){
         var dtmNotif = [];
         for (var rule in plrs)
             for (var phase in _satellite.pageLoadPhases)
-                if (_satellite.ruleInScope(plrs[rule], {hostname: location.hostname,protocol: location.protocol,URI: _satellite.data.URI}) && _satellite.isRuleActive(plrs[rule]))
+                if (_satellite.ruleInScope(plrs[rule]) && _satellite.isRuleActive(plrs[rule]))
                     if (_satellite.ruleMatches(plrs[rule],{target:document.location,type:_satellite.pageLoadPhases[phase]},document.location)){
                         dtmNotif.push({});
                         dtmNotif[dtmNotif.length-1][_satellite.pageLoadPhases[phase]]=plrs[rule].name;
