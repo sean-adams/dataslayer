@@ -20,7 +20,11 @@ var dataslayer = {
 dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
-		if (obj[ddel] instanceof Element) localDL[ddel] = "<i>element</i>";
+		if (obj[ddel] instanceof Element){
+            localDL[ddel] = "<i>element</i>";
+            if (obj.event=='gtm.linkClick'||obj.event=='gtm.click')
+                localDL['<i>Click Text</i>']=obj[ddel].innerText;
+        }
         else if (obj[ddel] instanceof Function) { } //tag commander has many of these
         else if (ddel.substr(0,9)=='function ') { } //tag commander has many of these
         else if (Array.isArray(obj[ddel])) {
