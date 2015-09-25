@@ -3,6 +3,8 @@ dataslayer Changelog
 0.10.8
 ------
 + fix DTM breaking load rules
++ modify iframe injection method to accommodate Chrome CSP changes
++ show GTM element click text
 
 0.10.7
 ------
