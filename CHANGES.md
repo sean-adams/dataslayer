@@ -1,5 +1,8 @@
 dataslayer Changelog
 ====================
+0.10.9
+------
+
 0.10.8
 ------
 + fix DTM breaking load rules
