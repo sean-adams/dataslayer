@@ -485,7 +485,7 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
 
   if ((type=='dtm')&&dataslayer.dtm_datas[index]&&dataslayer.dtm_datas[index].loadRules&&(dataslayer.dtm_datas[index].loadRules.length>0))
     $.each(dataslayer.dtm_datas[index].loadRules,function(i,v){ //iterate each push group on the page
-      allrows = datalayerPushHTML(v,index) + allrows;
+      allrows = datalayerPushHTML(v,index,i) + allrows;
       console.log('iterating dtm');
     });
   else if ((type!=='dtm')&&(!((type=='gtm')&&(dataslayer.GTMs[index].length===0))))
@@ -494,7 +494,7 @@ function datalayerHTML(datalayers,index,type,gtmIndex) {
   
     if (typeof arrLayer!= 'undefined')
       $.each(arrLayer,function(i,v){ //iterate each push group on the page
-        allrows = datalayerPushHTML(v,index) + allrows;
+        allrows = datalayerPushHTML(v,index,i) + allrows;
       });
   }
 
@@ -911,10 +911,8 @@ function messageListener(message,sender,sendResponse){
     else
       dataslayer.datalayers[dataslayer.activeIndex][message.dLN] = [JSON.parse(message.data)];
 
-    var dataLayerArrayIndex = ''+(dataslayer.datalayers[dataslayer.activeIndex][message.dLN].length-1);
-
     if ($('.dlnum'+dataslayer.activeIndex+'.dlheader').data('dln')==message.dLN)
-      $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex,dataLayerArrayIndex));
+      $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex,(''+(dataslayer.datalayers[dataslayer.activeIndex][message.dLN].length-1))));
     clickSetup('datalayer');
   }
   else if (message.type=='dataslayer_loadsettings'){
