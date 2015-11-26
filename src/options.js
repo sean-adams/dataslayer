@@ -8,6 +8,7 @@ dataslayer.options = dataslayer.options || {
   ignoredTags: [],
   collapseNested: false,
   blockTags: false,
+  showArrayIndices: false,
   hideEmpty: false,
   dataLayers: []
 };
@@ -30,6 +31,7 @@ function loadSettings(){
     ignoredTags: [],
     collapseNested: false,
     blockTags: false,
+    showArrayIndices: false,
     hideEmpty: false,
     dataLayers: []
   };
@@ -45,6 +47,7 @@ function loadSettings(){
     if (!dataslayer.options.hasOwnProperty(prop)) dataslayer.options[prop] = true;
   });
   if(!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
+  if(!dataslayer.options.hasOwnProperty('showArrayIndices')) dataslayer.options.showArrayIndices = false;
   if(!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
   if(!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;
   if(!dataslayer.options.hasOwnProperty('ignoredTags')) dataslayer.options.ignoredTags = [];
@@ -57,6 +60,7 @@ function loadSettings(){
       if (!ourItems.hasOwnProperty(prop)) ourItems[prop] = true;
     });
     if(!ourItems.hasOwnProperty('blockTags')) ourItems.blockTags = false;
+    if(!ourItems.hasOwnProperty('showArrayIndices')) ourItems.showArrayIndices = false;
     if(!ourItems.hasOwnProperty('collapseNested')) ourItems.collapseNested = false;
     if(!ourItems.hasOwnProperty('hideEmpty')) ourItems.hideEmpty = false;
     if(!ourItems.hasOwnProperty('ignoredTags')) ourItems.ignoredTags = [];

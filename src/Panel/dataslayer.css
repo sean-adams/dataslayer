@@ -241,3 +241,11 @@ margin-bottom: 3px;
 margin-top: 3px;
 }
 
+span.arrayIndex{
+    position: absolute;
+    top: 50%;
+    left:4px;
+    line-height: 14px;
+    margin-top: -7px;
+    color: #B1B1B1;
+}

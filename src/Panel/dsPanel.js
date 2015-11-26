@@ -24,7 +24,8 @@ dataslayer.options = {
   ignoredTags: [],
   collapseNested: false,
   blockTags: false,
-  hideEmpty: false
+  hideEmpty: false,
+  showArrayIndices: false
 };
 
 
@@ -52,7 +53,8 @@ function loadSettings(){
     ignoredTags: [],
     collapseNested: false,
     blockTags: false,
-    hideEmpty: false
+    hideEmpty: false,
+    showArrayIndices: false
   };
 
 
@@ -70,6 +72,7 @@ function loadSettings(){
   if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;  
   if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;  
   if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
+  if (!dataslayer.options.hasOwnProperty('showArrayIndices')) dataslayer.options.showArrayIndices = false;
   
   chrome.storage.sync.get(null,function(items){
     dataslayer.options = items;
@@ -80,6 +83,7 @@ function loadSettings(){
     if (!dataslayer.options.hasOwnProperty('collapseNested')) dataslayer.options.collapseNested = false;
     if (!dataslayer.options.hasOwnProperty('hideEmpty')) dataslayer.options.hideEmpty = false;  
     if (!dataslayer.options.hasOwnProperty('blockTags')) dataslayer.options.blockTags = false;
+    if (!dataslayer.options.hasOwnProperty('showArrayIndices')) dataslayer.options.showArrayIndices = false;
     try{
       localStorage.options = JSON.stringify(dataslayer.options);
     }
@@ -423,8 +427,8 @@ function addSpaces(obj){
 // datalayerPushHTML
 // - push: object 
 // - index: index of dataslayer.datalayers[data layer name] | dataslayer.utag_datas
-function datalayerPushHTML(push,index){
-  var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer"><table cols=2>';
+function datalayerPushHTML(push,index,eachIndex){
+  var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer">'+(dataslayer.options.showArrayIndices&&eachIndex!==undefined?'<span class="arrayIndex">['+eachIndex+']</span>':'')+'<table cols=2>';
   $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
           var level1Id = k1.replace(' ','-')+'-'+Math.ceil(Math.random()*10000000);
@@ -904,10 +908,13 @@ function messageListener(message,sender,sendResponse){
     // dataslayer.GTMs[dataslayer.activeIndex] = {id: message.gtmID, name: message.dLN};
     if (dataslayer.datalayers[dataslayer.activeIndex].hasOwnProperty(message.dLN))
       dataslayer.datalayers[dataslayer.activeIndex][message.dLN].push(JSON.parse(message.data));
-    else 
+    else
       dataslayer.datalayers[dataslayer.activeIndex][message.dLN] = [JSON.parse(message.data)];
+
+    var dataLayerArrayIndex = ''+(dataslayer.datalayers[dataslayer.activeIndex][message.dLN].length-1);
+
     if ($('.dlnum'+dataslayer.activeIndex+'.dlheader').data('dln')==message.dLN)
-      $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex));
+      $('.dlnum'+dataslayer.activeIndex+'.dlheader').after(datalayerPushHTML(JSON.parse(message.data),dataslayer.activeIndex,dataLayerArrayIndex));
     clickSetup('datalayer');
   }
   else if (message.type=='dataslayer_loadsettings'){
