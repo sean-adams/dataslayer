@@ -1,8 +1,9 @@
 dataslayer Changelog
 ====================
-0.10.9
+0.10.10
 ------
 + more detail on DTM rules
++ option to display array indices
 + fix for detail expansion on items with a space in their key name
 
 0.10.8
