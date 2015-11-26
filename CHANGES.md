@@ -3,6 +3,7 @@ dataslayer Changelog
 0.10.9
 ------
 + more detail on DTM rules
++ fix for detail expansion on items with a space in their key name
 
 0.10.8
 ------
