@@ -1,6 +1,6 @@
 dataslayer Changelog
 ====================
-0.10.10
+0.10.11
 ------
 + more detail on DTM rules
 + option to display array indices
