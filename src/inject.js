@@ -255,6 +255,14 @@ dataslayer.dtmLoad = function(){
                     if (_satellite.ruleMatches(plrs[rule],{target:document.location,type:_satellite.pageLoadPhases[phase]},document.location)){
                         dtmNotif.push({});
                         dtmNotif[dtmNotif.length-1][_satellite.pageLoadPhases[phase]]=plrs[rule].name;
+                        for (var a in plrs[rule].trigger){
+                            dtmNotif[dtmNotif.length-1]['trigger '+a] = {
+                                command: (plrs[rule].trigger[a].engine ? plrs[rule].trigger[a].engine + ' / ' : '') + plrs[rule].trigger[a].command
+                            };
+                            for (var c in plrs[rule].trigger[a].arguments){
+                                dtmNotif[dtmNotif.length-1]['trigger '+a]['argument '+ c] = plrs[rule].trigger[a].arguments[c];
+                            }
+                        }
                     }
         window.parent.postMessage({
             type: "dataslayer_dtm",

@@ -2,6 +2,7 @@ dataslayer Changelog
 ====================
 0.10.9
 ------
++ more detail on DTM rules
 
 0.10.8
 ------
