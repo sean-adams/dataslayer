@@ -47,5 +47,6 @@ dataslayer was built with and thanks to the following:
 - [jQuery](http://jquery.com/)
 - [leanModal](http://leanmodal.finelysliced.com.au/)
 - [Open Sans](http://www.google.com/fonts/specimen/Open+Sans)
+- [Massimo Artizzu's O.o polyfill](https://github.com/MaxArt2501/object-observe)
 
 dataslayer is under the MIT License. See LICENSE.md.

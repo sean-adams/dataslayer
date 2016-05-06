@@ -4,7 +4,7 @@
   "name": "dataslayer",
   "description": "Debug and test tag management (Google Tag Manager, Tealium) and analytics implementations.",
   "short_name": "dataslayer",
-  "version": "0.10.11",
+  "version": "0.10.12",
 
   "icons":{"48":"i48.png","128":"i128.png"},
 
@@ -16,7 +16,7 @@
     "persistent": false
   },
 
-  "web_accessible_resources": ["inject.js"],
+  "web_accessible_resources": ["inject.js","oo_poly.js"],
   
   "permissions": [ "tabs", "storage", "http://*/*", "https://*/*", "notifications","declarativeWebRequest" ]
 }

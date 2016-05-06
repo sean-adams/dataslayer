@@ -428,7 +428,7 @@ function addSpaces(obj){
 // - push: object 
 // - index: index of dataslayer.datalayers[data layer name] | dataslayer.utag_datas
 function datalayerPushHTML(push,index,eachIndex){
-  var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer">'+(dataslayer.options.showArrayIndices&&eachIndex!==undefined?'<span class="arrayIndex">['+eachIndex+']</span>':'')+'<table cols=2>';
+  var therow = '<li class="eventbreak submenu dlnum'+index+' datalayer"></li>\n' + '<li class="event submenu dlnum'+index+' datalayer">'+(dataslayer.options.showArrayIndices&&eachIndex!==undefined?'<span class="arrayIndex">'+eachIndex+'</span>':'')+'<table cols=2>';
   $.each(push,function(k1,x){ //iterate each individual up to 5 levels of keys-- clean this up later
         if(typeof x == 'object'){
           var level1Id = k1.replace(' ','-')+'-'+Math.ceil(Math.random()*10000000);

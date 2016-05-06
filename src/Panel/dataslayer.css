@@ -122,7 +122,7 @@ li.newpage.seeking:before{
 .pure-menu a, .pure-menu .pure-menu-heading {line-height: normal !important;}
 
 /*li.event tr>td:first-child {text-align: right;}*/
-li td {overflow: hidden; white-space: nowrap;}
+li td {overflow: hidden; white-space: nowrap; vertical-align: top;}
 
 .pure-menu>table {table-layout: fixed;}
 
@@ -243,9 +243,14 @@ margin-top: 3px;
 
 span.arrayIndex{
     position: absolute;
-    top: 50%;
-    left:4px;
+    /*top: 50%;*/
+    left:2px;
     line-height: 14px;
-    margin-top: -7px;
+    margin-top: 6px;
     color: #B1B1B1;
 }
+
+/*li.event tr td:nth-child(2):hover{
+	white-space:normal;
+}
+*/

@@ -1,10 +1,11 @@
 dataslayer Changelog
 ====================
-0.10.11
+0.10.12
 ------
 + more detail on DTM rules
 + option to display array indices
 + fix for detail expansion on items with a space in their key name
++ Object.observe polyfill
 
 0.10.8
 ------

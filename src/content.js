@@ -1,5 +1,11 @@
 if (!(/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host))){
 	if (document.getElementById('dataslayer_script') === null){
+	oopoly = document.createElement('script');
+	oopoly.id = 'oo_poly';
+	oopoly.src = chrome.runtime.getURL('oo_poly.js');
+	oopoly.type = 'text/javascript';
+	document.head.appendChild(oopoly);
+
 	dataslayers = document.createElement('script');
 	dataslayers.id = 'dataslayer_script';
 	dataslayers.src = chrome.runtime.getURL('inject.js');
