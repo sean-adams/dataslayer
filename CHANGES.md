@@ -1,5 +1,9 @@
 dataslayer Changelog
 ====================
+0.10.13
+-------
++ bug fixes
+
 0.10.12
 ------
 + more detail on DTM rules
