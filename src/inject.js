@@ -121,15 +121,24 @@ dataslayer.gtmSearch = function(){
     var gtmList = document.querySelectorAll("script[src*=googletagmanager\\.com]");
     if (gtmList.length > 0){
         for (i=0;i<gtmList.length;i++){
-            var gtmQSP = gtmList[i].src.split('?')[1];
-            if (gtmQSP.indexOf('&')>-1){
-                dataslayer.gtmID[i]=gtmQSP.substring(3,gtmQSP.indexOf('&'));
-                dataslayer.dLN[i]=gtmQSP.substr(gtmQSP.indexOf('&')+3);
+            try {
+                var gtmLocation = new URL(gtmList[i].src);
+                dataslayer.gtmID[i] = gtmLocation.searchParams.get('id');
+                dataslayer.dLN[i] = gtmLocation.searchParams.get('l') || 'dataLayer';
             }
-            else{
-                dataslayer.gtmID[i]=gtmQSP.substr(3);
-                dataslayer.dLN[i]='dataLayer';
+            catch(e) {
+                console.warn('Your browser likely doesn\'t support the URL type; please upgrade.');
             }
+
+            // var gtmQSP = gtmList[i].src.split('?')[1];
+            // if (gtmQSP.indexOf('&')>-1){
+            //     dataslayer.gtmID[i]=gtmQSP.substring(3,gtmQSP.indexOf('&'));
+            //     dataslayer.dLN[i]=gtmQSP.substr(gtmQSP.indexOf('&')+3);
+            // }
+            // else{
+            //     dataslayer.gtmID[i]=gtmQSP.substr(3);
+            //     dataslayer.dLN[i]='dataLayer';
+            // }
 
             if ((typeof window[dataslayer.dLN[i]] !== "undefined")&&(dataslayer.gtmAnnounced.indexOf(dataslayer.gtmID[i])==-1)) {
                 dataslayer.gtmAnnounced.push(dataslayer.gtmID[i]);
