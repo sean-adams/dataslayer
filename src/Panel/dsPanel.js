@@ -110,7 +110,9 @@ function parseUniversal(v,ref){
   if (v.allParams.gtm)
     therow = therow + '\n<tr><td></td><td><i>(via '+v.allParams.gtm+')</i></td></tr>\n';
 
-  if(hasEnhanced) therow = therow + '\n<tr><td></td><td><i>(contains enhanced ecommerce)</i></td></tr>\n';
+  if (hasEnhanced) therow = therow + '\n<tr><td></td><td><i>(contains enhanced ecommerce)</i></td></tr>\n';
+  if (v.uid)
+    therow = therow + '\n<tr><td><b>user ID</b></td><td><span>'+v.uid+'</span></td></tr>';
 
   switch(v.t) {  // what type of hit is it?
     case 'event':
