@@ -1061,7 +1061,9 @@ loadSettings();
 
 
 //set up UI
-$('a.settings').prop('href','chrome-extension://'+chrome.runtime.id+'/options.html');
+$('a.settings').click(function(){
+  chrome.runtime.sendMessage({type: 'openOptionsPage'});
+});
 $('a.clearbtn').leanModal({ top : 0});
 $('#clearbtnyes').click(function(){
     dataslayer.datalayers = [{}];
