@@ -2,3 +2,5 @@
 src/Panel/.jshintrc
 assets/
 demodata.json
+dataslayer.sublime-project
+dataslayer.sublime-workspace
