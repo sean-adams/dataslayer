@@ -254,3 +254,56 @@ span.arrayIndex{
 	white-space:normal;
 }
 */
+
+
+.dark .pure-menu.pure-menu-open,
+.dark .pure-menu.pure-menu-horizontal li .pure-menu-children {
+  background: rgb(36, 36, 36);
+}
+
+.dark .pure-menu-heading {
+  background: rgb(36, 36, 36) !important;
+}
+
+
+.dark li.newpage:not(.options):after,
+.dark td>span:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10%;
+  height: 100%;
+  pointer-events: none;
+  background: -webkit-linear-gradient(left, rgba(36,36,36,0.0) 75%,rgba(36, 36, 36, 1) 100%);
+}
+
+.dark #clearconfirm {
+  background: rgb(36, 36, 36);
+  color: rgb(213, 213, 213);
+}
+
+.dark .pure-menu-open table {
+  color: rgb(213, 213, 213);
+} 
+
+.dark {
+  background-color: rgb(36, 36, 36);
+}
+
+.dark .pure-menu li a:hover, .dark .pure-menu li a:focus {
+  background-color: rgb(72, 72, 72);
+  color: white;
+}
+
+.dark a.currentpage {
+  font-weight: normal;
+  color: rgb(232, 232, 232);
+}
+
+.dark select {
+  // -webkit-appearance: none;
+  border: 1px solid rgb(213, 213, 213);
+  color: rgb(213, 213, 213);
+  background: rgb(36, 36, 36);
+}

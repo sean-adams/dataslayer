@@ -1,5 +1,9 @@
 dataslayer Changelog
 ====================
+0.10.15
+-------
++ support dark devtools theme
+
 0.10.14
 -------
 + bug fixes

@@ -1084,6 +1084,11 @@ $('#clearbtnyes').click(function(){
     $("#lean_overlay").fadeOut(200);$('#clearconfirm').css({"display":"none"});
 });
 
+if (chrome.devtools.panels.themeName == 'dark') {
+  $('body').addClass('dark');
+}
+
+
 chrome.devtools.network.getHAR(function(harlog){
   if(harlog && harlog.entries)
     harlog.entries.forEach(function(v,i,a){
