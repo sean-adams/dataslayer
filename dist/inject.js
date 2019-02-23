@@ -249,19 +249,22 @@ dataslayer.tcoTimerID = window.setInterval(function() {
 
 // Adobe DTM
 dataslayer.dtmLoad = function(){
-    if (!window._satellite)
+    var hasAdobe = typeof window._satellite === 'undefined' || !(_satellite.buildDate || _satellite.buildInfo);
+    if (hasAdobe) {
         window.parent.postMessage({
             type: "dataslayer_dtm",
             url: (window == window.parent ? window.location.href : 'iframe'),
             data: "notfound"
         }, "*");
-    else{
+    }
+    else {
         var isLaunch = !_satellite.configurationSettings;
+        console.log(_satellite);
 
         if (!isLaunch) {
             // DTM
             // page load rules
-            var plrs = _satellite.configurationSettings.pageLoadRules;
+            var plrs = _satellite.configurationSettings.pageLoadRules || _satellite.pageLoadRules;
             var dtmNotif = [];
             for (var rule in plrs) {
                 for (var phase in _satellite.pageLoadPhases) {
@@ -290,7 +293,8 @@ dataslayer.dtmLoad = function(){
                 buildDate: _satellite.buildDate || ''
             }, "*");
         } else {
-			// WIP Adobe Launch
+            // WIP Adobe Launch
+            console.log('isLaunch');
             var dtmNotif = [];
 
 			var propertyInfo = '';
