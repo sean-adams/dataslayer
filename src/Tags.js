@@ -480,7 +480,7 @@ class Tag extends Component {
                 <td>{data.allParams[name]}</td>
               </tr>))
           }
-          { data.allParams.gtm && (<tr><td /><td><i>(via {data.allParams.gtm})</i></td></tr>)}
+          { data.allParams.gtm && (<tr><td /><td><i>(via {data.allParams.gtm.replace(/2wg241/ig, 'GTM-')})</i></td></tr>)}
 
           { specificParams }
         </tbody>
