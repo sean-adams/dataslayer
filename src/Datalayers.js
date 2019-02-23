@@ -342,7 +342,7 @@ class GTM extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeDatalayer: 'dataLayer'
+      activeDatalayer: props.GTMs[0].name || 'dataLayer'
     };
   }
 
@@ -356,7 +356,7 @@ class GTM extends Component {
     let header;
     if (props.GTMs.length === 1) {
       header = (<td>
-        <u>{props.GTMs[0].id} {props.GTMs[0].iframe ? '[iframe]' : ''}</u> {props.GTMs[0].name === 'dataLayer' ? '' : `(${props.GTMs[0].name})`}
+        <u>{props.GTMs[0].id} {props.GTMs[0].iframe ? '[iframe]' : ''}</u> <span>{props.GTMs[0].name === 'dataLayer' ? '' : `(${props.GTMs[0].name})`}</span>
       </td>);
     } else {
       header = (<td>
