@@ -1,3 +1,4 @@
+/* eslint-disable */
 (function(){/* jQuery v1.9.1 (c) 2005, 2012 jQuery Foundation, Inc. jquery.org/license.*/
 var g=/\\[object (Boolean|Number|String|Function|Array|Date|RegExp)\\]/;function h(a){return null==a?String(a):(a=g.exec(Object.prototype.toString.call(Object(a))))?a[1].toLowerCase():"object"}function k(a,b){return Object.prototype.hasOwnProperty.call(Object(a),b)}function m(a){if(!a||"object"!=h(a)||a.nodeType||a==a.window)return!1;try{if(a.constructor&&!k(a,"constructor")&&!k(a.constructor.prototype,"isPrototypeOf"))return!1}catch(b){return!1}for(var c in a);return void 0===c||k(a,c)};/*'+
  Copyright 2012 Google Inc. All rights reserved. */
@@ -21,9 +22,9 @@ dataslayer.sanitize = function(obj){
 	var localDL = {};
 	for (var ddel in obj){
 		if (obj[ddel] instanceof Element){
-            localDL[ddel] = "<i>element</i>";
+            localDL[ddel] = "element";
             if (obj.event=='gtm.linkClick'||obj.event=='gtm.click')
-                localDL['<i>Click Text</i>']=obj[ddel].innerText;
+                localDL['Click Text']=obj[ddel].innerText;
         }
         else if (obj[ddel] instanceof Function) { } //tag commander has many of these
         else if (ddel.substr(0,9)=='function ') { } //tag commander has many of these
@@ -255,32 +256,61 @@ dataslayer.dtmLoad = function(){
             data: "notfound"
         }, "*");
     else{
-        //page load rules
-        var plrs = _satellite.configurationSettings.pageLoadRules;
-        var dtmNotif = [];
-        for (var rule in plrs)
-            for (var phase in _satellite.pageLoadPhases)
-                if (_satellite.ruleInScope(plrs[rule]) && _satellite.isRuleActive(plrs[rule]))
-                    if (_satellite.ruleMatches(plrs[rule],{target:document.location,type:_satellite.pageLoadPhases[phase]},document.location)){
-                        dtmNotif.push({});
-                        dtmNotif[dtmNotif.length-1][_satellite.pageLoadPhases[phase]]=plrs[rule].name;
-                        for (var a in plrs[rule].trigger){
-                            dtmNotif[dtmNotif.length-1]['trigger '+a] = {
-                                command: (plrs[rule].trigger[a].engine ? plrs[rule].trigger[a].engine + ' / ' : '') + plrs[rule].trigger[a].command
-                            };
-                            for (var c in plrs[rule].trigger[a].arguments){
-                                dtmNotif[dtmNotif.length-1]['trigger '+a]['argument '+ c] = plrs[rule].trigger[a].arguments[c];
+        var isLaunch = !_satellite.configurationSettings;
+
+        if (!isLaunch) {
+            // DTM
+            // page load rules
+            var plrs = _satellite.configurationSettings.pageLoadRules;
+            var dtmNotif = [];
+            for (var rule in plrs) {
+                for (var phase in _satellite.pageLoadPhases) {
+                    if (_satellite.ruleInScope(plrs[rule]) && _satellite.isRuleActive(plrs[rule])) {
+                        if (_satellite.ruleMatches(plrs[rule],{target:document.location,type:_satellite.pageLoadPhases[phase]},document.location)) {
+                            dtmNotif.push({});
+                            dtmNotif[dtmNotif.length-1][_satellite.pageLoadPhases[phase]]=plrs[rule].name;
+                            for (var a in plrs[rule].trigger) {
+                                dtmNotif[dtmNotif.length-1]['trigger '+a] = {
+                                    command: (plrs[rule].trigger[a].engine ? plrs[rule].trigger[a].engine + ' / ' : '') + plrs[rule].trigger[a].command
+                                };
+                                for (var c in plrs[rule].trigger[a].arguments) {
+                                    dtmNotif[dtmNotif.length-1]['trigger '+a]['argument '+ c] = plrs[rule].trigger[a].arguments[c];
+                                }
                             }
-                        }
-                    }
-        window.parent.postMessage({
-            type: "dataslayer_dtm",
-            url: (window == window.parent ? window.location.href : 'iframe'),
-            data: "found",
-            loadRules:JSON.stringify(dtmNotif),
-            buildDate:_satellite.buildDate||''
-        }, "*");
+						}
+					}
+				}
+			}
+
+            window.parent.postMessage({
+                type: "dataslayer_dtm",
+                url: (window == window.parent ? window.location.href : 'iframe'),
+                data: "found",
+                loadRules:JSON.stringify(dtmNotif),
+                buildDate: _satellite.buildDate || ''
+            }, "*");
+        } else {
+			// WIP Adobe Launch
+            var dtmNotif = [];
+
+			var propertyInfo = '';
+			if (_satellite.property && _satellite.property.name) {
+				propertyInfo += _satellite.property.name;
+			}
+			if (_satellite.buildInfo && _satellite.buildInfo.environment) {
+				propertyInfo += ' (' + _satellite.buildInfo.environment + ')';
+			}
+
+            window.parent.postMessage({
+                type: "dataslayer_dtm",
+                url: (window == window.parent ? window.location.href : 'iframe'),
+                data: "found",
+				loadRules: JSON.stringify(dtmNotif),
+				property: propertyInfo,
+                buildDate: _satellite.buildInfo && _satellite.buildInfo.buildDate || ''
+            }, "*");
         }
+    }
 };
 
 if (document.readyState == 'complete')

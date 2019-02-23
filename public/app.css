@@ -12,18 +12,42 @@
   src: local('Open Sans'), local('OpenSans'), url(OpenSans.woff) format('woff');
 }
 
+.hidden {
+  display: none !important;
+}
+
 body,
 .pure-g [class *= "pure-u"], .pure-g-r [class *= "pure-u"] {
-	/*font-family: Georgia, Times, "Times New Roman", serif;*/
-	font-family: 'Open Sans';
-	margin: 10px; 
+  /*font-family: Georgia, Times, "Times New Roman", serif;*/
+  font-family: 'Open Sans';
+  margin: 10px; 
 }
 body {font-size:75%;}
 table {font-size:1em;}
 
 .pure-menu li a { padding-right: 30px; cursor: pointer !important;}
-.pure-menu.pure-menu-open, .pure-menu.pure-menu-horizontal li .pure-menu-children {  background: white;}
-.pure-menu-heading { font-weight: bold; border-bottom: none !important; text-transform: none !important; cursor: default !important; background: white !important; }
+
+.pure-menu.pure-menu-open,
+.pure-menu.pure-menu-horizontal li .pure-menu-children {
+  background: white;
+}
+
+.dark .pure-menu.pure-menu-open,
+.dark .pure-menu.pure-menu-horizontal li .pure-menu-children {
+  background: rgb(36, 36, 36);
+}
+
+.pure-menu-heading {
+  font-weight: bold;
+  border-bottom: none !important;
+  text-transform: none !important;
+  cursor: default !important;
+  background: white !important;
+}
+
+.dark .pure-menu-heading {
+  background: rgb(36, 36, 36) !important;
+}
 
 .pure-u-2-5 {margin-top: 3px !important;}
 
@@ -65,58 +89,74 @@ visibility: visible !important;
 
 td.utm, td.dlt {vertical-align:top !important;}
 
-li.newpage:not(.options):after,td>span:after {
-content: '';
-position: absolute;
-top: 0;
-right: 0;
-width: 10%;
-height: 100%;
-pointer-events: none;
-background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255, 1) 100%);
+li.newpage:not(.options):after,
+td>span:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10%;
+  height: 100%;
+  pointer-events: none;
+  background: -webkit-linear-gradient(left, rgba(0,0,0,0.0) 0%,rgba(255, 255, 255, 1) 100%);
+}
+
+.dark li.newpage:not(.options):after,
+.dark td>span:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 10%;
+  height: 100%;
+  pointer-events: none;
+  background: -webkit-linear-gradient(left, rgba(36,36,36,0.0) 75%,rgba(36, 36, 36, 1) 100%);
 }
 
 li.newpage:before{
-	position: absolute;
-	top: 0;
-	left: 0;
-	padding-top:5px;
-	padding-left:5px;
-	height: 100%;
-	pointer-events: none;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding-top:5px;
+  padding-left:5px;
+  height: 100%;
+  pointer-events: none;
 } 
 
 li.newpage.hasGTM:before{
-	content: url('img/gtm.png');
+  content: url('/img/gtm.png');
 }
 
 li.newpage.hasTLM:before{
-	content: url('img/tlm.png');
+  content: url('/img/tlm.png');
 }
 
 li.newpage.hasTCO:before{
-	content: url('img/tco.png');
+  content: url('/img/tco.png');
 }
 
 li.newpage.hasDTM:before{
-	content: url('img/dtm.png');
+  content: url('/img/dtm.png');
+}
+
+li.newpage.hasMULTI:before{
+  content: url('/img/multi.png');
 }
 
 li.newpage.hasVAR:before{
-	content: '\2713';
-	color: rgba(0, 128, 0, 0.5);
+  content: '\2713';
+  color: rgba(0, 128, 0, 0.5);
 }
 
 li.newpage.noGTM:before{
-	content: '\2717';
-	color: rgba(255, 0, 0, 0.5);
+  content: url('/img/none.png');
 }
 
 li.newpage.seeking:before{
-	content:url('img/loader.gif');
-	padding-top:6px;
-	padding-left:2px;
-	color: white;
+  content:url('/img/loader.gif');
+  padding-top:6px;
+  padding-left:2px;
+  color: white;
 }
 
 .pure-menu a, .pure-menu .pure-menu-heading {line-height: normal !important;}
@@ -126,24 +166,28 @@ li td {overflow: hidden; white-space: nowrap; vertical-align: top;}
 
 .pure-menu>table {table-layout: fixed;}
 
-.allparams { display: none;}
-.allparams-visible {display: table-row; font-size:75%;}
+.allparams {
+  font-size:75%;
+  display: table-row;
+}
 
 .event td a {display: inline;}
 
-a.settings img {position: fixed; top:25px; right: 2px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
+a.settings img {position: fixed; top:25px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
 a.settings img:hover {opacity: 1;}
-a.clearbtn img {position: fixed; top:50px; right: 2px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s;}
+a.clearbtn img {position: fixed; top:50px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
 a.clearbtn img:hover {opacity: 1;}
+a.filebtn img {position: fixed; top:75px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
+a.filebtn img:hover {opacity: 1;}
 
-a.toggle { padding: 0 5 0 5 !important;}
+a.toggle { padding: 0px 5px !important;}
 
 a.currentpage.newpage.options {cursor: default !important;}
 li.options { background: #eee;}
 
 label.pure-checkbox {
-	cursor: pointer;
-	margin-bottom: 0 !important;
+  cursor: pointer;
+  margin-bottom: 0 !important;
 }
 
 #lean_overlay {
@@ -158,83 +202,91 @@ label.pure-checkbox {
 }
 
 #clearconfirm {
-	display: none;
-	width:50%;
-	background: white;
-	border: 1px black;
-	padding:30px;
-	height:100px;
-	text-align: center;
+  display: none;
+  width:50%;
+  background: white;
+  border: 1px black;
+  padding:30px;
+  height:100px;
+  text-align: center;
+}
+.dark #clearconfirm {
+  background: rgb(36, 36, 36);
+  color: rgb(213, 213, 213);
 }
 
 li.newpage {border-bottom: 1px solid lightgrey;}
 
 #datalayeritems>.pure-menu tr ul {
-	overflow-y: hidden;
+  overflow-y: hidden;
 }
 
 .clicked-closed>table>tbody ul {
-	display: none;
+  display: none;
 }
 
 /*.object-row em{
-	all: initial;
-	position: absolute;
-	left: 1em;
-	font-style: normal;
+  all: initial;
+  position: absolute;
+  left: 1em;
+  font-style: normal;
 }*/
 
 .object-row em a{
-	position: absolute;
-	left: 1em;
-	font-style: normal;
-	padding: 0px;
+  position: absolute;
+  left: 1em;
+  font-style: normal;
+  padding: 0px !important;
 }
 .object-row em a:hover,.object-row em a:focus{
-	cursor: pointer;
-	position: absolute;
-	left: 1em;
-	font-style: normal;
-	padding: 0px;
-	background: none;
+  cursor: pointer;
+  position: absolute;
+  left: 1em;
+  font-style: normal;
+  padding: 0px;
+  background: none;
 }
 
 select {
-	font-family: 'Open Sans';
-	border: 0;
+  font-family: 'Open Sans' !important;
+  border: 0;
 }
 
 
 .pure-menu.containsTAG > table > tbody > tr > td.utm{
-	border-left:none;
+  border-left:none;
 }
 
 .pure-menu.containsGTM > table > tbody > tr > td.dlt{
-	border-right:none;
+  border-right:none;
 }
 
 td.dlt{
-	width:0;
+  width:0;
 }
 
 td.utm{
-	width:0;
+  width:0;
 }
 
 .pure-menu.containsGTM > table > tbody > tr > td.dlt{
-	width: auto;
+  width: auto;
 }
 
 .pure-menu.containsTAG > table > tbody > tr > td.utm{
-	width: auto;
+  width: auto;
 }
 
-.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.dlt{
-	border-right: 1px dashed rgb(112, 111, 111);
+.pure-menu > table > tbody > tr > td.dlt + td.utm {
+  border-left: 1px dashed rgb(112, 111, 111);
 }
-.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
-	border-left: 1px dashed rgb(112, 111, 111);
-}
+
+// .pure-menu.containsGTM.containsTAG > table > tbody > tr > td.dlt{
+//   border-right: 1px dashed rgb(112, 111, 111);
+// }
+// .pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
+//   border-left: 1px dashed rgb(112, 111, 111);
+// }
 
 .event.submenu>table {
 margin-bottom: 3px;
@@ -251,37 +303,9 @@ span.arrayIndex{
 }
 
 /*li.event tr td:nth-child(2):hover{
-	white-space:normal;
+  white-space:normal;
 }
 */
-
-
-.dark .pure-menu.pure-menu-open,
-.dark .pure-menu.pure-menu-horizontal li .pure-menu-children {
-  background: rgb(36, 36, 36);
-}
-
-.dark .pure-menu-heading {
-  background: rgb(36, 36, 36) !important;
-}
-
-
-.dark li.newpage:not(.options):after,
-.dark td>span:after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 10%;
-  height: 100%;
-  pointer-events: none;
-  background: -webkit-linear-gradient(left, rgba(36,36,36,0.0) 75%,rgba(36, 36, 36, 1) 100%);
-}
-
-.dark #clearconfirm {
-  background: rgb(36, 36, 36);
-  color: rgb(213, 213, 213);
-}
 
 .dark .pure-menu-open table {
   color: rgb(213, 213, 213);

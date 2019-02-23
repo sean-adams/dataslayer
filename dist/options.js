@@ -36,10 +36,11 @@ function loadSettings(){
     dataLayers: []
   };
 
-  try{
-    if (typeof localStorage.options !== 'undefined') dataslayer.options = JSON.parse(localStorage.options);
-  }
-  catch(error){
+  try {
+    if (typeof localStorage.options !== 'undefined') {
+      dataslayer.options = JSON.parse(localStorage.options);
+    }
+  } catch (error) {
     console.log(error);
   }
 
