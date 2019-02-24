@@ -400,22 +400,23 @@ const parseSiteCatalyst = (data, keyPrefix = '') => {
     params.push((<tr><td><b>state</b></td><td><span>{allParams.state}</span></td></tr>));
   }
 
+  const varRegex = /^D=(([vc]\d+)|(\w+))$/;
 
   // enumerate eVars and props
   for (let cd in data.scEvars) {
     if (data.scEvars.hasOwnProperty(cd)) {
       if (cd === '0') {
         params.push((<tr key={`${keyPrefix}campaign`}><td><b>campaign</b></td><td><span>{data.scEvars[cd]}</span></td></tr>));
-      } else if (/^D=(c\d+)$/.test(data.scEvars[cd])) {
-        // Value is copied from a prop
-        let prop = data.scEvars[cd].replace(/^D=c/,'');
+      } else if (varRegex.test(data.scEvars[cd])) {
+        // Value is copied from another variable
+        let prop = data.scEvars[cd].match(varRegex)[1];
         params.push(
           (<tr key={`${keyPrefix}eVar${cd}`}>
             <td>
               <b>eVar{cd}</b>
             </td>
             <td>
-              <span>{data.scEvars[cd]}</span> <em style={{ color: '#919191' }}>{data.scProps[prop]}</em>
+              <span>{data.scEvars[cd]}</span> <em style={{ color: '#919191' }}>{data.allParams[prop]}</em>
             </td>
           </tr>)
         );
@@ -426,16 +427,16 @@ const parseSiteCatalyst = (data, keyPrefix = '') => {
   }
   for (let cm in data.scProps) {
     if (data.scProps.hasOwnProperty(cm)) {
-      if (/^D=(v\d+)$/.test(data.scProps[cm])) {
-        // Value is copied from an eVar
-        let eVar = data.scProps[cm].replace(/^D=v/,'');
+      if (varRegex.test(data.scProps[cm])) {
+        // Value is copied from another variable
+        let eVar = data.scProps[cm].match(varRegex)[1];
         params.push(
           (<tr key={`${keyPrefix}prop${cm}`}>
             <td>
               <b>prop{cm}</b>
             </td>
             <td>
-              <span>{data.scProps[cm]}</span> <em style={{ color: '#919191' }}>{data.scEvars[eVar]}</em>
+              <span>{data.scProps[cm]}</span> <em style={{ color: '#919191' }}>{data.allParams[eVar]}</em>
             </td>
           </tr>)
         );
