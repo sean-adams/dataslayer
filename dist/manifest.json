@@ -12,7 +12,6 @@
   },
 
   "devtools_page": "devtools.html",
-  "options_page": "options.html",
 
   "background": {
     "scripts": ["event.js"],

@@ -1,3 +1,4 @@
+/* global chrome */
 var devtoolsPort = [];
 var notifId = '';
 chrome.runtime.onConnect.addListener(function(port){
@@ -68,15 +69,6 @@ chrome.runtime.onMessage.addListener(function(message,sender,sendResponse){
 		devtoolsPort.forEach(function(v,i,x){
 			v.postMessage(message);
 		});
-	}
-	else if (message.type=='openOptionsPage'){
-	  if (chrome.runtime.openOptionsPage) {
-	    // New way to open options pages, if supported (Chrome 42+).
-	    chrome.runtime.openOptionsPage();
-	  } else {
-	    // Reasonable fallback.
-	    window.open(chrome.runtime.getURL('options.html'));
-  }
 	}
 });
 

@@ -47,7 +47,7 @@ class Settings extends Component {
         <a
           className="settings"
           title="Options"
-          onClick={() => chrome.runtime.sendMessage({ type: 'openOptionsPage' })}
+          onClick={this.props.onSettingsClick}
         >
           <img alt="options" src="/img/settings.png" />
         </a>
@@ -151,10 +151,12 @@ Settings.propTypes = {
   clearHistory: React.PropTypes.func,
   appState: React.PropTypes.object,
   handleFile: React.PropTypes.func,
+  onSettingsClick: React.PropTypes.func,
 };
 
 Settings.defaultProps = {
   clearHistory: () => null,
+  onSettingsClick: () => null,
   appState: {},
   handleFile: e => null,
 };

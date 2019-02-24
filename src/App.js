@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import uuid from 'uuid';
 import Page from './Page';
 import Settings from './Settings';
+import Options from './Options';
 import demoData from './demoData';
 
 // isChromeDevTools
@@ -88,12 +89,13 @@ class Dataslayer extends Component {
     super(props);
     this.state = {
       ...dataslayer,
+      showOptions: false,
       port: (isChromeDevTools() ? chrome.runtime.connect() : null),
-      importAllowed: true
     };
   }
 
   componentDidMount() {
+    this.loadSettings();
     if (isChromeDevTools()) {
       if (chrome.devtools.panels.themeName === 'dark') {
         this.setState({ darkTheme: true });
@@ -102,7 +104,6 @@ class Dataslayer extends Component {
       this.setState({
         debug: (chrome.runtime.id !== 'ikbablmmjldhamhcldjjigniffkkjgpo')
       });
-      this.loadSettings();
 
       // check for existing requests
       chrome.devtools.network.getHAR((harlog) => {
@@ -172,6 +173,36 @@ class Dataslayer extends Component {
       }
       );
     }
+  }
+
+  setOption = (option, value) => {
+    // TODO: save to storage
+    
+    let options = this.state.options;
+    if (typeof value === 'boolean') {
+      options[option] = value;
+    } else if (typeof value === 'string') {
+      if (value.length === 0) {
+        options[option] = [];
+      } else {
+        options[option] = value.split(';');
+      }
+    }
+
+    try {
+      localStorage['options'] = JSON.stringify(options);
+    }
+    catch(error) {
+      console.log(error);
+    }
+
+    if (isChromeDevTools()) {
+      chrome.storage.sync.set(options);
+    }
+
+    this.setState({
+      options
+    });
   }
 
   importFile = (e, callback) => {
@@ -599,9 +630,10 @@ class Dataslayer extends Component {
       showArrayIndices: false
     };
 
-
     try {
-      if (typeof localStorage.options !== 'undefined') options = JSON.parse(localStorage.options);
+      if (typeof localStorage.options !== 'undefined') {
+        options = JSON.parse(localStorage.options);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -627,6 +659,8 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('showArrayIndices')) {
       options.showArrayIndices = false;
     }
+
+    console.log(options);
 
     this.setState({ options });
 
@@ -673,10 +707,12 @@ class Dataslayer extends Component {
           clearHistory={this.clearHistory}
           appState={this.state}
           handleFile={this.importFile}
+          onSettingsClick={() => this.setState({ showOptions: !this.state.showOptions })}
         />
         <div>
           <div className="datalayeritems">
-            {(() => {
+            { this.state.showOptions ? <Options options={this.state.options} setOption={this.setOption} /> : null}
+            {!this.state.showOptions && (() => {
               let pages = [];
               for (let a = this.state.urls.length - 1; a >= 0; a--) {
                 let pageData = {

@@ -1,6 +1,6 @@
 {
-  "name": "dataslayer-react",
-  "version": "0.1.0",
+  "name": "dataslayer",
+  "version": "1.0.0",
   "private": true,
   "devDependencies": {
     "autoprefixer": "6.5.1",
