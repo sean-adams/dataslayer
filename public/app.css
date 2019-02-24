@@ -63,7 +63,7 @@ a.currentpage {font-weight: bolder;}
 .project-description {font-size: 75%; font-style:italic; padding-left: 30px; padding-right: 30px; opacity:0.5;}
 
 li.submenu-hidden hr { margin: 0;}
-li.submenu-hidden.eventbreak {border:0; -webkit-transition: none !important;}
+li.submenu-hidden.eventbreak {border:0; -webkit-transition: none !important; transition: none !important;}
 
 ul li table {margin-left: 30px;}
 ul li table td {padding-right: 30px;}
@@ -73,7 +73,7 @@ ul li table td {padding-right: 30px;}
 
 .pure-menu { margin: 20px; box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);}
 
-li.eventbreak {text-align:left; border:1px dashed lightgrey;  -webkit-transition: none !important;}
+li.eventbreak {text-align:left; border:1px dashed lightgrey;  -webkit-transition: none !important; transition: none !important;}
 
 .pure-menu.pure-menu-open {
 width: auto !important;
@@ -283,12 +283,14 @@ td.utm{
   border-left: 1px dashed rgb(112, 111, 111);
 }
 
-// .pure-menu.containsGTM.containsTAG > table > tbody > tr > td.dlt{
-//   border-right: 1px dashed rgb(112, 111, 111);
-// }
-// .pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
-//   border-left: 1px dashed rgb(112, 111, 111);
-// }
+/*
+.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.dlt{
+  border-right: 1px dashed rgb(112, 111, 111);
+}
+.pure-menu.containsGTM.containsTAG > table > tbody > tr > td.utm{
+  border-left: 1px dashed rgb(112, 111, 111);
+}
+*/
 
 .event.submenu>table {
 margin-bottom: 3px;
@@ -328,7 +330,6 @@ span.arrayIndex{
 }
 
 .dark select {
-  // -webkit-appearance: none;
   border: 1px solid rgb(213, 213, 213);
   color: rgb(213, 213, 213);
   background: rgb(36, 36, 36);
