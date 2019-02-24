@@ -65,6 +65,13 @@ class Settings extends Component {
         >
           <img alt="import/export" src="/img/save.png" />
         </a>
+        <a
+          className="searchbtn"
+          title="Search"
+          onClick={() => null}
+        >
+          <img alt="search" src="/img/search.png" />
+        </a>
         {this.state.showModal && (
           <div>
             <div
