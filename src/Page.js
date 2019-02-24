@@ -9,7 +9,14 @@ const PageHeader = props =>
         className={`newpage ${props.isCurrent ? 'currentpage' : ''}`}
         onClick={props.onClick}
       >
-        {props.url}
+        { props.url }
+        <span style={{
+          float: 'right',
+          fontWeight: 'lighter',
+          marginRight: '72px'
+        }}>
+        { props.timestamp && props.timestamp.toLocaleTimeString() }
+        </span>
       </a>
     </li>
   </ul>);
@@ -18,7 +25,8 @@ PageHeader.propTypes = {
   url: React.PropTypes.string,
   onClick: React.PropTypes.func,
   className: React.PropTypes.string,
-  isCurrent: React.PropTypes.bool
+  isCurrent: React.PropTypes.bool,
+  timestamp: React.PropTypes.object,
 };
 
 PageHeader.defaultProps = {
@@ -90,6 +98,7 @@ class Page extends Component {
           onClick={this.toggleExpanded}
           isCurrent={this.props.isCurrent}
           className={headerClass}
+          timestamp={this.props.options.showTimestamps ? this.props.timestamp : null}
         />
         <table cols="2" width="100%">
           <tbody className={expanded ? '' : 'hidden'}>
@@ -123,7 +132,8 @@ Page.propTypes = {
   children: React.PropTypes.oneOfType([
     React.PropTypes.arrayOf(React.PropTypes.node),
     React.PropTypes.node
-  ])
+  ]),
+  timestamp: React.PropTypes.object,
 };
 
 Page.defaultProps = {

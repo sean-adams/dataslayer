@@ -32,6 +32,7 @@ else {
     vars: [[]],
     activeIndex: 0,
     urls: [],
+    timestamps: [],
     options: {
       showFloodlight: true, 
       showUniversal: true, 
@@ -44,6 +45,7 @@ else {
       hideEmpty: false,
       showArrayIndices: false,
       collapseGTMNativeEvents: false,
+      showTimestamps: false,
     }
   };
 }
@@ -247,13 +249,11 @@ class Dataslayer extends Component {
   newPageLoad = (newurl) => {
     console.log(newurl);
     let newIndex = this.state.activeIndex + 1;
-    let datalayers = this.state.datalayers;
+    let { datalayers, GTMs, urls, timestamps, tags } = this.state;
     datalayers[newIndex] = {};
-    let GTMs = this.state.GTMs;
     GTMs[newIndex] = [];
-    let urls = this.state.urls;
     urls[newIndex] = newurl;
-    let tags = this.state.tags;
+    timestamps[newIndex] = new Date();
     tags[newIndex] = [];
 
     this.loadSettings();
@@ -268,6 +268,7 @@ class Dataslayer extends Component {
       datalayers,
       GTMs,
       urls,
+      timestamps,
       tags
     });
 
@@ -615,6 +616,7 @@ class Dataslayer extends Component {
   clearHistory = () => {
     this.setState({
       urls: [this.state.urls[this.state.activeIndex]],
+      timestamps: [new Date()],
       activeIndex: 0,
       datalayers: [{}],
       tags: [[]],
@@ -643,6 +645,7 @@ class Dataslayer extends Component {
       hideEmpty: false,
       showArrayIndices: false,
       collapseGTMNativeEvents: false,
+      showTimestamps: false,
     };
 
     try {
@@ -677,6 +680,9 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
       options.collapseGTMNativeEvents = false;
     }
+    if (!options.hasOwnProperty('showTimestamps')) {
+      options.showTimestamps = false;
+    }
 
     console.log(options);
 
@@ -709,6 +715,9 @@ class Dataslayer extends Component {
         }
         if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
           options.collapseGTMNativeEvents = false;
+        }
+        if (!options.hasOwnProperty('showTimestamps')) {
+          options.showTimestamps = false;
         }
         try {
           localStorage.options = JSON.stringify(options);
@@ -754,6 +763,7 @@ class Dataslayer extends Component {
                     (<Page
                       key={`page${a}`}
                       ref={`page${a}`}
+                      timestamp={this.state.timestamps[a] || null}
                       options={this.state.options}
                       url={this.state.urls[a]}
                       data={pageData}

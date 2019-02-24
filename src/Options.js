@@ -32,6 +32,7 @@ class Options extends Component {
         { name: 'collapseGTMNativeEvents', description: 'auto-collapse gtm.* events', type: 'checkbox' },
         { name: 'hideEmpty', description: 'hide empty data layer variables', type: 'checkbox' },
         { name: 'showArrayIndices', description: 'show array indices', type: 'checkbox' },
+        { name: 'showTimestamps', description: 'show navigation timestamps', type: 'checkbox' },
         { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
       ],
       Tags: [

@@ -967,6 +967,7 @@ export default {
     []
   ],
   activeIndex: 6,
+  timestamps: ['http://bearcla.ws/gtmtest.html', 'http://bearcla.ws/', 'https://lifereimagined.aarp.org/', 'http://tealium.com/', 'http://www.tagcommander.com/', 'http://www.tagcommander.com/en/', 'https://www.ebth.com/'],
   urls: ['http://bearcla.ws/gtmtest.html', 'http://bearcla.ws/', 'https://lifereimagined.aarp.org/', 'http://tealium.com/', 'http://www.tagcommander.com/', 'http://www.tagcommander.com/en/', 'https://www.ebth.com/'],
   options: {
     showFloodlight: true,
@@ -979,7 +980,8 @@ export default {
     hideEmpty: true,
     blockTags: false,
     showArrayIndices: false,
-    collapseGTMNativeEvents: false
+    collapseGTMNativeEvents: false,
+    showTimestamps: false,
   },
   loading: false,
   port: {},
