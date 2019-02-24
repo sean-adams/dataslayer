@@ -481,6 +481,7 @@ class Tag extends Component {
               </tr>))
           }
           { data.allParams.gtm && (<tr><td /><td><i>(via {data.allParams.gtm.replace(/2wg241/ig, 'GTM-')})</i></td></tr>)}
+          { data.allParams.ni && Number(data.allParams.ni) === 1 ? (<tr><td /><td><i>non-interactive</i></td></tr>) : ''}
 
           { specificParams }
         </tbody>
