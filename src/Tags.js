@@ -406,6 +406,19 @@ const parseSiteCatalyst = (data, keyPrefix = '') => {
     if (data.scEvars.hasOwnProperty(cd)) {
       if (cd === '0') {
         params.push((<tr key={`${keyPrefix}campaign`}><td><b>campaign</b></td><td><span>{data.scEvars[cd]}</span></td></tr>));
+      } else if (/^D=(c\d+)$/.test(data.scEvars[cd])) {
+        // Value is copied from a prop
+        let prop = data.scEvars[cd].replace(/^D=c/,'');
+        params.push(
+          (<tr key={`${keyPrefix}eVar${cd}`}>
+            <td>
+              <b>eVar{cd}</b>
+            </td>
+            <td>
+              <span>{data.scEvars[cd]}</span> <em style={{ color: '#919191' }}>{data.scProps[prop]}</em>
+            </td>
+          </tr>)
+        );
       } else {
         params.push((<tr key={`${keyPrefix}eVar${cd}`}><td><b>eVar{cd}</b></td><td><span>{data.scEvars[cd]}</span></td></tr>));
       }
@@ -413,10 +426,24 @@ const parseSiteCatalyst = (data, keyPrefix = '') => {
   }
   for (let cm in data.scProps) {
     if (data.scProps.hasOwnProperty(cm)) {
-      params.push((<tr key={`${keyPrefix}prop${cm}`}><td><b>prop{cm}</b></td><td><span>{data.scProps[cm]}</span></td></tr>));
+      if (/^D=(v\d+)$/.test(data.scProps[cm])) {
+        // Value is copied from an eVar
+        let eVar = data.scProps[cm].replace(/^D=v/,'');
+        params.push(
+          (<tr key={`${keyPrefix}prop${cm}`}>
+            <td>
+              <b>prop{cm}</b>
+            </td>
+            <td>
+              <span>{data.scProps[cm]}</span> <em style={{ color: '#919191' }}>{data.scEvars[eVar]}</em>
+            </td>
+          </tr>)
+        );
+      } else {
+        params.push((<tr key={`${keyPrefix}prop${cm}`}><td><b>prop{cm}</b></td><td><span>{data.scProps[cm]}</span></td></tr>));
+      }
     }
   }
-
   return params;
 };
 
