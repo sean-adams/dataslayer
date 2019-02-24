@@ -13,9 +13,6 @@ function isChromeDevTools() {
 }
 
 let dataslayer = {};
-let activeIndex = 0;
-/* eslint-disable */
-// for testing
 if (!isChromeDevTools()) {
   dataslayer = demoData;
 }
@@ -48,7 +45,6 @@ else {
     }
   };
 }
-/* eslint-enable */
 
 // collapseStack
 // - obj: object to populate based on keys
@@ -190,7 +186,9 @@ class Dataslayer extends Component {
       let parsed;
       try {
         parsed = JSON.parse(contents);
+        this.clearHistory();
         this.setState({ ...parsed });
+        this.forceUpdate();
         callback({ success: true });
       } catch (error) {
         console.log(error);
@@ -697,7 +695,7 @@ class Dataslayer extends Component {
                 if (this.state.urls[a]) {
                   pages.push(
                     (<Page
-                      key={a}
+                      key={`page${a}`}
                       ref={`page${a}`}
                       options={this.state.options}
                       url={this.state.urls[a]}

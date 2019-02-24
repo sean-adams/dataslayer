@@ -545,6 +545,7 @@ const Datalayers = (props) => {
         (<GTM
           datalayers={data.datalayers}
           GTMs={data.GTM}
+          key={`GTM${props.page}`}
           options={props.options}
           page={props.page}
         />) :
