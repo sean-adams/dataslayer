@@ -135,6 +135,19 @@ class Dataslayer extends Component {
       chrome.devtools.network.onRequestFinished.addListener(this.newRequest);
       this.state.port.onMessage.addListener(this.messageListener);
 
+      // WIP support for History API.
+      //
+      // chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+      //   if (tabId !== chrome.devtools.inspectedWindow.tabId) {
+      //     return;
+      //   } else {
+      //     if (changeInfo.url) {
+      //       this.newPageLoad(changeInfo.url);
+      //     }
+      //     console.log(changeInfo);
+      //   }
+      // });
+
       // Check for already injected content script
       chrome.devtools.inspectedWindow.eval('dataslayer', (exists, error) => {
         if (!error) {
