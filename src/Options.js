@@ -29,6 +29,7 @@ class Options extends Component {
       General: [
         { name: 'showGTMLoad', description: 'show data layer presence', type: 'checkbox' },
         { name: 'collapseNested', description: 'auto-collapse nested data layer variables', type: 'checkbox' },
+        { name: 'collapseGTMNativeEvents', description: 'auto-collapse gtm.* events', type: 'checkbox' },
         { name: 'hideEmpty', description: 'hide empty data layer variables', type: 'checkbox' },
         { name: 'showArrayIndices', description: 'show array indices', type: 'checkbox' },
         { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
@@ -61,7 +62,7 @@ class Options extends Component {
               <li className="event submenu">
                 {
                   Object.keys(optionMap).map((section) =>
-                    (<form className="pure-form pure-form-stacked">
+                    (<form className="pure-form pure-form-stacked" key={section}>
                       <table cols="2">
                         <tbody>
                           <tr>
@@ -75,7 +76,7 @@ class Options extends Component {
                       </table>
                       {
                         optionMap[section].map((option) => 
-                        (<table cols="2">
+                        (<table cols="2" key={option.name}>
                           <tbody>
                             <tr>
                               <td/>

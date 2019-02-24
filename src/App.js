@@ -42,7 +42,8 @@ else {
       collapseNested: false,
       blockTags: false,
       hideEmpty: false,
-      showArrayIndices: false
+      showArrayIndices: false,
+      collapseGTMNativeEvents: false,
     }
   };
 }
@@ -640,7 +641,8 @@ class Dataslayer extends Component {
       collapseNested: false,
       blockTags: false,
       hideEmpty: false,
-      showArrayIndices: false
+      showArrayIndices: false,
+      collapseGTMNativeEvents: false,
     };
 
     try {
@@ -672,6 +674,9 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('showArrayIndices')) {
       options.showArrayIndices = false;
     }
+    if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
+      options.collapseGTMNativeEvents = false;
+    }
 
     console.log(options);
 
@@ -701,6 +706,9 @@ class Dataslayer extends Component {
         }
         if (!options.hasOwnProperty('showArrayIndices')) {
           options.showArrayIndices = false;
+        }
+        if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
+          options.collapseGTMNativeEvents = false;
         }
         try {
           localStorage.options = JSON.stringify(options);

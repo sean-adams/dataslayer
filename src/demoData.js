@@ -978,7 +978,8 @@ export default {
     collapseNested: true,
     hideEmpty: true,
     blockTags: false,
-    showArrayIndices: false
+    showArrayIndices: false,
+    collapseGTMNativeEvents: false
   },
   loading: false,
   port: {},

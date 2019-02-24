@@ -206,7 +206,7 @@ class DataLayerEntry extends Component {
             <b>{depth > 0 && addSpaces(spaces)}{this.props.index === 'Click Text' ? (<i>{this.props.index}</i>) : this.props.index}</b>
           </td>
           <td>
-            <span>{rowData}</span>
+            <span onClick={this.props.onClick}>{rowData}</span>
           </td>
         </tr>
         {(isObject && this.state.expanded) && Object.keys(data).map((v, i) =>
@@ -240,26 +240,60 @@ DataLayerEntry.propTypes = {
   keyAncestor: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
-  ])
+  ]),
+  eventToggleable: React.PropTypes.bool,
+  onClick: React.PropTypes.func,
 };
 
-const DataLayerBlock = props =>
-  (<li className="event submenu datalayer">
-    {props.options.showArrayIndices && props.arrayIndex > -1 && (<span className="arrayIndex">{props.arrayIndex}</span>)}
-    <table cols="2">
-      {Object.keys(props.data).map((v, i) =>
-        (<DataLayerEntry
-          key={`${props.keyAncestor}_${v}`}
-          keyAncestor={`${props.keyAncestor}_${v}`}
-          index={v}
-          data={props.data[v]}
-          depth={0}
-          hideEmpty={props.options.hideEmpty}
-          collapseNested={props.options.collapseNested}
-        />)
-      )}
-    </table>
-  </li>);
+DataLayerEntry.defaultProps = {
+  onClick: () => null,
+};
+
+class DataLayerBlock extends Component {
+  state = {
+    collapsed: this.props.options.collapseGTMNativeEvents &&
+      Object.keys(this.props.data).indexOf('event') > -1 &&
+      /^gtm\.(click|dom|js|load|linkClick|formSubmit|historyChange|pageError|timer|scrollDepth|video)$/.test(this.props.data.event)
+  }
+
+  render = () => {
+    const props = this.props;
+    return (<li className="event submenu datalayer">
+      {props.options.showArrayIndices && props.arrayIndex > -1 && (<span className="arrayIndex">{props.arrayIndex}</span>)}
+      <table cols="2">
+        {
+          Object.keys(props.data).map((v, i) => {
+            if (v === 'event') {
+              return (<DataLayerEntry
+                key={`${props.keyAncestor}_${v}`}
+                keyAncestor={`${props.keyAncestor}_${v}`}
+                index={v}
+                data={props.data[v]}
+                depth={0}
+                hideEmpty={props.options.hideEmpty}
+                collapseNested={props.options.collapseNested}
+                onClick={() => { this.setState({ collapsed: !this.state.collapsed }); }}
+              />);
+            } else if (!this.state.collapsed) {
+              return (<DataLayerEntry
+                key={`${props.keyAncestor}_${v}`}
+                keyAncestor={`${props.keyAncestor}_${v}`}
+                index={v}
+                data={props.data[v]}
+                depth={0}
+                hideEmpty={props.options.hideEmpty}
+                collapseNested={props.options.collapseNested}
+              />);
+            } else {
+              return null;
+            }
+          })
+        }
+      </table>
+    </li>);
+  }
+
+}
 
 DataLayerBlock.propTypes = {
   data: React.PropTypes.object,
