@@ -3,6 +3,7 @@ dataslayer Changelog
 1.0.0
 -----
 + complete rewrite
++ fix for #51
 + fix for #50
 + fix for #47
 

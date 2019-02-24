@@ -44,6 +44,19 @@ class Options extends Component {
       ]
     };
 
+    const versionHistory = [
+      {
+        version: '1.0.0',
+        changes: [
+        'rewritten UI',
+        'import/export functionality',
+        'auto collapse gtm.*',
+        'fix displayed GTM IDs',
+        'misc. bug fixes'
+        ]
+      }
+    ];
+
     return (
       <div id={`sub${this.props.index}`} className={`pure-menu pure-menu-open`}>
         <ul>
@@ -249,18 +262,16 @@ class Options extends Component {
                           <td/>
                           <td/>
                         </tr>
-                        <tr>
-                          <td><b>1.0.0</b></td>
-                          <td><span>rewrite</span></td>
-                        </tr>
-                        <tr>
-                          <td/>
-                          <td><span>improvements & bug fixes</span></td>
-                        </tr>
-                        <tr>
-                          <td/>
-                          <td><span>import/export functionality</span></td>
-                        </tr>
+                        {
+                          versionHistory.map(({ version, changes }) => 
+                            (<tr>
+                              <td><b>{version}</b></td>
+                              <td>
+                                {changes.map((note) => (<span>{note}<br/></span>))}
+                              </td>
+                            </tr>)  
+                          )
+                        }
                         <tr>
                           <td/>
                           <td/>
