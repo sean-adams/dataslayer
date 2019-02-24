@@ -1,12 +1,12 @@
 if (!(/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host))){
 	if (document.getElementById('dataslayer_script') === null){
-	oopoly = document.createElement('script');
+	var oopoly = document.createElement('script');
 	oopoly.id = 'oo_poly';
 	oopoly.src = chrome.runtime.getURL('oo_poly.js');
 	oopoly.type = 'text/javascript';
 	document.head.appendChild(oopoly);
 
-	dataslayers = document.createElement('script');
+	var dataslayers = document.createElement('script');
 	dataslayers.id = 'dataslayer_script';
 	dataslayers.src = chrome.runtime.getURL('inject.js');
 	dataslayers.type = 'text/javascript';
@@ -19,7 +19,7 @@ if (!(/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host))){
 
 	var dataslayer = {};
 	dataslayer.helperListener = function(event){
-		if ((event.data.type && (event.data.type.substr(0,10)=='dataslayer'))){
+		if ((event.data.type && (event.data.type.substr(0,10) === 'dataslayer'))){
 			try{
 				if (event.source == window)
 					chrome.runtime.sendMessage(event.data);
