@@ -69,8 +69,6 @@ function addSpaces(obj) {
 //
 // Data layer subcomponents
 //
-const DataLayerBreak = () => (<li className="eventbreak submenu" />);
-
 const DataLayerLines = (props) => {
   let data = props.data;
   let depth = props.depth;
@@ -257,14 +255,22 @@ class DataLayerBlock extends Component {
   }
 
   render = () => {
-    const { data, searchQuery, keyAncestor, options, arrayIndex } = this.props;
+    const {
+      data,
+      searchQuery,
+      keyAncestor,
+      options,
+      arrayIndex,
+      hasSibling
+    } = this.props;
+
     if (searchQuery && searchQuery.length && searchQuery.length > 0) {
       if (JSON.stringify(data).replace(/[{}"]/ig, '').toLowerCase().indexOf(searchQuery) === -1) {
         return (<div/>);
       }
     }
     
-    return (<li className="event submenu datalayer">
+    return (<li className={`event ${hasSibling ? 'eventbreak ' : ' '}submenu datalayer`}>
       {options.showArrayIndices && arrayIndex > -1 && (<span className="arrayIndex">{arrayIndex}</span>)}
       <table cols="2">
         {
@@ -313,6 +319,7 @@ DataLayerBlock.propTypes = {
     React.PropTypes.number
   ]),
   searchQuery: React.PropTypes.string,
+  hasSibling: React.PropTypes.bool,
 };
 
 //
@@ -327,7 +334,7 @@ const TLM = (props) => {
   </td>);
 
   return (<ul>
-    <li className="event submenu dlheader">
+    <li className="event eventbreak submenu dlheader">
       <table cols="2">
         <tbody>
           <tr>
@@ -337,7 +344,6 @@ const TLM = (props) => {
         </tbody>
       </table>
     </li>
-    <DataLayerBreak />
     <DataLayerBlock
       key={`page${props.page}_TLM`}
       keyAncestor={`page${props.page}_TLM`}
@@ -364,7 +370,7 @@ const TCO = (props) => {
   </td>);
 
   return (<ul>
-    <li className="event submenu dlheader">
+    <li className="event eventbreak submenu dlheader">
       <table cols="2">
         <tbody>
           <tr>
@@ -374,7 +380,6 @@ const TCO = (props) => {
         </tbody>
       </table>
     </li>
-    <DataLayerBreak />
     <DataLayerBlock
       key={`page${props.page}_TCO`}
       keyAncestor={`page${props.page}_TCO`}
@@ -425,7 +430,7 @@ class GTM extends Component {
     }
 
     return (<ul>
-      <li className="event submenu dlheader">
+      <li className="event eventbreak submenu dlheader">
         <table cols="2">
           <tbody>
             <tr>
@@ -435,13 +440,10 @@ class GTM extends Component {
           </tbody>
         </table>
       </li>
-      <DataLayerBreak />
       {(props.datalayers[this.state.activeDatalayer] || [])
         .slice(0)
         .reverse()
         .map((push, index, array) =>
-          index !== props.datalayers[this.state.activeDatalayer].length - 1 ?
-          [
             <DataLayerBlock
               key={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
               arrayIndex={array.length - 1 - index}
@@ -449,16 +451,7 @@ class GTM extends Component {
               data={push}
               options={props.options}
               searchQuery={props.searchQuery}
-            />,
-            <DataLayerBreak />
-          ] :
-          <DataLayerBlock
-            key={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-            arrayIndex={array.length - 1 - index}
-            keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-            data={push}
-            options={props.options}
-            searchQuery={props.searchQuery}
+            hasSibling={index !== props.datalayers[this.state.activeDatalayer].length - 1}
           />
         )
       }
@@ -475,7 +468,7 @@ GTM.propTypes = {
 
 const DTM = props =>
   (<ul>
-    <li className="event submenu dlheader">
+    <li className="event eventbreak submenu dlheader">
       <table cols="2">
         <tbody>
           <tr>
@@ -492,12 +485,9 @@ const DTM = props =>
         </tbody>
       </table>
     </li>
-    <DataLayerBreak />
     {
       props.data.loadRules ?
       props.data.loadRules.map((v, i) =>
-        i !== props.data.loadRules.length - 1 ?
-        [
           <DataLayerBlock
             key={`page${props.page}_DTM_${i}`}
             arrayIndex={i}
@@ -505,16 +495,7 @@ const DTM = props =>
             data={v}
             options={props.options}
             searchQuery={props.searchQuery}
-          />,
-          <DataLayerBreak />
-        ] :
-        <DataLayerBlock
-          key={`page${props.page}_DTM_${i}`}
-          arrayIndex={i}
-          keyAncestor={`page${props.page}_DTM_${i}`}
-          data={v}
-          options={props.options}
-          searchQuery={props.searchQuery}
+          hasSibling={i !== props.data.loadRules.length - 1}
         />
       )
       :
@@ -560,7 +541,7 @@ class Vars extends Component {
     }
 
     return (<ul>
-      <li className="event submenu dlheader">
+      <li className="event eventbreak submenu dlheader">
         <table cols="2">
           <tbody>
             <tr>
@@ -570,7 +551,6 @@ class Vars extends Component {
           </tbody>
         </table>
       </li>
-      <DataLayerBreak />
       { props.varDatas && props.varDatas[this.state.activeDatalayer] &&
       (<DataLayerBlock
         key={`page${props.page}_vars_${this.state.activeDatalayer}`}

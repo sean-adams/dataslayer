@@ -73,7 +73,7 @@ ul li table td {padding-right: 30px;}
 
 .pure-menu { margin: 20px; box-shadow: 0px 0px 10px 1px rgba(0,0,0,0.1);}
 
-li.eventbreak {text-align:left; border:1px dashed lightgrey;  -webkit-transition: none !important; transition: none !important;}
+li.eventbreak { border-bottom:1px dashed lightgrey;  -webkit-transition: none !important; transition: none !important; }
 
 .pure-menu.pure-menu-open {
 width: auto !important;
