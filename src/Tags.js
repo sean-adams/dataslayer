@@ -523,12 +523,15 @@ Tag.propTypes = {
   keyAncestor: React.PropTypes.oneOfType([
     React.PropTypes.string.isRequired,
     React.PropTypes.number.isRequired
-  ]).isRequired
+  ]).isRequired,
+  searchQuery: React.PropTypes.string,
 };
 
 const TagBreak = () => (<li className="eventbreak submenu" />);
 
 const Tags = (props) => {
+  const testTag = ({ allParams }, query) =>
+    Object.keys(allParams).map((key) => String(allParams[key])).join('').toLowerCase().indexOf(query) > -1;
   let tags = [];
   for (let i = props.data.length - 1; i >= 0; i--) {
     let tag = props.data[i];
@@ -547,6 +550,8 @@ const Tags = (props) => {
       showTag = false;
     } else if (tag.rsid && props.options.ignoredTags.includes(tag.rsid)) {
       showTag = false;
+    } else if (props.searchQuery && props.searchQuery.length > 0 && !testTag(tag, props.searchQuery)) {
+      showTag = false;
     }
 
     if (showTag) {
@@ -557,6 +562,7 @@ const Tags = (props) => {
           key={tag.__uuid || i}
           keyAncestor={tag.__uuid || i}
           options={props.options}
+          searchQuery={props.searchQuery}
         />)
       ] :
       [
@@ -565,6 +571,7 @@ const Tags = (props) => {
           key={tag.__uuid || i}
           keyAncestor={tag.__uuid || i}
           options={props.options}
+          searchQuery={props.searchQuery}
         />),
         (<TagBreak key={`${tag.__uuid}break` || `${i}break`} />)
       ]
@@ -583,7 +590,8 @@ const Tags = (props) => {
 
 Tags.propTypes = {
   data: React.PropTypes.arrayOf(React.PropTypes.object),
-  options: React.PropTypes.object
+  options: React.PropTypes.object,
+  searchQuery: React.PropTypes.string,
 };
 
 export default Tags;

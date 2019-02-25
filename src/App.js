@@ -1,10 +1,11 @@
 /* global chrome, google */
 import React, { Component } from 'react';
 import uuid from 'uuid';
-import { GlobalHotKeys, IgnoreKeys } from 'react-hotkeys';
+import { GlobalHotKeys } from 'react-hotkeys';
 import Page from './Page';
 import Settings from './Settings';
 import Options from './Options';
+import Search from './Search';
 import demoData from './demoData';
 
 // isChromeDevTools
@@ -687,8 +688,6 @@ class Dataslayer extends Component {
       options.showTimestamps = false;
     }
 
-    console.log(options);
-
     this.setState({ options });
 
     if (isChromeDevTools()) {
@@ -736,24 +735,29 @@ class Dataslayer extends Component {
   render() {
     return (
       <div className={`App${this.state.darkTheme ? ' dark' : ''}`}>
+        <GlobalHotKeys
+          keyMap={{
+            SEARCH: 'ctrl+shift+f',
+          }}
+          handlers={{
+            SEARCH: () => this.setState({ searchMode: !this.state.searchMode, searchQuery: '' }),
+          }}
+        />
+        { this.state.searchMode && !this.state.showOptions &&
+          (<Search
+            value={this.state.searchQuery}
+            toggleSearch={() => this.setState({ searchMode: false, searchQuery: '' })}
+            onChange={({ target: { value } }) => this.setState({ searchQuery: value.toLowerCase() })}
+          />)
+        }
         <Settings
           clearHistory={this.clearHistory}
           appState={this.state}
           handleFile={this.importFile}
           onSettingsClick={() => this.setState({ showOptions: !this.state.showOptions })}
-          onSearchClick={() => this.setState({ searchMode: !this.state.searchMode })}
+          onSearchClick={() => this.setState({ searchMode: !this.state.searchMode, searchQuery: '' })}
         />
         <div>
-          { !this.state.showOptions &&
-          (<GlobalHotKeys
-            keyMap={{
-              SEARCH: 'ctrl+shift+f',
-            }}
-            handlers={{
-              SEARCH: () => this.setState({ searchMode: !this.state.searchMode }),
-            }}
-          />)
-          }
           <div className="datalayeritems">
             { this.state.showOptions ? <Options options={this.state.options} setOption={this.setOption} /> : null}
             {!this.state.showOptions && (() => {
@@ -784,6 +788,8 @@ class Dataslayer extends Component {
                       index={a}
                       loading={this.state.loading}
                       isCurrent={a === (this.state.urls.length - 1)}
+                      searchQuery={this.state.searchQuery}
+                      searchMode={this.state.searchMode}
                     />)
                   );
                 }

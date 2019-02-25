@@ -101,17 +101,19 @@ class Page extends Component {
           timestamp={this.props.options.showTimestamps ? this.props.timestamp : null}
         />
         <table cols="2" width="100%">
-          <tbody className={expanded ? '' : 'hidden'}>
+          <tbody className={expanded || this.props.searchMode ? '' : 'hidden'}>
             <tr>
               <Datalayers
                 data={this.props.data}
                 options={this.props.options}
                 page={this.props.index}
+                searchQuery={this.props.searchQuery}
               />
               <Tags
                 data={this.props.data.tags}
                 options={this.props.options}
                 page={this.props.index}
+                searchQuery={this.props.searchQuery}
               />
               {this.props.children}
             </tr>
@@ -134,6 +136,8 @@ Page.propTypes = {
     React.PropTypes.node
   ]),
   timestamp: React.PropTypes.object,
+  searchQuery: React.PropTypes.string,
+  searchMode: React.PropTypes.bool,
 };
 
 Page.defaultProps = {
@@ -143,7 +147,9 @@ Page.defaultProps = {
   isCurrent: false,
   loading: false,
   options: {},
-  children: []
+  children: [],
+  searchQuery: '',
+  searchMode: false
 };
 
 export default Page;

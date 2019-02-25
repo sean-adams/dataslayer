@@ -257,32 +257,38 @@ class DataLayerBlock extends Component {
   }
 
   render = () => {
-    const props = this.props;
+    const { data, searchQuery, keyAncestor, options, arrayIndex } = this.props;
+    if (searchQuery && searchQuery.length && searchQuery.length > 0) {
+      if (JSON.stringify(data).replace(/[{}"]/ig, '').toLowerCase().indexOf(searchQuery) === -1) {
+        return (<div/>);
+      }
+    }
+    
     return (<li className="event submenu datalayer">
-      {props.options.showArrayIndices && props.arrayIndex > -1 && (<span className="arrayIndex">{props.arrayIndex}</span>)}
+      {options.showArrayIndices && arrayIndex > -1 && (<span className="arrayIndex">{arrayIndex}</span>)}
       <table cols="2">
         {
-          Object.keys(props.data).map((v, i) => {
+          Object.keys(data).map((v, i) => {
             if (v === 'event') {
               return (<DataLayerEntry
-                key={`${props.keyAncestor}_${v}`}
-                keyAncestor={`${props.keyAncestor}_${v}`}
+                key={`${keyAncestor}_${v}`}
+                keyAncestor={`${keyAncestor}_${v}`}
                 index={v}
-                data={props.data[v]}
+                data={data[v]}
                 depth={0}
-                hideEmpty={props.options.hideEmpty}
-                collapseNested={props.options.collapseNested}
+                hideEmpty={options.hideEmpty}
+                collapseNested={options.collapseNested}
                 onClick={() => { this.setState({ collapsed: !this.state.collapsed }); }}
               />);
             } else if (!this.state.collapsed) {
               return (<DataLayerEntry
-                key={`${props.keyAncestor}_${v}`}
-                keyAncestor={`${props.keyAncestor}_${v}`}
+                key={`${keyAncestor}_${v}`}
+                keyAncestor={`${keyAncestor}_${v}`}
                 index={v}
-                data={props.data[v]}
+                data={data[v]}
                 depth={0}
-                hideEmpty={props.options.hideEmpty}
-                collapseNested={props.options.collapseNested}
+                hideEmpty={options.hideEmpty}
+                collapseNested={options.collapseNested}
               />);
             } else {
               return null;
@@ -305,7 +311,8 @@ DataLayerBlock.propTypes = {
   arrayIndex: React.PropTypes.oneOfType([
     React.PropTypes.string,
     React.PropTypes.number
-  ])
+  ]),
+  searchQuery: React.PropTypes.string,
 };
 
 //
@@ -331,7 +338,13 @@ const TLM = (props) => {
       </table>
     </li>
     <DataLayerBreak />
-    <DataLayerBlock key={`page${props.page}_TLM`} keyAncestor={`page${props.page}_TLM`} data={udo} options={props.options} />
+    <DataLayerBlock
+      key={`page${props.page}_TLM`}
+      keyAncestor={`page${props.page}_TLM`}
+      data={udo}
+      options={props.options}
+      searchQuery={props.searchQuery}
+    />
   </ul>);
 };
 
@@ -339,7 +352,8 @@ TLM.propTypes = {
   data: React.PropTypes.object,
   TLM: React.PropTypes.object,
   options: React.PropTypes.object,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 const TCO = (props) => {
@@ -361,7 +375,14 @@ const TCO = (props) => {
       </table>
     </li>
     <DataLayerBreak />
-    <DataLayerBlock key={`page${props.page}_TCO`} keyAncestor={`page${props.page}_TCO`} page={props.page} data={udo} options={props.options} />
+    <DataLayerBlock
+      key={`page${props.page}_TCO`}
+      keyAncestor={`page${props.page}_TCO`}
+      page={props.page}
+      data={udo}
+      options={props.options}
+      searchQuery={props.searchQuery}
+    />
   </ul>);
 };
 
@@ -369,7 +390,8 @@ TCO.propTypes = {
   data: React.PropTypes.object,
   TCO: React.PropTypes.object,
   options: React.PropTypes.object,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 class GTM extends Component {
@@ -426,6 +448,7 @@ class GTM extends Component {
               keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
               data={push}
               options={props.options}
+              searchQuery={props.searchQuery}
             />,
             <DataLayerBreak />
           ] :
@@ -435,6 +458,7 @@ class GTM extends Component {
             keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
             data={push}
             options={props.options}
+            searchQuery={props.searchQuery}
           />
         )
       }
@@ -445,7 +469,8 @@ class GTM extends Component {
 GTM.propTypes = {
   datalayers: React.PropTypes.object,
   GTMs: React.PropTypes.array,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 const DTM = props =>
@@ -472,8 +497,25 @@ const DTM = props =>
       props.data.loadRules ?
       props.data.loadRules.map((v, i) =>
         i !== props.data.loadRules.length - 1 ?
-        [<DataLayerBlock key={`page${props.page}_DTM_${i}`} arrayIndex={i} keyAncestor={`page${props.page}_DTM_${i}`} data={v} options={props.options} />, <DataLayerBreak />] :
-        <DataLayerBlock key={`page${props.page}_DTM_${i}`} arrayIndex={i} keyAncestor={`page${props.page}_DTM_${i}`} data={v} options={props.options} />
+        [
+          <DataLayerBlock
+            key={`page${props.page}_DTM_${i}`}
+            arrayIndex={i}
+            keyAncestor={`page${props.page}_DTM_${i}`}
+            data={v}
+            options={props.options}
+            searchQuery={props.searchQuery}
+          />,
+          <DataLayerBreak />
+        ] :
+        <DataLayerBlock
+          key={`page${props.page}_DTM_${i}`}
+          arrayIndex={i}
+          keyAncestor={`page${props.page}_DTM_${i}`}
+          data={v}
+          options={props.options}
+          searchQuery={props.searchQuery}
+        />
       )
       :
       null
@@ -483,7 +525,8 @@ const DTM = props =>
 DTM.propTypes = {
   data: React.PropTypes.object,
   options: React.PropTypes.object,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 class Vars extends Component {
@@ -543,14 +586,15 @@ class Vars extends Component {
 Vars.propTypes = {
   varDatas: React.PropTypes.object,
   vars: React.PropTypes.array,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 //
 // Main component
 //
 const Datalayers = (props) => {
-  let data = props.data;
+  let { data, options, page, searchQuery } = props;
 
   if (!(data.vars && data.vars.length && data.varDatas) &&
     !(data.GTM && data.GTM.length) &&
@@ -569,8 +613,9 @@ const Datalayers = (props) => {
         (<Vars
           varDatas={data.varDatas}
           vars={data.vars}
-          options={props.options}
-          page={props.page}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
         />) :
         null
       }
@@ -579,9 +624,10 @@ const Datalayers = (props) => {
         (<GTM
           datalayers={data.datalayers}
           GTMs={data.GTM}
-          key={`GTM${props.page}`}
-          options={props.options}
-          page={props.page}
+          key={`GTM${page}`}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
         />) :
         null
       }
@@ -593,8 +639,9 @@ const Datalayers = (props) => {
         ) ?
         (<DTM
           data={data.dtmDatas}
-          options={props.options}
-          page={props.page}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
         />) :
         null
       }
@@ -603,8 +650,9 @@ const Datalayers = (props) => {
         (<TLM
           data={data.utagDatas}
           TLM={data.TLM}
-          options={props.options}
-          page={props.page}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
         />) :
         null
       }
@@ -613,8 +661,9 @@ const Datalayers = (props) => {
         (<TCO
           data={data.tcoDatas}
           TCO={data.TCO}
-          options={props.options}
-          page={props.page}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
         />) :
         null
       }
@@ -625,7 +674,8 @@ const Datalayers = (props) => {
 Datalayers.propTypes = {
   data: React.PropTypes.object,
   options: React.PropTypes.object,
-  page: React.PropTypes.number
+  page: React.PropTypes.number,
+  searchQuery: React.PropTypes.string,
 };
 
 export default Datalayers;
