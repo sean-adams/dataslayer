@@ -444,13 +444,13 @@ class GTM extends Component {
         .slice(0)
         .reverse()
         .map((push, index, array) =>
-            <DataLayerBlock
-              key={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-              arrayIndex={array.length - 1 - index}
-              keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-              data={push}
-              options={props.options}
-              searchQuery={props.searchQuery}
+          <DataLayerBlock
+            key={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
+            arrayIndex={array.length - 1 - index}
+            keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
+            data={push}
+            options={props.options}
+            searchQuery={props.searchQuery}
             hasSibling={index !== props.datalayers[this.state.activeDatalayer].length - 1}
           />
         )
@@ -488,13 +488,13 @@ const DTM = props =>
     {
       props.data.loadRules ?
       props.data.loadRules.map((v, i) =>
-          <DataLayerBlock
-            key={`page${props.page}_DTM_${i}`}
-            arrayIndex={i}
-            keyAncestor={`page${props.page}_DTM_${i}`}
-            data={v}
-            options={props.options}
-            searchQuery={props.searchQuery}
+        <DataLayerBlock
+          key={`page${props.page}_DTM_${i}`}
+          arrayIndex={i}
+          keyAncestor={`page${props.page}_DTM_${i}`}
+          data={v}
+          options={props.options}
+          searchQuery={props.searchQuery}
           hasSibling={i !== props.data.loadRules.length - 1}
         />
       )
@@ -584,6 +584,12 @@ const Datalayers = (props) => {
     !(data.TCO && data.TCO.id && data.tcoDatas)
     ) {
     return null;
+  }
+
+  if (searchQuery && searchQuery.length && searchQuery.length > 0) {
+    if (JSON.stringify(data).replace(/[{}"]/ig, '').toLowerCase().indexOf(searchQuery) === -1) {
+      return (<td />);
+    }
   }
 
   return (
