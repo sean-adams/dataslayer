@@ -68,7 +68,7 @@ class Settings extends Component {
         <a
           className="searchbtn"
           title="Search"
-          onClick={() => null}
+          onClick={this.props.onSearchClick}
         >
           <img alt="search" src="/img/search.png" />
         </a>
@@ -159,6 +159,7 @@ Settings.propTypes = {
   appState: React.PropTypes.object,
   handleFile: React.PropTypes.func,
   onSettingsClick: React.PropTypes.func,
+  onSearchClick: React.PropTypes.func,
 };
 
 Settings.defaultProps = {
@@ -166,6 +167,7 @@ Settings.defaultProps = {
   onSettingsClick: () => null,
   appState: {},
   handleFile: e => null,
+  onSearchClick: e => null,
 };
 
 export default Settings;

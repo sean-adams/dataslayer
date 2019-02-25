@@ -1,6 +1,7 @@
 /* global chrome, google */
 import React, { Component } from 'react';
 import uuid from 'uuid';
+import { GlobalHotKeys, IgnoreKeys } from 'react-hotkeys';
 import Page from './Page';
 import Settings from './Settings';
 import Options from './Options';
@@ -93,6 +94,8 @@ class Dataslayer extends Component {
     this.state = {
       ...dataslayer,
       showOptions: false,
+      searchMode: false,
+      searchQuery: '',
       port: (isChromeDevTools() ? chrome.runtime.connect() : null),
     };
   }
@@ -738,8 +741,19 @@ class Dataslayer extends Component {
           appState={this.state}
           handleFile={this.importFile}
           onSettingsClick={() => this.setState({ showOptions: !this.state.showOptions })}
+          onSearchClick={() => this.setState({ searchMode: !this.state.searchMode })}
         />
         <div>
+          { !this.state.showOptions &&
+          (<GlobalHotKeys
+            keyMap={{
+              SEARCH: 'ctrl+shift+f',
+            }}
+            handlers={{
+              SEARCH: () => this.setState({ searchMode: !this.state.searchMode }),
+            }}
+          />)
+          }
           <div className="datalayeritems">
             { this.state.showOptions ? <Options options={this.state.options} setOption={this.setOption} /> : null}
             {!this.state.showOptions && (() => {
