@@ -100,7 +100,7 @@ class Page extends Component {
           className={headerClass}
           timestamp={this.props.options.showTimestamps ? this.props.timestamp : null}
         />
-        <table cols="2" width="100%">
+        <table cols="2" width="100%" style={{ borderCollapse: 'unset' }}>
           <tbody className={expanded || this.props.searchMode ? '' : 'hidden'}>
             <tr>
               <Datalayers
