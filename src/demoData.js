@@ -967,7 +967,7 @@ export default {
     []
   ],
   activeIndex: 6,
-  timestamps: ['http://bearcla.ws/gtmtest.html', 'http://bearcla.ws/', 'https://lifereimagined.aarp.org/', 'http://tealium.com/', 'http://www.tagcommander.com/', 'http://www.tagcommander.com/en/', 'https://www.ebth.com/'],
+  timestamps: [{}, {}, {}, {}, {}, {}, {}],
   urls: ['http://bearcla.ws/gtmtest.html', 'http://bearcla.ws/', 'https://lifereimagined.aarp.org/', 'http://tealium.com/', 'http://www.tagcommander.com/', 'http://www.tagcommander.com/en/', 'https://www.ebth.com/'],
   options: {
     showFloodlight: true,
