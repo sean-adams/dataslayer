@@ -268,7 +268,7 @@ class Options extends Component {
                             (<tr>
                               <td><b>{version}</b></td>
                               <td>
-                                {changes.map((note) => (<span>{note}<br/></span>))}
+                                {changes.map((note, i) => (<span key={`${note}i`}>{note}<br/></span>))}
                               </td>
                             </tr>)  
                           )
