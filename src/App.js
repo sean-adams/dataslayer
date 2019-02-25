@@ -737,7 +737,7 @@ class Dataslayer extends Component {
       <div className={`App${this.state.darkTheme ? ' dark' : ''}`}>
         <GlobalHotKeys
           keyMap={{
-            SEARCH: 'ctrl+shift+f',
+            SEARCH: 'ctrl+alt+f',
           }}
           handlers={{
             SEARCH: () => this.setState({ searchMode: !this.state.searchMode, searchQuery: '' }),

@@ -19,11 +19,17 @@ class Search extends Component {
       }}>
         <input
           type="text"
+          style={{
+            fontFamily: 'Open Sans'
+          }}
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
           value={value}
           onChange={onChange}
-          onKeyUp={({ key }) => key === 'Escape' && toggleSearch()}
+          onKeyDown={(e) => e.ctrlKey && e.altKey && e.key === 'f' && toggleSearch()}
           autoFocus
-          placeholder={"Search (press Escape to exit)"}
+          placeholder={"Search (case insensitive)"}
         />
       </div>);
   }

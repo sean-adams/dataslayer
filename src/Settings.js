@@ -67,7 +67,7 @@ class Settings extends Component {
         </a>
         <a
           className="searchbtn"
-          title="Toggle Search (Ctrl+Shift+F)"
+          title="Toggle Search (Ctrl+Alt+F)"
           onClick={this.props.onSearchClick}
         >
           <img alt="search" src="/img/search.png" />
