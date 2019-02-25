@@ -531,7 +531,7 @@ const TagBreak = () => (<li className="eventbreak submenu" />);
 
 const Tags = (props) => {
   const testTag = ({ allParams }, query) =>
-    Object.keys(allParams).map((key) => String(allParams[key])).join('').toLowerCase().indexOf(query) > -1;
+    JSON.stringify(allParams).toLowerCase().indexOf(query) > -1;
   let tags = [];
   for (let i = props.data.length - 1; i >= 0; i--) {
     let tag = props.data[i];
