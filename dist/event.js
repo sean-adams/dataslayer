@@ -104,27 +104,27 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 });
 
 chrome.runtime.onInstalled.addListener(function (details) {
-	// if (details.reason === 'install')
-	// 	chrome.tabs.create({
-	// 		url: 'chrome-extension://' + chrome.runtime.id + '/options.html#install',
-	// 		active: true
-	// 	});
+	if (details.reason === 'install')
+		chrome.tabs.create({
+			url: 'https://bearcla.ws/dataslayer/#releaseNotes',
+			active: true
+		});
 	if ((details.reason === 'update') && (!dsDebug)) {
 		chrome.notifications.create('', {
 				type: 'basic',
 				title: 'dataslayer' + (dsDebug ? ' beta' : ''),
-				message: 'dataslayer' + (dsDebug ? ' beta' : '') + ' has been updated to version ' + chrome.runtime.getManifest().version + '.',
+				message: 'dataslayer' + (dsDebug ? ' beta' : '') + ' has been updated to version ' + chrome.runtime.getManifest().version + '.\n\nClick here to see what\'s new.',
 				iconUrl: 'i128.png'
 			},
 			function (notificationId) {
 				notifId = notificationId;
 			}
 		);
-		// chrome.notifications.onClicked.addListener(function (notificationId) {
-		// 	if (notificationId == notifId) chrome.tabs.create({
-		// 		url: 'chrome-extension://' + chrome.runtime.id + '/options.html#whatsnew',
-		// 		active: true
-		// 	});
-		// });
+		chrome.notifications.onClicked.addListener(function (notificationId) {
+			if (notificationId == notifId) chrome.tabs.create({
+				url: 'https://bearcla.ws/dataslayer/#releaseNotes',
+				active: true
+			});
+		});
 	}
 });
