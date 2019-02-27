@@ -105,7 +105,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 chrome.runtime.onInstalled.addListener(function (details) {
 	if (details.reason === 'install')
 		chrome.tabs.create({
-			url: 'https://bearcla.ws/dataslayer/#Release-Notes',
+			url: 'https://dataslayer.org/release-notes/',
 			active: true
 		});
 	if ((details.reason === 'update') && (!dsDebug)) {
@@ -121,7 +121,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		);
 		chrome.notifications.onClicked.addListener(function (notificationId) {
 			if (notificationId == notifId) chrome.tabs.create({
-				url: 'https://bearcla.ws/dataslayer/#Release-Notes',
+				url: 'https://dataslayer.org/release-notes/',
 				active: true
 			});
 		});
