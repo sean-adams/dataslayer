@@ -1,0 +1,35 @@
+{
+  "manifest_version": 2,
+
+  "name": "dataslayer",
+  "description": "Debug and test tag management (Google Tag Manager, DTM, Tealium) and analytics implementations.",
+  "short_name": "dataslayer",
+  "version": "1.0.0",
+
+  "icons": {
+    "48": "i48.png",
+    "128": "i128.png"
+  },
+
+  "devtools_page": "devtools.html",
+
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+
+  "web_accessible_resources": [
+    "inject.js",
+    "oo_poly.js"
+  ],
+  
+  "permissions": [
+    "tabs",
+    "storage",
+    "http://*/*",
+    "https://*/*",
+    "notifications",
+    "webNavigation",
+    "declarativeWebRequest"
+  ]
+}

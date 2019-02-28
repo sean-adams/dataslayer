@@ -1,7 +1,7 @@
 dataslayer
 ==========
 
-A Chrome extension to enhance debugging of some frequently-used tag management platforms (Google Tag Manager and Tealium) in combination with some frequently-used tags (Google Analytics, Adobe Analytics/Omniture, Floodlight).
+A Chrome extension to enhance debugging of some frequently-used tag management platforms (Google Tag Manager, Adobe DTM / Launch, Tealium, TagCommander) in combination with some frequently-used tags (Google Analytics, Adobe Analytics/Omniture, Floodlight).
 
 Installation
 ------------
@@ -29,9 +29,12 @@ Note that vertical alignment between the data layer and any fired tags does not 
 Settings
 --------
 ### General
-- show data layer presence: enable (default) or disable the TMS logo / X in each page group. Useful for disabling if you are using dataslayer for e.g. pure GA debugging rather than tag management debugging.
-- auto-collapse nested data layer variables: when this option is enabled (default), nested variables such as Google Analytics enhanced ecommerce will automatically be collapsed to save space.
-- block tags from firing: requires use of the Chrome dev or beta channels. When this option is enabled, supported tags will be blocked from actually sending to the analytics platform. Note that blocking does not take the Tags selections into account (i.e. all supported tags are blocked, regardless of whether or not they are shown).
+- **show data layer presence**: enable (default) or disable the TMS logo / X in each page group. Useful for disabling if you are using dataslayer for e.g. pure GA debugging rather than tag management debugging.
+- **auto-collapse nested data layer variables**: when this option is enabled (default), nested variables such as Google Analytics enhanced ecommerce will automatically be collapsed to save space.
+- **auto-collapse gtm.\* events**: when this option is enabled, data layer events like gtm.click and gtm.scrollDepth will be collapsed by default; click the event to toggle it.
+- **hide empty data layer variables**: when enabled, if no value is set for a key, hide it entirely.
+- **show array indices**: when enabled, show a faint indicator of the array index for values inside array-like data layers.
+- **block tags from firing**: requires use of the Chrome dev or beta channels. When this option is enabled, supported tags will be blocked from actually sending to the analytics platform. Note that blocking does not take the Tags selections into account (i.e. all supported tags are blocked, regardless of whether or not they are shown).
 
 ### Tags
 All supported tag types are shown by default; these can be individually disabled.
@@ -39,9 +42,18 @@ All supported tag types are shown by default; these can be individually disabled
 ### Ignored IDs
 To filter out tags hitting specific analytics properties, enter the property IDs here.
 
+### Additional data layer objects
+Add global Javascript objects to watch here (e.g. _digitalData_).
+
+Developing
+--------
+- `npm run start` (or `npm run start-win` on Windows) will start a local development server for working on UI
+- `npm run build` packages the extension into /dist/build - /dist is the folder to load as an unpacked extension
+
 Misc
 ----
 dataslayer was built with and thanks to the following:
+- React
 - [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
 - [Pure](http://purecss.io/)
 - [jQuery](http://jquery.com/)
@@ -50,3 +62,4 @@ dataslayer was built with and thanks to the following:
 - [Massimo Artizzu's O.o polyfill](https://github.com/MaxArt2501/object-observe)
 
 dataslayer is under the MIT License. See LICENSE.md.
+
