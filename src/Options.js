@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.0.1';
+    let version = '1.0.2';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -47,7 +47,7 @@ class Options extends Component {
 
     const versionHistory = [
       {
-        version: '1.0.1',
+        version: '1.0.*',
         changes: [
         'bug fixes'
         ]
