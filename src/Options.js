@@ -49,7 +49,7 @@ class Options extends Component {
       {
         version: '1.0.1',
         changes: [
-        'misc. bug fixes'
+        'bug fixes'
         ]
       },
       {
