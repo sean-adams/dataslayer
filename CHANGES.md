@@ -1,5 +1,9 @@
 dataslayer Changelog
 ====================
+1.0.1
+-----
++ bugfixes
+
 1.0.0
 -----
 + complete rewrite

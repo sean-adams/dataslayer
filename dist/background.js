@@ -99,6 +99,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 		devtoolsPort.forEach(function (v, i, x) {
 			v.postMessage(message);
 		});
+	} else {
+		console.log(message);
+		// prevent unhandled chrome runtime errors
+		if (sendResponse) {
+			sendResponse();
+		}
 	}
 });
 

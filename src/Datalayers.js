@@ -72,7 +72,7 @@ function addSpaces(obj) {
 const DataLayerLines = (props) => {
   let data = props.data;
   let depth = props.depth;
-  let isObject = typeof data === 'object';
+  let isObject = typeof data === 'object' && data != null;
   let spaces = props.spaces || '';
   let showChildren = !props.hidden.includes(`${props.parent}--${props.index}`);
 
@@ -180,7 +180,7 @@ class DataLayerEntry extends Component {
   render() {
     let data = this.props.data;
     let depth = this.props.depth;
-    let isObject = typeof data === 'object';
+    let isObject = typeof data === 'object' && data != null;
     let spaces = this.props.spaces || '';
 
     if (this.props.hideEmpty && (data === '' || data === {})) {
