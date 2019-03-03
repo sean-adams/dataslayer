@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 class Search extends Component {
   state = {
@@ -22,9 +23,9 @@ class Search extends Component {
           style={{
             fontFamily: 'Open Sans'
           }}
-          autocorrect="off"
-          autocapitalize="off"
-          spellcheck="false"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck="false"
           value={value}
           onChange={onChange}
           onKeyDown={(e) => e.ctrlKey && e.altKey && e.key === 'f' && toggleSearch()}
@@ -36,9 +37,9 @@ class Search extends Component {
 }
 
 Search.propTypes = {
-  value: React.PropTypes.string,
-  onChange: React.PropTypes.func,
-  toggleSearch: React.PropTypes.func,
+  value: PropTypes.string,
+  onChange: PropTypes.func,
+  toggleSearch: PropTypes.func,
 };
 
 Search.defaultProps = {

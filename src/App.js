@@ -1,4 +1,4 @@
-/* global chrome, google */
+/* global chrome */
 import React, { Component } from 'react';
 import uuid from 'uuid';
 import { GlobalHotKeys } from 'react-hotkeys';
@@ -257,7 +257,7 @@ class Dataslayer extends Component {
     datalayers[newIndex] = {};
     GTMs[newIndex] = [];
     urls[newIndex] = newurl;
-    timestamps[newIndex] = new Date();
+    timestamps[newIndex] = new Date().valueOf();
     tags[newIndex] = [];
 
     this.loadSettings();
@@ -620,7 +620,7 @@ class Dataslayer extends Component {
   clearHistory = () => {
     this.setState({
       urls: [this.state.urls[this.state.activeIndex]],
-      timestamps: [new Date()],
+      timestamps: [new Date().valueOf()],
       activeIndex: 0,
       datalayers: [{}],
       tags: [[]],

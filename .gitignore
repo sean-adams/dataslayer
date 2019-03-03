@@ -1,8 +1,4 @@
 *.zip
-src/Panel/.jshintrc
-assets/
-dist/build
-demodata.json
-dataslayer.sublime-project
-dataslayer.sublime-workspace
+dist/*
+*build
 node_modules

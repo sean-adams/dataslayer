@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 //
 // Helper functions
@@ -225,22 +226,22 @@ class DataLayerEntry extends Component {
 }
 
 DataLayerEntry.propTypes = {
-  depth: React.PropTypes.number,
-  data: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.string,
-    React.PropTypes.number
+  depth: PropTypes.number,
+  data: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.string,
+    PropTypes.number
   ]),
-  collapseNested: React.PropTypes.bool,
-  spaces: React.PropTypes.string,
-  index: React.PropTypes.string,
-  hideEmpty: React.PropTypes.bool,
-  keyAncestor: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
+  collapseNested: PropTypes.bool,
+  spaces: PropTypes.string,
+  index: PropTypes.string,
+  hideEmpty: PropTypes.bool,
+  keyAncestor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
   ]),
-  eventToggleable: React.PropTypes.bool,
-  onClick: React.PropTypes.func,
+  eventToggleable: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 DataLayerEntry.defaultProps = {
@@ -308,18 +309,18 @@ class DataLayerBlock extends Component {
 }
 
 DataLayerBlock.propTypes = {
-  data: React.PropTypes.object,
-  options: React.PropTypes.object,
-  keyAncestor: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
+  data: PropTypes.object,
+  options: PropTypes.object,
+  keyAncestor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
   ]),
-  arrayIndex: React.PropTypes.oneOfType([
-    React.PropTypes.string,
-    React.PropTypes.number
+  arrayIndex: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
   ]),
-  searchQuery: React.PropTypes.string,
-  hasSibling: React.PropTypes.bool,
+  searchQuery: PropTypes.string,
+  hasSibling: PropTypes.bool,
 };
 
 //
@@ -355,11 +356,11 @@ const TLM = (props) => {
 };
 
 TLM.propTypes = {
-  data: React.PropTypes.object,
-  TLM: React.PropTypes.object,
-  options: React.PropTypes.object,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  data: PropTypes.object,
+  TLM: PropTypes.object,
+  options: PropTypes.object,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 const TCO = (props) => {
@@ -392,11 +393,11 @@ const TCO = (props) => {
 };
 
 TCO.propTypes = {
-  data: React.PropTypes.object,
-  TCO: React.PropTypes.object,
-  options: React.PropTypes.object,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  data: PropTypes.object,
+  TCO: PropTypes.object,
+  options: PropTypes.object,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 class GTM extends Component {
@@ -460,10 +461,10 @@ class GTM extends Component {
 }
 
 GTM.propTypes = {
-  datalayers: React.PropTypes.object,
-  GTMs: React.PropTypes.array,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  datalayers: PropTypes.object,
+  GTMs: PropTypes.array,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 const DTM = props =>
@@ -504,10 +505,10 @@ const DTM = props =>
   </ul>);
 
 DTM.propTypes = {
-  data: React.PropTypes.object,
-  options: React.PropTypes.object,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  data: PropTypes.object,
+  options: PropTypes.object,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 class Vars extends Component {
@@ -564,10 +565,10 @@ class Vars extends Component {
 }
 
 Vars.propTypes = {
-  varDatas: React.PropTypes.object,
-  vars: React.PropTypes.array,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  varDatas: PropTypes.object,
+  vars: PropTypes.array,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 //
@@ -658,10 +659,10 @@ const Datalayers = (props) => {
 };
 
 Datalayers.propTypes = {
-  data: React.PropTypes.object,
-  options: React.PropTypes.object,
-  page: React.PropTypes.number,
-  searchQuery: React.PropTypes.string,
+  data: PropTypes.object,
+  options: PropTypes.object,
+  page: PropTypes.number,
+  searchQuery: PropTypes.string,
 };
 
 export default Datalayers;

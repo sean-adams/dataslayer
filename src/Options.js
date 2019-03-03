@@ -1,5 +1,6 @@
 /* global chrome */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 class Options extends Component {
   constructor(props) {
@@ -155,43 +156,43 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td><b>by</b></td>
-                        <td><span><a href="http://bearcla.ws" target="_blank">Sean Adams</a></span></td>
+                        <td><span><a href="http://bearcla.ws" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
                         <td/><td/>
                       </tr>
                       <tr>
                         <td>using</td>
-                        <td><span><a href="http://jquery.com/" target="_blank">jQuery</a></span></td>
+                        <td><span><a href="http://jquery.com/" rel="noopener noreferrer" target="_blank">jQuery</a></span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://purecss.io" target="_blank">Pure</a></span></td>
+                        <td><span><a href="http://purecss.io" rel="noopener noreferrer" target="_blank">Pure</a></span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="https://facebook.github.io/react/" target="_blank">React</a></span></td>
+                        <td><span><a href="https://facebook.github.io/react/" rel="noopener noreferrer" target="_blank">React</a></span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://github.com/google/data-layer-helper" target="_blank">data-layer-helper</a></span></td>
+                        <td><span><a href="http://github.com/google/data-layer-helper" rel="noopener noreferrer" target="_blank">data-layer-helper</a></span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://leanmodal.finelysliced.com.au/" target="_blank">leanModal</a></span></td>
+                        <td><span><a href="http://leanmodal.finelysliced.com.au/" rel="noopener noreferrer" target="_blank">leanModal</a></span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="https://github.com/MaxArt2501/object-observe" target="_blank">O.o polyfill by MaxArt2501</a></span></td>
+                        <td><span><a href="https://github.com/MaxArt2501/object-observe" rel="noopener noreferrer" target="_blank">O.o polyfill by MaxArt2501</a></span></td>
                       </tr>
                       <tr>
                         <td/>
                         <td>
                           <span>
-                            <a href="http://www.google.com/fonts/specimen/Open+Sans" target="_blank">
+                            <a href="http://www.google.com/fonts/specimen/Open+Sans" rel="noopener noreferrer" target="_blank">
                             Open Sans
                             </a>
-                            <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">
+                            <a href="http://www.apache.org/licenses/LICENSE-2.0.html" rel="noopener noreferrer" target="_blank">
                             (license)
                             </a>
                           </span>
@@ -201,8 +202,8 @@ class Options extends Component {
                         <td>icons made by</td>
                         <td>
                           <span>
-                            <a href="http://www.flaticon.com/authors/madebyoliver" target="_blank">Madebyoliver</a>
-                            from <a href="http://www.flaticon.com" target="_blank">www.flaticon.com</a>
+                            <a href="http://www.flaticon.com/authors/madebyoliver" rel="noopener noreferrer" target="_blank">Madebyoliver</a>
+                            from <a href="http://www.flaticon.com" rel="noopener noreferrer" target="_blank">www.flaticon.com</a>
                           </span>
                         </td>
                       </tr>
@@ -212,7 +213,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>contribute</td>
-                        <td><span><a href="http://github.com/sean-adams/dataslayer" target="_blank">GitHub</a></span></td>
+                        <td><span><a href="http://github.com/sean-adams/dataslayer" rel="noopener noreferrer" target="_blank">GitHub</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -220,11 +221,11 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>report issue</td>
-                        <td><span><a href="http://github.com/sean-adams/dataslayer/issues/new" target="_blank">GitHub</a> (preferred)</span></td>
+                        <td><span><a href="http://github.com/sean-adams/dataslayer/issues/new" rel="noopener noreferrer" target="_blank">GitHub</a> (preferred)</span></td>
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="mailto:dataslayer@bearcla.ws?subject=dataslayer+bug" target="_blank">email</a></span></td>
+                        <td><span><a href="mailto:dataslayer@bearcla.ws?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -232,13 +233,13 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>share</td>
-                        <td><span><a href="http://dataslayer.org" target="_blank">dataslayer.org</a></span></td>
+                        <td><span><a href="http://dataslayer.org" rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
                       </tr>
                       <tr>
                         <td/>
                         <td>
                           <span>
-                            <a href="http://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo" target="_blank">Chrome Web Store</a>
+                            <a href="http://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
                           </span>
                         </td>
                       </tr>
@@ -246,7 +247,7 @@ class Options extends Component {
                         <td>leave a review</td>
                         <td>
                           <span>
-                            <a href="https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo/reviews" target="_blank">Chrome Web Store</a>
+                            <a href="https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo/reviews" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
                           </span>
                         </td>
                       </tr>
@@ -297,8 +298,8 @@ class Options extends Component {
 }
 
 Options.propTypes = {
-  options: React.PropTypes.object,
-  setOption: React.PropTypes.func,
+  options: PropTypes.object,
+  setOption: PropTypes.func,
 };
 
 export default Options;

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import Datalayers from './Datalayers';
 import Tags from './Tags';
 
@@ -22,11 +23,11 @@ const PageHeader = props =>
   </ul>);
 
 PageHeader.propTypes = {
-  url: React.PropTypes.string,
-  onClick: React.PropTypes.func,
-  className: React.PropTypes.string,
-  isCurrent: React.PropTypes.bool,
-  timestamp: React.PropTypes.object,
+  url: PropTypes.string,
+  onClick: PropTypes.func,
+  className: PropTypes.string,
+  isCurrent: PropTypes.bool,
+  timestamp: PropTypes.object,
 };
 
 PageHeader.defaultProps = {
@@ -98,7 +99,7 @@ class Page extends Component {
           onClick={this.toggleExpanded}
           isCurrent={this.props.isCurrent}
           className={headerClass}
-          timestamp={this.props.options.showTimestamps ? this.props.timestamp : null}
+          timestamp={this.props.options.showTimestamps ? new Date(this.props.timestamp) : null}
         />
         <table cols="2" width="100%" style={{ borderCollapse: 'unset' }}>
           <tbody className={expanded || this.props.searchMode ? '' : 'hidden'}>
@@ -125,19 +126,19 @@ class Page extends Component {
 }
 
 Page.propTypes = {
-  url: React.PropTypes.string,
-  data: React.PropTypes.object,
-  index: React.PropTypes.number,
-  isCurrent: React.PropTypes.bool,
-  loading: React.PropTypes.bool,
-  options: React.PropTypes.object,
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.arrayOf(React.PropTypes.node),
-    React.PropTypes.node
+  url: PropTypes.string,
+  data: PropTypes.object,
+  index: PropTypes.number,
+  isCurrent: PropTypes.bool,
+  loading: PropTypes.bool,
+  options: PropTypes.object,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node
   ]),
-  timestamp: React.PropTypes.object,
-  searchQuery: React.PropTypes.string,
-  searchMode: React.PropTypes.bool,
+  timestamp: PropTypes.object,
+  searchQuery: PropTypes.string,
+  searchMode: PropTypes.bool,
 };
 
 Page.defaultProps = {
