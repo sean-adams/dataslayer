@@ -412,6 +412,17 @@ dataslayer.dtmLoad = function() {
         propertyInfo += ' (' + satellite.buildInfo.environment + ')';
       }
 
+      var buildDate = '';
+      if (satellite.buildInfo && satellite.buildInfo.buildDate) {
+        if (/Z$/.test(satellite.buildInfo.buildDate)) {
+          buildDate =
+            new Date(satellite.buildInfo.buildDate).toLocaleString() +
+            ' [local time]';
+        } else {
+          buildDate = satellite.buildInfo.buildDate;
+        }
+      }
+
       window.parent.postMessage(
         {
           type: 'dataslayer_dtm',
@@ -419,7 +430,7 @@ dataslayer.dtmLoad = function() {
           data: 'found',
           loadRules: JSON.stringify(dtmNotif),
           property: propertyInfo,
-          buildDate: satellite.buildInfo ? satellite.buildInfo.buildDate : '',
+          buildDate,
         },
         '*'
       );
