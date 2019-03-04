@@ -62,6 +62,8 @@ Developing
 --------
 dataslayer is built with create-react-app and depends on react-scripts. This makes the build process very easy, although it makes live debugging *as an extension* slightly annoying.
 
+NOTE: to create a build that Chrome will actually run, make sure you set ```INLINE_RUNTIME_CHUNK=false```, either in your environment or in a ```.env``` file at the root of the project.
+
 To use the development version, enable Developer mode in the [Chrome extensions page](chrome://extensions/), ```npm run build```, and *Load unpacked extension* from the **build** folder. You will need to reload the extension from the same page each time you build.
 
 - `npm run start` will start a local development server for working on UI only
