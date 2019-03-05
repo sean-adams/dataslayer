@@ -43,6 +43,7 @@ class Options extends Component {
         { name: 'showSitecatalyst', description: 'show Adobe Analytics tags', type: 'checkbox' },
         { name: 'ignoredTags', description: <span><u>Ignored IDs</u> (separated by semicolons)</span>, type: 'input', placeholder: 'UA-XXX-Y;UA-AAA-B' },
         { name: 'dataLayers', description: <span><u>Additional data layer objects</u> (separated by semicolons)</span>, type: 'input', placeholder: 'digitalData;testDataLayer' },
+        { name: 'launchDataElements', description: <span><u>Adobe Launch data elements</u> (separated by semicolons)</span>, type: 'input', placeholder: 'Page Name;pageType' },
       ]
     };
 

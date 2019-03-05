@@ -345,7 +345,7 @@ dataslayer.dtmLoad = function() {
     );
   } else {
     var isLaunch = !satellite.configurationSettings;
-    console.log(satellite);
+    // console.log(satellite);
 
     if (!isLaunch) {
       // DTM
@@ -402,7 +402,7 @@ dataslayer.dtmLoad = function() {
       );
     } else {
       // WIP Adobe Launch
-      console.log('isLaunch');
+      // console.log('isLaunch');
 
       var propertyInfo = '';
       if (satellite.property && satellite.property.name) {
@@ -522,8 +522,58 @@ dataslayer.loadOtherLayers = function() {
   }
 };
 
-if (document.readyState === 'complete') dataslayer.loadOtherLayers();
-else
+dataslayer.loadLaunchDataElements = function() {
+  dataslayer.launchDataElements = document
+    .getElementById('dataslayer_script')
+    .getAttribute('data-launchdataelements');
+  // console.log(dataslayer.launchDataElements);
+  if (dataslayer.launchDataElements !== null) {
+    dataslayer.launchDataElements = dataslayer.launchDataElements.split(';');
+
+    for (var i = 0; i < dataslayer.launchDataElements.length; i++) {
+      if (window._satellite) {
+        try {
+          window.parent.postMessage(
+            {
+              type: 'dataslayer_launchdataelement',
+              data: 'found',
+              url: window == window.parent ? window.location.href : 'iframe',
+              key: dataslayer.launchDataElements[i],
+              value: window._satellite.getVar(dataslayer.launchDataElements[i]),
+            },
+            '*'
+          );  
+        } catch(e) {
+          console.warn(e);
+        }  
+      }
+      // dataslayer.launchDataElements[i] = {
+      //   variable: dataslayer.launchDataElements[i],
+      //   listener: dataslayer.createListener(dataslayer.launchDataElements[i]),
+      // };
+      // Object.observe(
+      //   dataslayer.layers[i].variable.length === 1
+      //     ? window[dataslayer.layers[i].variable[0]]
+      //     : dataslayer.layers[i].variable.reduce(
+      //         dataslayer.reduceIndex,
+      //         window
+      //       ),
+      //   dataslayer.layers[i].listener
+      // );
+
+      // dataslayer.layers[i].listener();
+    }
+  }
+};
+
+if (document.readyState === 'complete') {
+  dataslayer.loadOtherLayers();
+  dataslayer.loadLaunchDataElements();
+} else {
   document.addEventListener('readystatechange', function() {
-    if (document.readyState === 'complete') dataslayer.loadOtherLayers();
+    if (document.readyState === 'complete') {
+      dataslayer.loadOtherLayers();
+      dataslayer.loadLaunchDataElements();
+    }
   });
+}
