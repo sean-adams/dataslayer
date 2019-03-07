@@ -16,13 +16,6 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
         dataslayers.setAttribute('data-layers', items.dataLayers.join(';'));
       }
 
-      if (items.hasOwnProperty('launchDataElements')) {
-        dataslayers.setAttribute(
-          'data-launchdataelements',
-          items.launchDataElements.join(';')
-        );
-      }
-
       document.head.appendChild(dataslayers);
     });
   }
