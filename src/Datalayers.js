@@ -230,7 +230,8 @@ DataLayerEntry.propTypes = {
   data: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.number
+    PropTypes.number,
+    PropTypes.bool,
   ]),
   collapseNested: PropTypes.bool,
   spaces: PropTypes.string,
@@ -499,6 +500,19 @@ const DTM = props =>
           hasSibling={i !== props.data.loadRules.length - 1}
         />
       )
+      :
+      null
+    }
+    {
+      props.data.elements ? 
+      <DataLayerBlock
+        key={`page${props.page}_DTM_${0}_elements`}
+        arrayIndex={0}
+        keyAncestor={`page${props.page}_DTM_${0}_elements`}
+        data={props.data.elements}
+        options={props.options}
+        searchQuery={props.searchQuery}
+      />
       :
       null
     }

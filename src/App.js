@@ -562,6 +562,19 @@ class Dataslayer extends Component {
         };
         this.setState({ dtmDatas });
       }
+    } else if ((message.type === 'dataslayer_launchdataelement') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+      console.log(message);
+      if (message.data === 'found') {
+        let { dtmDatas } = this.state;
+        let thisDTM = dtmDatas[this.state.activeIndex];
+        if (typeof thisDTM !== 'undefined') {
+          if (typeof thisDTM.elements !== 'object') {
+            thisDTM.elements = {};
+          }
+          thisDTM.elements[message.key] = message.value;
+        }
+        this.setState({ dtmDatas });
+      }
     } else if ((message.type === 'dataslayer_var') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       let varDatas = this.state.varDatas;
       if (message.url !== 'iframe') {

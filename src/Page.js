@@ -136,7 +136,10 @@ Page.propTypes = {
     PropTypes.arrayOf(PropTypes.node),
     PropTypes.node
   ]),
-  timestamp: PropTypes.object,
+  timestamp: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.object
+  ]),
   searchQuery: PropTypes.string,
   searchMode: PropTypes.bool,
 };

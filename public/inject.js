@@ -345,7 +345,7 @@ dataslayer.dtmLoad = function() {
     );
   } else {
     var isLaunch = !satellite.configurationSettings;
-    console.log(satellite);
+    // console.log(satellite);
 
     if (!isLaunch) {
       // DTM
@@ -402,7 +402,7 @@ dataslayer.dtmLoad = function() {
       );
     } else {
       // WIP Adobe Launch
-      console.log('isLaunch');
+      // console.log('isLaunch');
 
       var propertyInfo = '';
       if (satellite.property && satellite.property.name) {
@@ -522,8 +522,53 @@ dataslayer.loadOtherLayers = function() {
   }
 };
 
-if (document.readyState === 'complete') dataslayer.loadOtherLayers();
-else
+dataslayer.loadLaunchDataElements = function() {
+  if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
+    var elementNames = Object.keys(window._satellite._container.dataElements).sort(function(a, b) {
+      var nameA = a.toUpperCase();
+      var nameB = b.toUpperCase();
+
+      if (nameA < nameB) {
+        return -1;
+      } else if (nameA > nameB) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+
+    for (var i = 0; i < elementNames.length; i++) {
+      var newElement = JSON.parse(JSON.stringify(window._satellite._container.dataElements[elementNames[i]]));
+
+      try {
+        window.parent.postMessage(
+          {
+            type: 'dataslayer_launchdataelement',
+            data: 'found',
+            url: window == window.parent ? window.location.href : 'iframe',
+            key: elementNames[i],
+            value: window._satellite.getVar(elementNames[i]),
+            element: newElement,
+          },
+          '*'
+        );  
+      } catch(e) {
+        console.warn(e);
+      }
+    }  
+  }
+};
+
+if (document.readyState === 'complete') {
+  dataslayer.loadOtherLayers();
+  dataslayer.loadLaunchDataElements();
+  window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+} else {
   document.addEventListener('readystatechange', function() {
-    if (document.readyState === 'complete') dataslayer.loadOtherLayers();
+    if (document.readyState === 'complete') {
+      dataslayer.loadOtherLayers();
+      dataslayer.loadLaunchDataElements();
+      window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+    }
   });
+}
