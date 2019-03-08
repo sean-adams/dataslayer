@@ -230,7 +230,8 @@ DataLayerEntry.propTypes = {
   data: PropTypes.oneOfType([
     PropTypes.object,
     PropTypes.string,
-    PropTypes.number
+    PropTypes.number,
+    PropTypes.bool,
   ]),
   collapseNested: PropTypes.bool,
   spaces: PropTypes.string,
