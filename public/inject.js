@@ -538,10 +538,8 @@ dataslayer.loadLaunchDataElements = function() {
     });
 
     for (var i = 0; i < elementNames.length; i++) {
-      var newElement = Object.assign({}, window._satellite._container.dataElements[elementNames[i]]);
-      if (newElement.settings && newElement.settings.source) {
-        delete newElement.settings.source;
-      }
+      var newElement = JSON.parse(JSON.stringify(window._satellite._container.dataElements[elementNames[i]]));
+
       try {
         window.parent.postMessage(
           {
