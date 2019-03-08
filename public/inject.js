@@ -562,11 +562,13 @@ dataslayer.loadLaunchDataElements = function() {
 if (document.readyState === 'complete') {
   dataslayer.loadOtherLayers();
   dataslayer.loadLaunchDataElements();
+  window.setInterval(dataslayer.loadLaunchDataElements, 5000);
 } else {
   document.addEventListener('readystatechange', function() {
     if (document.readyState === 'complete') {
       dataslayer.loadOtherLayers();
       dataslayer.loadLaunchDataElements();
+      window.setInterval(dataslayer.loadLaunchDataElements, 5000);
     }
   });
 }
