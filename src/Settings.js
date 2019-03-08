@@ -1,5 +1,6 @@
 /* global chrome, google */
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 
 class Settings extends Component {
   state = {
@@ -155,11 +156,11 @@ class Settings extends Component {
 }
 
 Settings.propTypes = {
-  clearHistory: React.PropTypes.func,
-  appState: React.PropTypes.object,
-  handleFile: React.PropTypes.func,
-  onSettingsClick: React.PropTypes.func,
-  onSearchClick: React.PropTypes.func,
+  clearHistory: PropTypes.func,
+  appState: PropTypes.object,
+  handleFile: PropTypes.func,
+  onSettingsClick: PropTypes.func,
+  onSearchClick: PropTypes.func,
 };
 
 Settings.defaultProps = {

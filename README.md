@@ -5,9 +5,9 @@ A Chrome extension to enhance debugging of some frequently-used tag management p
 
 Installation
 ------------
-To use the unpacked source version, enable Developer mode in the [Chrome extensions page](chrome://extensions/) and *Load unpacked extension* from the checked-out **src** folder.
-
 The latest official version will always be available at the [Chrome Web Store](https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo).
+
+If you're working on the source, please see Developing.
 
 Use
 ---
@@ -24,7 +24,20 @@ A new panel will appear in Developer Tools titled **dataslayer**, containing a p
 
 All items are in reverse chronological order (newest on top).
 
-Note that vertical alignment between the data layer and any fired tags does not necessarily indicate a tie between the two. If a page contains only a data layer, or only tags, that side of the panel will expand to take up the width of the entire panel.
+Note that vertical alignment between the data layer and any fired tags does **not** necessarily indicate a tie between the two. If a page contains only a data layer, or only tags, that side of the panel will expand to take up the width of the entire panel.
+
+Import / Export
+---------------
+dataslayer allows you to export your current session to a JSON file. This file can then be imported later to review or confirm the output of a previous session.
+
+Search
+------
+dataslayer allows you to search for a specific key or value within the session. When you enter search mode, all page groups will be exposed; as you type, only data layer entries and tags that include your text will be included.
+
+Search mode can be toggled with the keyboard shortcut Ctrl+Alt+F
+
+The search basis is a simple ```JSON.stringify()``` of the tag or data layer values.
+
 
 Settings
 --------
@@ -47,17 +60,24 @@ Add global Javascript objects to watch here (e.g. _digitalData_).
 
 Developing
 --------
-- `npm run start` (or `npm run start-win` on Windows) will start a local development server for working on UI
-- `npm run build` packages the extension into /dist/build - /dist is the folder to load as an unpacked extension
+dataslayer is built with create-react-app and depends on react-scripts. This makes the build process very easy, although it makes live debugging *as an extension* slightly annoying.
+
+NOTE: to create a build that Chrome will actually run, make sure you set ```INLINE_RUNTIME_CHUNK=false```, either in your environment or in a ```.env``` file at the root of the project.
+
+To use the development version, enable Developer mode in the [Chrome extensions page](chrome://extensions/), ```npm run build```, and *Load unpacked extension* from the **build** folder. You will need to reload the extension from the same page each time you build.
+
+- `npm run start` will start a local development server for working on UI only
+- `npm run build` packages the extension into /build - /build is the folder to load as an unpacked extension
+
+In general, data layer / tag state is managed solely in App (which is also responsible for monitoring network requests and communicating with the background / content scripts) and cascades down to a number of presentation components.
 
 Misc
 ----
 dataslayer was built with and thanks to the following:
-- React
+- React / create-react-app
 - [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
 - [Pure](http://purecss.io/)
 - [jQuery](http://jquery.com/)
-- [leanModal](http://leanmodal.finelysliced.com.au/)
 - [Open Sans](http://www.google.com/fonts/specimen/Open+Sans)
 - [Massimo Artizzu's O.o polyfill](https://github.com/MaxArt2501/object-observe)
 

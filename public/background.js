@@ -67,7 +67,7 @@ chrome.storage.sync.get(null, function (items) {
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 	if (dsDebug) console.log(message);
-	if (message.type === 'dataslayer_gtm_push' || message.type === 'dataslayer_gtm' || message.type === 'dataslayer_tlm' || message.type === 'dataslayer_tco' || message.type === 'dataslayer_var' || message.type === 'dataslayer_dtm') {
+	if (message.type === 'dataslayer_gtm_push' || message.type === 'dataslayer_gtm' || message.type === 'dataslayer_tlm' || message.type === 'dataslayer_tco' || message.type === 'dataslayer_var' || message.type === 'dataslayer_dtm' || message.type === 'dataslayer_launchdataelement') {
 		message.tabID = sender.tab.id;
 		devtoolsPort.forEach(function (v, i, x) {
 			try {

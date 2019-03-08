@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types'
 import lookupParameter from './lookupParameter';
 
 const parseUniversal = (data, keyPrefix = '') => {
@@ -518,13 +519,13 @@ class Tag extends Component {
 }
 
 Tag.propTypes = {
-  data: React.PropTypes.object.isRequired,
-  options: React.PropTypes.object.isRequired,
-  keyAncestor: React.PropTypes.oneOfType([
-    React.PropTypes.string.isRequired,
-    React.PropTypes.number.isRequired
+  data: PropTypes.object.isRequired,
+  options: PropTypes.object.isRequired,
+  keyAncestor: PropTypes.oneOfType([
+    PropTypes.string.isRequired,
+    PropTypes.number.isRequired
   ]).isRequired,
-  searchQuery: React.PropTypes.string,
+  searchQuery: PropTypes.string,
 };
 
 const TagBreak = () => (<li className="eventbreak submenu" />);
@@ -589,9 +590,9 @@ const Tags = (props) => {
 };
 
 Tags.propTypes = {
-  data: React.PropTypes.arrayOf(React.PropTypes.object),
-  options: React.PropTypes.object,
-  searchQuery: React.PropTypes.string,
+  data: PropTypes.arrayOf(PropTypes.object),
+  options: PropTypes.object,
+  searchQuery: PropTypes.string,
 };
 
 export default Tags;
