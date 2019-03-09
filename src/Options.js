@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.0.2';
+    let version = '1.1.0';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -48,13 +48,13 @@ class Options extends Component {
 
     const versionHistory = [
       {
-        version: '1.0.*',
+        version: '1.1',
         changes: [
-        'bug fixes'
+        'support for Adobe Launch data elements'
         ]
       },
       {
-        version: '1.0.0',
+        version: '1.0',
         changes: [
         'rewritten UI',
         'import/export functionality',
@@ -163,7 +163,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>using</td>
-                        <td><span><a href="http://jquery.com/" rel="noopener noreferrer" target="_blank">jQuery</a></span></td>
+                        <td><span><a href="https://facebook.github.io/react/" rel="noopener noreferrer" target="_blank">React</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -171,7 +171,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="https://facebook.github.io/react/" rel="noopener noreferrer" target="_blank">React</a></span></td>
+                        <td><span><a href="http://jquery.com/" rel="noopener noreferrer" target="_blank">jQuery</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -269,6 +269,12 @@ class Options extends Component {
                         <tr>
                           <td/>
                           <td/>
+                        </tr>
+                        <tr>
+                          <td/>
+                          <td>
+                            <i>x.x.* are bug fix releases</i>
+                          </td>
                         </tr>
                         {
                           versionHistory.map(({ version, changes }) => 
