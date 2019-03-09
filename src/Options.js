@@ -34,6 +34,7 @@ class Options extends Component {
         { name: 'hideEmpty', description: 'hide empty data layer variables', type: 'checkbox' },
         { name: 'showArrayIndices', description: 'show array indices', type: 'checkbox' },
         { name: 'showTimestamps', description: 'show navigation timestamps', type: 'checkbox' },
+        { name: 'showFriendlyNames', description: 'show friendly names for query parameters where available', type: 'checkbox' },
         { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
       ],
       Tags: [

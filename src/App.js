@@ -48,6 +48,7 @@ else {
       showArrayIndices: false,
       collapseGTMNativeEvents: false,
       showTimestamps: false,
+      showFriendlyNames: true,
     }
   };
 }
@@ -663,6 +664,7 @@ class Dataslayer extends Component {
       showArrayIndices: false,
       collapseGTMNativeEvents: false,
       showTimestamps: false,
+      showFriendlyNames: true,
     };
 
     try {
@@ -700,6 +702,9 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('showTimestamps')) {
       options.showTimestamps = false;
     }
+    if (!options.hasOwnProperty('showFriendlyNames')) {
+      options.showFriendlyNames = true;
+    }
 
     this.setState({ options });
 
@@ -733,6 +738,9 @@ class Dataslayer extends Component {
         }
         if (!options.hasOwnProperty('showTimestamps')) {
           options.showTimestamps = false;
+        }
+        if (!options.hasOwnProperty('showFriendlyNames')) {
+          options.showFriendlyNames = true;
         }
         try {
           localStorage.options = JSON.stringify(options);
