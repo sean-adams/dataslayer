@@ -492,7 +492,7 @@ const DTM = props =>
     {
       props.data.rules ?
         [
-          <SubHeader mainText="Triggered rules" subText="" />,
+          <SubHeader mainText="Fired rules" subText="" />,
           props.data.rules.map((v, i) =>
             <DataLayerBlock
               key={`page${props.page}_DTM_${i}`}

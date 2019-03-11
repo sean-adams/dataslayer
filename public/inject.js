@@ -418,10 +418,26 @@ dataslayer.dtmLoad = function() {
           );
         },
         ruleCompleted: function (e) {
-          return null;
+          console.log(e.rule);
+          window.parent.postMessage(
+            {
+              type: 'dataslayer_launchrulecompleted',
+              url: window == window.parent ? window.location.href : 'iframe',
+              data: JSON.parse(JSON.stringify(e.rule)),
+            },
+            '*'
+          );
         },
         ruleConditionFailed: function (e) {
-          return null;
+          console.log(e.rule);
+          window.parent.postMessage(
+            {
+              type: 'dataslayer_launchrulefailed',
+              url: window == window.parent ? window.location.href : 'iframe',
+              data: JSON.parse(JSON.stringify(e.rule)),
+            },
+            '*'
+          );
         },
       })
 

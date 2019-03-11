@@ -77,7 +77,9 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     message.type === 'dataslayer_var' ||
     message.type === 'dataslayer_dtm' ||
     message.type === 'dataslayer_launchdataelement' ||
-    message.type === 'dataslayer_launchruletriggered'
+	message.type === 'dataslayer_launchruletriggered' ||
+	message.type === 'dataslayer_launchrulecompleted' ||
+	message.type === 'dataslayer_launchrulefailed'
   ) {
     message.tabID = sender.tab.id;
     devtoolsPort.forEach(function(v, i, x) {

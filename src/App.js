@@ -576,7 +576,7 @@ class Dataslayer extends Component {
         }
         this.setState({ dtmDatas });
       }
-    } else if ((message.type === 'dataslayer_launchruletriggered') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_launchrulecompleted') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       let { dtmDatas } = this.state;
       let thisDTM = dtmDatas[this.state.activeIndex];
