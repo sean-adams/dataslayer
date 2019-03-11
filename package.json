@@ -15,7 +15,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "package": "react-scripts build && cd ./build && zip -r ../package.zip *"
+    "package": "react-scripts build && rm ./package.zip; cd ./build && zip -r ../package.zip *"
   },
   "eslintConfig": {
     "extends": "react-app"
