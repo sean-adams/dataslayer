@@ -329,12 +329,12 @@ dataslayer.tcoTimerID = window.setInterval(function() {
 
 // Adobe DTM
 dataslayer.dtmLoad = function() {
-  var hasAdobe =
+  var hasNoAdobe =
     typeof window._satellite === 'undefined' ||
     !(window._satellite.buildDate || window._satellite.buildInfo);
   var satellite = window._satellite;
   var dtmNotif = [];
-  if (hasAdobe) {
+  if (hasNoAdobe) {
     window.parent.postMessage(
       {
         type: 'dataslayer_dtm',
@@ -403,6 +403,27 @@ dataslayer.dtmLoad = function() {
     } else {
       // WIP Adobe Launch
       // console.log('isLaunch');
+
+      satellite._monitors = satellite._monitors || [];
+      satellite._monitors.push({
+        ruleTriggered: function (e) {
+          console.log(e.rule);
+          window.parent.postMessage(
+            {
+              type: 'dataslayer_launchruletriggered',
+              url: window == window.parent ? window.location.href : 'iframe',
+              data: JSON.parse(JSON.stringify(e.rule)),
+            },
+            '*'
+          );
+        },
+        ruleCompleted: function (e) {
+          return null;
+        },
+        ruleConditionFailed: function (e) {
+          return null;
+        },
+      })
 
       var propertyInfo = '';
       if (satellite.property && satellite.property.name) {
@@ -541,13 +562,19 @@ dataslayer.loadLaunchDataElements = function() {
       var newElement = JSON.parse(JSON.stringify(window._satellite._container.dataElements[elementNames[i]]));
 
       try {
+        let cleanValue = window._satellite.getVar(elementNames[i]);
+        if (typeof cleanValue === 'function') {
+          cleanValue = '(function)';
+        } else if (typeof cleanValue === 'object' && typeof cleanValue.then === 'function') {
+          cleanValue = '(Promise)';
+        }
         window.parent.postMessage(
           {
             type: 'dataslayer_launchdataelement',
             data: 'found',
             url: window == window.parent ? window.location.href : 'iframe',
             key: elementNames[i],
-            value: window._satellite.getVar(elementNames[i]),
+            value: cleanValue,
             element: newElement,
           },
           '*'
