@@ -565,16 +565,7 @@ class Vars extends Component {
     }
 
     return (<ul>
-      <li className="event eventbreak submenu dlheader">
-        <table cols="2">
-          <tbody>
-            <tr>
-              <td />
-              {header}
-            </tr>
-          </tbody>
-        </table>
-      </li>
+      <SubHeader headerComponent={header} />
       { props.varDatas && props.varDatas[this.state.activeDatalayer] &&
       (<DataLayerBlock
         key={`page${props.page}_vars_${this.state.activeDatalayer}`}
