@@ -329,12 +329,12 @@ dataslayer.tcoTimerID = window.setInterval(function() {
 
 // Adobe DTM
 dataslayer.dtmLoad = function() {
-  var hasAdobe =
+  var hasNoAdobe =
     typeof window._satellite === 'undefined' ||
     !(window._satellite.buildDate || window._satellite.buildInfo);
   var satellite = window._satellite;
   var dtmNotif = [];
-  if (hasAdobe) {
+  if (hasNoAdobe) {
     window.parent.postMessage(
       {
         type: 'dataslayer_dtm',
