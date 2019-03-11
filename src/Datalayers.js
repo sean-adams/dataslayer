@@ -70,6 +70,26 @@ function addSpaces(obj) {
 //
 // Data layer subcomponents
 //
+
+const SubHeader = (props) =>
+  (<li className="event eventbreak submenu dlheader">
+    <table cols="2">
+      <tbody>
+        <tr>
+          <td />
+          {
+            props.headerComponent ||
+            (<td>
+              {
+                (<span><u>{props.mainText}</u> {props.subText}</span>)
+              }
+            </td>)
+          }
+        </tr>
+      </tbody>
+    </table>
+  </li>);
+
 const DataLayerLines = (props) => {
   let data = props.data;
   let depth = props.depth;
@@ -263,7 +283,8 @@ class DataLayerBlock extends Component {
       keyAncestor,
       options,
       arrayIndex,
-      hasSibling
+      hasSibling,
+      hideKeys
     } = this.props;
 
     if (searchQuery && searchQuery.length && searchQuery.length > 0) {
@@ -277,7 +298,9 @@ class DataLayerBlock extends Component {
       <table cols="2">
         {
           Object.keys(data).map((v, i) => {
-            if (v === 'event') {
+            if (hideKeys && (hideKeys.indexOf(v) > -1)) {
+              return null;
+            } else if (v === 'event') {
               return (<DataLayerEntry
                 key={`${keyAncestor}_${v}`}
                 keyAncestor={`${keyAncestor}_${v}`}
@@ -322,6 +345,7 @@ DataLayerBlock.propTypes = {
   ]),
   searchQuery: PropTypes.string,
   hasSibling: PropTypes.bool,
+  hideKeys: PropTypes.array,
 };
 
 //
@@ -336,16 +360,7 @@ const TLM = (props) => {
   </td>);
 
   return (<ul>
-    <li className="event eventbreak submenu dlheader">
-      <table cols="2">
-        <tbody>
-          <tr>
-            <td />
-            {header}
-          </tr>
-        </tbody>
-      </table>
-    </li>
+    <SubHeader headerComponent={header} />
     <DataLayerBlock
       key={`page${props.page}_TLM`}
       keyAncestor={`page${props.page}_TLM`}
@@ -372,16 +387,7 @@ const TCO = (props) => {
   </td>);
 
   return (<ul>
-    <li className="event eventbreak submenu dlheader">
-      <table cols="2">
-        <tbody>
-          <tr>
-            <td />
-            {header}
-          </tr>
-        </tbody>
-      </table>
-    </li>
+    <SubHeader headerComponent={header} />
     <DataLayerBlock
       key={`page${props.page}_TCO`}
       keyAncestor={`page${props.page}_TCO`}
@@ -432,16 +438,7 @@ class GTM extends Component {
     }
 
     return (<ul>
-      <li className="event eventbreak submenu dlheader">
-        <table cols="2">
-          <tbody>
-            <tr>
-              <td />
-              {header}
-            </tr>
-          </tbody>
-        </table>
-      </li>
+      <SubHeader headerComponent={header} />
       {(props.datalayers[this.state.activeDatalayer] || [])
         .slice(0)
         .reverse()
@@ -470,51 +467,63 @@ GTM.propTypes = {
 
 const DTM = props =>
   (<ul>
-    <li className="event eventbreak submenu dlheader">
-      <table cols="2">
-        <tbody>
-          <tr>
-            <td />
-            <td>
-              {
-                props.data.property ?
-                (<span><u>{props.data.property}</u> {props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}</span>)
-                :
-                (<span><u>DTM load rules</u> {props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}</span>)
-              }
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </li>
     {
-      props.data.loadRules ?
-      props.data.loadRules.map((v, i) =>
-        <DataLayerBlock
-          key={`page${props.page}_DTM_${i}`}
-          arrayIndex={i}
-          keyAncestor={`page${props.page}_DTM_${i}`}
-          data={v}
-          options={props.options}
-          searchQuery={props.searchQuery}
-          hasSibling={i !== props.data.loadRules.length - 1}
-        />
-      )
-      :
-      null
+      props.data.property ?
+        <SubHeader mainText={props.data.property} subText={props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}/>
+        :
+        <SubHeader mainText="DTM load rules" subText={props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}/>
     }
     {
-      props.data.elements ? 
-      <DataLayerBlock
-        key={`page${props.page}_DTM_${0}_elements`}
-        arrayIndex={0}
-        keyAncestor={`page${props.page}_DTM_${0}_elements`}
-        data={props.data.elements}
-        options={props.options}
-        searchQuery={props.searchQuery}
-      />
-      :
-      null
+      props.data.loadRules ?
+        props.data.loadRules.map((v, i) =>
+          <DataLayerBlock
+            key={`page${props.page}_DTM_${i}`}
+            arrayIndex={i}
+            keyAncestor={`page${props.page}_DTM_${i}`}
+            data={v}
+            options={props.options}
+            searchQuery={props.searchQuery}
+            hasSibling={i !== props.data.loadRules.length - 1}
+          />
+        )
+        :
+        null
+    }
+    {
+      props.data.rules ?
+        [
+          <SubHeader mainText="Triggered rules" subText="" />,
+          props.data.rules.map((v, i) =>
+            <DataLayerBlock
+              key={`page${props.page}_DTM_${i}`}
+              arrayIndex={i}
+              keyAncestor={`page${props.page}_DTM_${i}`}
+              data={v}
+              options={props.options}
+              searchQuery={props.searchQuery}
+              hasSibling={i !== props.data.rules.length - 1}
+              hideKeys={['id']}
+            />
+          ),
+        ]
+        :
+        null
+    }
+    {
+      props.data.elements ?
+        [
+          <SubHeader mainText="Data elements" subText="" />,
+          <DataLayerBlock
+            key={`page${props.page}_DTM_${0}_elements`}
+            arrayIndex={0}
+            keyAncestor={`page${props.page}_DTM_${0}_elements`}
+            data={props.data.elements}
+            options={props.options}
+            searchQuery={props.searchQuery}
+          />,
+        ]
+        :
+        null
     }
   </ul>);
 

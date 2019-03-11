@@ -404,6 +404,27 @@ dataslayer.dtmLoad = function() {
       // WIP Adobe Launch
       // console.log('isLaunch');
 
+      satellite._monitors = satellite._monitors || [];
+      satellite._monitors.push({
+        ruleTriggered: function (e) {
+          console.log(e.rule);
+          window.parent.postMessage(
+            {
+              type: 'dataslayer_launchruletriggered',
+              url: window == window.parent ? window.location.href : 'iframe',
+              data: JSON.parse(JSON.stringify(e.rule)),
+            },
+            '*'
+          );
+        },
+        ruleCompleted: function (e) {
+          return null;
+        },
+        ruleConditionFailed: function (e) {
+          return null;
+        },
+      })
+
       var propertyInfo = '';
       if (satellite.property && satellite.property.name) {
         propertyInfo += satellite.property.name;
