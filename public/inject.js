@@ -541,13 +541,19 @@ dataslayer.loadLaunchDataElements = function() {
       var newElement = JSON.parse(JSON.stringify(window._satellite._container.dataElements[elementNames[i]]));
 
       try {
+        let cleanValue = window._satellite.getVar(elementNames[i]);
+        if (typeof cleanValue === 'function') {
+          cleanValue = '(function)';
+        } else if (typeof cleanValue === 'object' && typeof cleanValue.then === 'function') {
+          cleanValue = '(Promise)';
+        }
         window.parent.postMessage(
           {
             type: 'dataslayer_launchdataelement',
             data: 'found',
             url: window == window.parent ? window.location.href : 'iframe',
             key: elementNames[i],
-            value: window._satellite.getVar(elementNames[i]),
+            value: cleanValue,
             element: newElement,
           },
           '*'
