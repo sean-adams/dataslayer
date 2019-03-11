@@ -51,7 +51,7 @@ class Options extends Component {
       {
         version: '1.1',
         changes: [
-        'support for Adobe Launch data elements'
+        'initial support for Adobe Launch'
         ]
       },
       {
