@@ -51,7 +51,8 @@ class Options extends Component {
       {
         version: '1.1',
         changes: [
-        'initial support for Adobe Launch'
+        'initial support for Adobe Launch',
+        'toggle friendly param names',
         ]
       },
       {
@@ -157,13 +158,89 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td><b>by</b></td>
-                        <td><span><a href="http://bearcla.ws" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
+                        <td><span><a href="https://bearcla.ws?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
-                        <td/><td/>
+                        <td/>
+                        <td>
+                          <br/>
+                        </td>
                       </tr>
                       <tr>
-                        <td>using</td>
+                        <td>documentation</td>
+                        <td><span><a href="https://dataslayer.org/documentation/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org/documentation</a></span></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td>
+                          <br/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>open source</td>
+                        <td><span><a href="http://github.com/sean-adams/dataslayer" rel="noopener noreferrer" target="_blank">GitHub</a></span></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td>
+                          <br/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>report bug / request feature</td>
+                        <td><span><a href="http://github.com/sean-adams/dataslayer/issues/new" rel="noopener noreferrer" target="_blank">GitHub issues</a> (preferred)</span></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td><span><a href="mailto:dataslayer@bearcla.ws?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td>
+                          <br/>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td>leave a review</td>
+                        <td>
+                          <span>
+                            <a href="https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo/reviews" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td><br/></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td/>
+                      </tr>
+                      <tr>
+                        <td>links</td>
+                        <td><span><a href="https://dataslayer.org/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td>
+                          <span>
+                            <a href="http://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td/>
+                        <td>
+                          <span>
+                            <a href="https://dataslayer.org/release-notes/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">release notes</a>
+                          </span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td/><td><br/></td>
+                      </tr>
+                      <tr>
+                        <td>made with</td>
                         <td><span><a href="https://facebook.github.io/react/" rel="noopener noreferrer" target="_blank">React</a></span></td>
                       </tr>
                       <tr>
@@ -200,61 +277,13 @@ class Options extends Component {
                         </td>
                       </tr>
                       <tr>
-                        <td>icons made by</td>
+                        <td></td>
                         <td>
                           <span>
-                            <a href="http://www.flaticon.com/authors/madebyoliver" rel="noopener noreferrer" target="_blank">Madebyoliver</a>
+                            <a href="http://www.flaticon.com/authors/madebyoliver" rel="noopener noreferrer" target="_blank">Madebyoliver</a> icons
                             from <a href="http://www.flaticon.com" rel="noopener noreferrer" target="_blank">www.flaticon.com</a>
                           </span>
                         </td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td/>
-                      </tr>
-                      <tr>
-                        <td>contribute</td>
-                        <td><span><a href="http://github.com/sean-adams/dataslayer" rel="noopener noreferrer" target="_blank">GitHub</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td/>
-                      </tr>
-                      <tr>
-                        <td>report issue</td>
-                        <td><span><a href="http://github.com/sean-adams/dataslayer/issues/new" rel="noopener noreferrer" target="_blank">GitHub</a> (preferred)</span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="mailto:dataslayer@bearcla.ws?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td/>
-                      </tr>
-                      <tr>
-                        <td>share</td>
-                        <td><span><a href="http://dataslayer.org" rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td>
-                          <span>
-                            <a href="http://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td>leave a review</td>
-                        <td>
-                          <span>
-                            <a href="https://chrome.google.com/webstore/detail/dataslayer/ikbablmmjldhamhcldjjigniffkkjgpo/reviews" rel="noopener noreferrer" target="_blank">Chrome Web Store</a>
-                          </span>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><br/></td>
                       </tr>
                     </tbody>
                   </table>
