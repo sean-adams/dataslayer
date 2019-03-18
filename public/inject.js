@@ -604,6 +604,7 @@ dataslayer.setLaunchMonitors = function() {
         },
         '*'
       );
+      dataslayer.loadLaunchDataElements();
     },
     ruleConditionFailed: function (e) {
       console.log(e.rule);
