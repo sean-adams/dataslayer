@@ -173,14 +173,35 @@ li td {overflow: hidden; white-space: nowrap; vertical-align: top;}
 
 .event td a {display: inline;}
 
-a.settings img {position: fixed; top:25px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
-a.settings img:hover {opacity: 1;}
-a.clearbtn img {position: fixed; top:50px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
-a.clearbtn img:hover {opacity: 1;}
-a.filebtn img {position: fixed; top:75px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
-a.filebtn img:hover {opacity: 1;}
-a.searchbtn img {position: fixed; top:100px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
-a.searchbtn img:hover {opacity: 1;}
+button {
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  display: inline-block;
+  border: none;
+  background: rgba(0,0,0,0);
+  position: fixed;
+  right: 6px;
+  opacity: 0.3;
+  -webkit-transition: opacity 0.3s;
+  transition: opacity 0.3s;
+  cursor: pointer;
+  padding: 0;
+}
+button:hover {
+  opacity: 1;
+}
+button.settings {
+  top:25px;
+}
+button.clearbtn {
+  top:50px;
+}
+button.filebtn {
+  top:75px;
+}
+button.searchbtn {
+  top:100px;
+}
 a.helpbtn img {position: fixed; top:125px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
 a.helpbtn img:hover {opacity: 1;}
 
