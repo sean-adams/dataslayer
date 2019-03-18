@@ -983,6 +983,7 @@ export default {
     collapseGTMNativeEvents: false,
     showTimestamps: false,
     showFriendlyNames: true,
+    dontDecode: false,
   },
   loading: false,
   port: {},

@@ -36,6 +36,7 @@ class Options extends Component {
         { name: 'showTimestamps', description: 'show navigation timestamps', type: 'checkbox' },
         { name: 'showFriendlyNames', description: 'show friendly names for query parameters where available', type: 'checkbox' },
         { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
+        { name: 'dontDecode', description: 'don\'t decode query string values', type: 'checkbox' },  
       ],
       Tags: [
         { name: 'showUniversal', description: 'show Universal Analytics tags', type: 'checkbox' },
@@ -53,6 +54,7 @@ class Options extends Component {
         changes: [
         'initial support for Adobe Launch',
         'toggle friendly param names',
+        'toggle param URL decoding',
         ]
       },
       {
