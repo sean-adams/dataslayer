@@ -54,6 +54,7 @@ class Options extends Component {
         changes: [
         'initial support for Adobe Launch',
         'toggle friendly param names',
+        'toggle param URL decoding',
         ]
       },
       {
