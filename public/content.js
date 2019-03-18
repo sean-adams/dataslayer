@@ -1,25 +1,4 @@
 if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
-  if (document.getElementById('dataslayer_script') === null) {
-    var oopoly = document.createElement('script');
-    oopoly.id = 'oo_poly';
-    oopoly.src = chrome.runtime.getURL('oo_poly.js');
-    oopoly.type = 'text/javascript';
-    document.head.appendChild(oopoly);
-
-    var dataslayers = document.createElement('script');
-    dataslayers.id = 'dataslayer_script';
-    dataslayers.src = chrome.runtime.getURL('inject.js');
-    dataslayers.type = 'text/javascript';
-
-    chrome.storage.sync.get(null, function(items) {
-      if (items.hasOwnProperty('dataLayers')) {
-        dataslayers.setAttribute('data-layers', items.dataLayers.join(';'));
-      }
-
-      document.head.appendChild(dataslayers);
-    });
-  }
-
   var dataslayer = {
 	helperListener: function(event) {
 		if (event.data.type && event.data.type.substr(0, 10) === 'dataslayer') {
@@ -49,4 +28,25 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
       document.head.appendChild(refreshTag);
     }
   });
+
+  if (document.getElementById('dataslayer_script') === null) {
+    var oopoly = document.createElement('script');
+    oopoly.id = 'oo_poly';
+    oopoly.src = chrome.runtime.getURL('oo_poly.js');
+    oopoly.type = 'text/javascript';
+    document.head.appendChild(oopoly);
+
+    var dataslayers = document.createElement('script');
+    dataslayers.id = 'dataslayer_script';
+    dataslayers.src = chrome.runtime.getURL('inject.js');
+    dataslayers.type = 'text/javascript';
+
+    chrome.storage.sync.get(null, function(items) {
+      if (items.hasOwnProperty('dataLayers')) {
+        dataslayers.setAttribute('data-layers', items.dataLayers.join(';'));
+      }
+
+      document.head.appendChild(dataslayers);
+    });
+  }
 }
