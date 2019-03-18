@@ -556,7 +556,8 @@ class Dataslayer extends Component {
         dtmDatas[this.state.activeIndex] = {
           loadRules: JSON.parse(message.loadRules),
           buildDate: message.buildDate,
-          property: message.property
+          property: message.property,
+          ...dtmDatas[this.state.activeIndex]
         };
         this.setState({ loading: false, dtmDatas });
       } else {
@@ -564,7 +565,8 @@ class Dataslayer extends Component {
         dtmDatas[this.state.activeIndex] = {
           loadRules: JSON.parse(message.loadRules),
           buildDate: message.buildDate,
-          property: message.property
+          property: message.property,
+          ...dtmDatas[this.state.activeIndex]
         };
         this.setState({ dtmDatas });
       }
@@ -578,6 +580,11 @@ class Dataslayer extends Component {
             thisDTM.elements = {};
           }
           thisDTM.elements[message.key] = message.value;
+        } else {
+          dtmDatas[this.state.activeIndex] = {
+            elements: {}
+          };
+          dtmDatas[this.state.activeIndex].elements[message.key] = message.value;
         }
         this.setState({ dtmDatas });
       }
@@ -593,6 +600,12 @@ class Dataslayer extends Component {
         } else {
           thisDTM.rules.push(message.data);
         }
+      } else {
+        dtmDatas[this.state.activeIndex] = {
+          rules: [
+            message.data
+          ]
+        };
       }
       this.setState({ dtmDatas });
     } else if ((message.type === 'dataslayer_var') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
