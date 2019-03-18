@@ -11,6 +11,46 @@ function r(a,b,c){for(a.c.push.apply(a.c,b);!1===a.d&&0<a.c.length;){b=a.c.shift
 function p(a){return{set:function(b,c){s(t(b,c),a.a)},get:function(b){return a.get(b)}}}function t(a,b){for(var c={},d=c,e=a.split("."),f=0;f<e.length-1;f++)d=d[e[f]]={};d[e[e.length-1]]=b;return c}function s(a,b){for(var c in a)if(k(a,c)){var d=a[c];"array"==h(d)?("array"==h(b[c])||(b[c]=[]),s(d,b[c])):m(d)?(m(b[c])||(b[c]={}),s(d,b[c])):b[c]=d}};})();
 /* eslint-enable */
 
+window._satellite = window._satellite || {};
+window._satellite._monitors = window._satellite._monitors || [];
+window._satellite._monitors.push({
+  ruleTriggered: function (e) {
+    console.log(e.rule);
+    window.parent.postMessage(
+      {
+        type: 'dataslayer_launchruletriggered',
+        url: window == window.parent ? window.location.href : 'iframe',
+        data: JSON.parse(JSON.stringify(e.rule)),
+      },
+      '*'
+    );
+  },
+  ruleCompleted: function (e) {
+    console.log(e.rule);
+    window.parent.postMessage(
+      {
+        type: 'dataslayer_launchrulecompleted',
+        url: window == window.parent ? window.location.href : 'iframe',
+        data: JSON.parse(JSON.stringify(e.rule)),
+      },
+      '*'
+    );
+    dataslayer.loadLaunchDataElements();
+  },
+  ruleConditionFailed: function (e) {
+    console.log(e.rule);
+    window.parent.postMessage(
+      {
+        type: 'dataslayer_launchrulefailed',
+        url: window == window.parent ? window.location.href : 'iframe',
+        data: JSON.parse(JSON.stringify(e.rule)),
+      },
+      '*'
+    );
+  },
+});
+
+
 var dataslayer = {
   helper: {},
   dLN: [],
@@ -565,62 +605,6 @@ dataslayer.loadLaunchDataElements = function() {
   }
 };
 
-
-dataslayer.setLaunchMonitors = function() {
-  if (!window._satellite && document.readyState === 'complete') {
-    // page has finished loading and it's not there
-    window.clearInterval(dataslayer.launchMonitorTimer);
-    return;
-  } else if (!window._satellite) {
-    // might have just not loaded yet
-    return;
-  } else if (window._satellite.configurationSettings) {
-    // DTM, not Launch
-    window.clearInterval(dataslayer.launchMonitorTimer);
-    return;
-  }
-
-  let satellite = window._satellite;
-  satellite._monitors = satellite._monitors || [];
-  satellite._monitors.push({
-    ruleTriggered: function (e) {
-      console.log(e.rule);
-      window.parent.postMessage(
-        {
-          type: 'dataslayer_launchruletriggered',
-          url: window == window.parent ? window.location.href : 'iframe',
-          data: JSON.parse(JSON.stringify(e.rule)),
-        },
-        '*'
-      );
-    },
-    ruleCompleted: function (e) {
-      console.log(e.rule);
-      window.parent.postMessage(
-        {
-          type: 'dataslayer_launchrulecompleted',
-          url: window == window.parent ? window.location.href : 'iframe',
-          data: JSON.parse(JSON.stringify(e.rule)),
-        },
-        '*'
-      );
-      dataslayer.loadLaunchDataElements();
-    },
-    ruleConditionFailed: function (e) {
-      console.log(e.rule);
-      window.parent.postMessage(
-        {
-          type: 'dataslayer_launchrulefailed',
-          url: window == window.parent ? window.location.href : 'iframe',
-          data: JSON.parse(JSON.stringify(e.rule)),
-        },
-        '*'
-      );
-    },
-  });
-  window.clearInterval(dataslayer.launchMonitorTimer);
-}
-
 if (document.readyState === 'complete') {
   dataslayer.loadOtherLayers();
   dataslayer.loadLaunchDataElements();
@@ -634,5 +618,3 @@ if (document.readyState === 'complete') {
     }
   });
 }
-
-dataslayer.launchMonitorTimer = window.setInterval(dataslayer.setLaunchMonitors, 100);
