@@ -493,7 +493,7 @@ const DTM = props =>
       props.data.rules ?
         [
           <SubHeader mainText="Fired rules" subText="" />,
-          props.data.rules.map((v, i) =>
+          props.data.rules.slice(0).reverse().map((v, i) =>
             <DataLayerBlock
               key={`page${props.page}_DTM_${i}`}
               arrayIndex={i}
