@@ -18,8 +18,22 @@
     "persistent": false
   },
 
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": [
+        "injectlaunchmonitors.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+
   "web_accessible_resources": [
     "inject.js",
+    "injectlaunchmonitors.js",
     "oo_poly.js"
   ],
   
