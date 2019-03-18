@@ -72,6 +72,15 @@ class Settings extends Component {
         >
           <img alt="search" src="/img/search.png" />
         </a>
+        <a
+          className="helpbtn"
+          title="Documentation"
+          href="https://dataslayer.org/documentation/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img alt="documentation" src="/img/help.png" />
+        </a>
         {this.state.showModal && (
           <div>
             <div
