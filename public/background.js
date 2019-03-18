@@ -1,3 +1,4 @@
+/* global chrome */
 var devtoolsPort = [];
 var notifId = '';
 chrome.runtime.onConnect.addListener(function (port) {
