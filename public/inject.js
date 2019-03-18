@@ -404,43 +404,6 @@ dataslayer.dtmLoad = function() {
       // WIP Adobe Launch
       // console.log('isLaunch');
 
-      satellite._monitors = satellite._monitors || [];
-      satellite._monitors.push({
-        ruleTriggered: function (e) {
-          console.log(e.rule);
-          window.parent.postMessage(
-            {
-              type: 'dataslayer_launchruletriggered',
-              url: window == window.parent ? window.location.href : 'iframe',
-              data: JSON.parse(JSON.stringify(e.rule)),
-            },
-            '*'
-          );
-        },
-        ruleCompleted: function (e) {
-          console.log(e.rule);
-          window.parent.postMessage(
-            {
-              type: 'dataslayer_launchrulecompleted',
-              url: window == window.parent ? window.location.href : 'iframe',
-              data: JSON.parse(JSON.stringify(e.rule)),
-            },
-            '*'
-          );
-        },
-        ruleConditionFailed: function (e) {
-          console.log(e.rule);
-          window.parent.postMessage(
-            {
-              type: 'dataslayer_launchrulefailed',
-              url: window == window.parent ? window.location.href : 'iframe',
-              data: JSON.parse(JSON.stringify(e.rule)),
-            },
-            '*'
-          );
-        },
-      })
-
       var propertyInfo = '';
       if (satellite.property && satellite.property.name) {
         propertyInfo += satellite.property.name;
@@ -602,6 +565,61 @@ dataslayer.loadLaunchDataElements = function() {
   }
 };
 
+
+dataslayer.setLaunchMonitors = function() {
+  if (!window._satellite && document.readyState === 'complete') {
+    // page has finished loading and it's not there
+    window.clearInterval(dataslayer.launchMonitorTimer);
+    return;
+  } else if (!window._satellite) {
+    // might have just not loaded yet
+    return;
+  } else if (window._satellite.configurationSettings) {
+    // DTM, not Launch
+    window.clearInterval(dataslayer.launchMonitorTimer);
+    return;
+  }
+
+  let satellite = window._satellite;
+  satellite._monitors = satellite._monitors || [];
+  satellite._monitors.push({
+    ruleTriggered: function (e) {
+      console.log(e.rule);
+      window.parent.postMessage(
+        {
+          type: 'dataslayer_launchruletriggered',
+          url: window == window.parent ? window.location.href : 'iframe',
+          data: JSON.parse(JSON.stringify(e.rule)),
+        },
+        '*'
+      );
+    },
+    ruleCompleted: function (e) {
+      console.log(e.rule);
+      window.parent.postMessage(
+        {
+          type: 'dataslayer_launchrulecompleted',
+          url: window == window.parent ? window.location.href : 'iframe',
+          data: JSON.parse(JSON.stringify(e.rule)),
+        },
+        '*'
+      );
+    },
+    ruleConditionFailed: function (e) {
+      console.log(e.rule);
+      window.parent.postMessage(
+        {
+          type: 'dataslayer_launchrulefailed',
+          url: window == window.parent ? window.location.href : 'iframe',
+          data: JSON.parse(JSON.stringify(e.rule)),
+        },
+        '*'
+      );
+    },
+  });
+  window.clearInterval(dataslayer.launchMonitorTimer);
+}
+
 if (document.readyState === 'complete') {
   dataslayer.loadOtherLayers();
   dataslayer.loadLaunchDataElements();
@@ -615,3 +633,5 @@ if (document.readyState === 'complete') {
     }
   });
 }
+
+dataslayer.launchMonitorTimer = window.setInterval(dataslayer.setLaunchMonitors, 100);
