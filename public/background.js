@@ -93,12 +93,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
   } else if (
     message.type === 'dataslayer_pageload' ||
     message.type === 'dataslayer_opened'
-  ) {
+	) {
     chrome.tabs.executeScript(message.tabID, {
       file: 'content.js',
       runAt: 'document_idle',
       allFrames: true,
-    });
+		});
   } else if (message.type === 'dataslayer_refresh') {
     chrome.tabs.sendMessage(message.tabID, {
       ask: 'refresh',
@@ -127,7 +127,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 chrome.runtime.onInstalled.addListener(function (details) {
 	if (details.reason === 'install')
 		chrome.tabs.create({
-			url: 'https://dataslayer.org/release-notes/',
+			url: 'https://dataslayer.org/documentation/',
 			active: true
 		});
 	if ((details.reason === 'update') && (!dsDebug)) {
