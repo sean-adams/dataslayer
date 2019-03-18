@@ -49,6 +49,7 @@ else {
       collapseGTMNativeEvents: false,
       showTimestamps: false,
       showFriendlyNames: true,
+      dontDecode: false,
     }
   };
 }
@@ -326,7 +327,11 @@ class Dataslayer extends Component {
         requestURI.split('&').forEach((pair) => {
           pair = pair.split('=');
           try {
-            queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+            if (this.state.options.dontDecode) {
+              queryParams[pair[0]] = pair[1] || '';
+            } else {
+              queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+            }
           } catch (e) {
             console.log(`${e} error with ${pair[0]} = ${pair[1]}`);
           }
@@ -679,6 +684,7 @@ class Dataslayer extends Component {
       collapseGTMNativeEvents: false,
       showTimestamps: false,
       showFriendlyNames: true,
+      dontDecode: false,
     };
 
     try {
@@ -719,6 +725,9 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('showFriendlyNames')) {
       options.showFriendlyNames = true;
     }
+    if (!options.hasOwnProperty('dontDecode')) {
+      options.dontDecode = false;
+    }
 
     this.setState({ options });
 
@@ -755,6 +764,9 @@ class Dataslayer extends Component {
         }
         if (!options.hasOwnProperty('showFriendlyNames')) {
           options.showFriendlyNames = true;
+        }
+        if (!options.hasOwnProperty('dontDecode')) {
+          options.dontDecode = false;
         }
         try {
           localStorage.options = JSON.stringify(options);
