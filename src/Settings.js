@@ -45,35 +45,35 @@ class Settings extends Component {
     return (
       <div>
         <button
-          className="settings"
+          className="actionBar settings"
           title="Options"
           onClick={this.props.onSettingsClick}
         >
           <img alt="options" src="/img/settings.png" />
         </button>
         <button
-          className="clearbtn"
+          className="actionBar clearbtn"
           title="Clear History"
           onClick={this.showClearHistoryModal}
         >
           <img alt="clear" src="/img/clearbtn.png" />
         </button>
         <button
-          className="filebtn"
+          className="actionBar filebtn"
           title="Import / Export"
           onClick={this.showFileModal}
         >
           <img alt="import/export" src="/img/save.png" />
         </button>
         <button
-          className="searchbtn"
+          className="actionBar searchbtn"
           title="Toggle Search (Ctrl+Alt+F)"
           onClick={this.props.onSearchClick}
         >
           <img alt="search" src="/img/search.png" />
         </button>
         <a
-          className="helpbtn"
+          className="actionBar helpbtn"
           title="Documentation"
           href="https://dataslayer.org/documentation/"
           target="_blank"
@@ -105,7 +105,7 @@ class Settings extends Component {
               }}
             >
               <p>Clear history?</p>
-              <a id="clearbtnyes" className="pure-button" onClick={this.clearHistory} >Yes</a>
+              <button className="pure-button" onClick={this.clearHistory} >Yes</button>
             </div>
           </div>
         )}

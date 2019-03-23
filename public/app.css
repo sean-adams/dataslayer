@@ -173,7 +173,7 @@ li td {overflow: hidden; white-space: nowrap; vertical-align: top;}
 
 .event td a {display: inline;}
 
-button {
+button.actionBar {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   display: inline-block;
@@ -187,7 +187,7 @@ button {
   cursor: pointer;
   padding: 0;
 }
-button:hover {
+button.actionBar:hover {
   opacity: 1;
 }
 button.settings {
