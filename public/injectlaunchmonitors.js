@@ -105,10 +105,12 @@ window._satellite._monitors.push({
 });
 `;
 
-if (!document.querySelector("#dataslayerLaunchMonitors")) {
-  var dsLaunchMonitors = document.createElement("script");
-  dsLaunchMonitors.id = "dataslayerLaunchMonitors";
-  //dsLaunchMonitors.type = 'text/javascript';
-  dsLaunchMonitors.textContent = launchMonitorScript;
-  document.documentElement.appendChild(dsLaunchMonitors);
+if (!document.querySelector('#dataslayerLaunchMonitors')) {
+  if (/html/i.test(document.contentType)) {
+    var dsLaunchMonitors = document.createElement('script');
+    dsLaunchMonitors.id = 'dataslayerLaunchMonitors';
+    //dsLaunchMonitors.type = 'text/javascript';
+    dsLaunchMonitors.textContent = launchMonitorScript;
+    document.documentElement.appendChild(dsLaunchMonitors);
+  }
 }
