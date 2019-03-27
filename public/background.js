@@ -1,3 +1,4 @@
+/* global chrome */
 var devtoolsPort = [];
 var notifId = '';
 chrome.runtime.onConnect.addListener(function (port) {
@@ -66,52 +67,67 @@ chrome.storage.sync.get(null, function (items) {
 });
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-	if (dsDebug) console.log(message);
-	if (message.type === 'dataslayer_gtm_push' || message.type === 'dataslayer_gtm' || message.type === 'dataslayer_tlm' || message.type === 'dataslayer_tco' || message.type === 'dataslayer_var' || message.type === 'dataslayer_dtm' || message.type === 'dataslayer_launchdataelement') {
-		message.tabID = sender.tab.id;
-		devtoolsPort.forEach(function (v, i, x) {
-			try {
-				v.postMessage(message);
-			} catch (e) {
-				console.log(e);
-			}
+  if (dsDebug) {
+	  console.log(message);
+  }
+  if (
+    message.type === 'dataslayer_gtm_push' ||
+    message.type === 'dataslayer_gtm' ||
+    message.type === 'dataslayer_tlm' ||
+    message.type === 'dataslayer_tco' ||
+    message.type === 'dataslayer_var' ||
+    message.type === 'dataslayer_dtm' ||
+    message.type === 'dataslayer_launchdataelement' ||
+	// message.type === 'dataslayer_launchruletriggered' ||
+	message.type === 'dataslayer_launchrulecompleted'
+	// message.type === 'dataslayer_launchrulefailed'
+  ) {
+    message.tabID = sender.tab.id;
+    devtoolsPort.forEach(function(v, i, x) {
+      try {
+        v.postMessage(message);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  } else if (
+    message.type === 'dataslayer_pageload' ||
+    message.type === 'dataslayer_opened'
+	) {
+    chrome.tabs.executeScript(message.tabID, {
+      file: 'content.js',
+      runAt: 'document_idle',
+      allFrames: true,
 		});
-	} else if (message.type === 'dataslayer_pageload' || message.type === 'dataslayer_opened') {
-		chrome.tabs.executeScript(message.tabID, {
-			file: 'content.js',
-			runAt: 'document_idle',
-			allFrames: true
-		});
-	} else if (message.type === 'dataslayer_refresh') {
-		chrome.tabs.sendMessage(message.tabID, {
-			ask: 'refresh'
-		});
-	} else if (message.type === 'dataslayer_unload')
-		chrome.tabs.executeScript(message.tabID, {
-			code: 'document.head.removeChild(document.getElementById(\'dataslayer_script\'));',
-			runAt: "document_idle"
-		});
-	else if (message.type === 'dataslayer_loadsettings') {
-		if (message.data.blockTags)
-			addBlocking();
-		else
-			removeBlocking();
-		devtoolsPort.forEach(function (v, i, x) {
-			v.postMessage(message);
-		});
-	} else {
-		console.log(message);
-		// prevent unhandled chrome runtime errors
-		if (sendResponse) {
-			sendResponse();
-		}
-	}
+  } else if (message.type === 'dataslayer_refresh') {
+    chrome.tabs.sendMessage(message.tabID, {
+      ask: 'refresh',
+    });
+  } else if (message.type === 'dataslayer_unload')
+    chrome.tabs.executeScript(message.tabID, {
+      code:
+        "document.head.removeChild(document.getElementById('dataslayer_script'));",
+      runAt: 'document_idle',
+    });
+  else if (message.type === 'dataslayer_loadsettings') {
+    if (message.data.blockTags) addBlocking();
+    else removeBlocking();
+    devtoolsPort.forEach(function(v, i, x) {
+      v.postMessage(message);
+    });
+  } else {
+    console.log(message);
+    // prevent unhandled chrome runtime errors
+    if (sendResponse) {
+      sendResponse();
+    }
+  }
 });
 
 chrome.runtime.onInstalled.addListener(function (details) {
 	if (details.reason === 'install')
 		chrome.tabs.create({
-			url: 'https://dataslayer.org/release-notes/',
+			url: 'https://dataslayer.org/documentation/',
 			active: true
 		});
 	if ((details.reason === 'update') && (!dsDebug)) {

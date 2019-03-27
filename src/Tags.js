@@ -467,6 +467,8 @@ class Tag extends Component {
     let propertyId;
     let specificParams;
 
+    const { showFriendlyNames } = this.props.options;
+
     switch (data.reqType) {
       case 'classic':
       case 'dc_js':
@@ -505,11 +507,11 @@ class Tag extends Component {
           {
             Object.keys(data.allParams).map(name =>
               (<tr key={`${this.props.keyAncestor}_allparams_${name}`} className={`allparams ${this.state.expanded ? '' : 'hidden'}`}>
-                <td>{(data.reqType === 'universal' && lookupParameter(name)) || name}</td>
+                <td>{(data.reqType === 'universal' && showFriendlyNames && lookupParameter(name)) || name}</td>
                 <td>{data.allParams[name]}</td>
               </tr>))
           }
-          { data.allParams.gtm && (<tr><td /><td><i>(via {data.allParams.gtm.replace(/2wg241/ig, 'GTM-')})</i></td></tr>)}
+          { data.allParams.gtm && (<tr><td /><td><i>(via {data.allParams.gtm.replace(/2wg241|2wg3b2/ig, 'GTM-')})</i></td></tr>)}
           { data.allParams.ni && Number(data.allParams.ni) === 1 ? (<tr><td /><td><i>non-interactive</i></td></tr>) : null}
           { specificParams }
         </tbody>

@@ -1,4 +1,3 @@
-/* global chrome, google */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 
@@ -45,33 +44,42 @@ class Settings extends Component {
 
     return (
       <div>
-        <a
-          className="settings"
+        <button
+          className="actionBar settings"
           title="Options"
           onClick={this.props.onSettingsClick}
         >
           <img alt="options" src="/img/settings.png" />
-        </a>
-        <a
-          className="clearbtn"
+        </button>
+        <button
+          className="actionBar clearbtn"
           title="Clear History"
           onClick={this.showClearHistoryModal}
         >
           <img alt="clear" src="/img/clearbtn.png" />
-        </a>
-        <a
-          className="filebtn"
+        </button>
+        <button
+          className="actionBar filebtn"
           title="Import / Export"
           onClick={this.showFileModal}
         >
           <img alt="import/export" src="/img/save.png" />
-        </a>
-        <a
-          className="searchbtn"
+        </button>
+        <button
+          className="actionBar searchbtn"
           title="Toggle Search (Ctrl+Alt+F)"
           onClick={this.props.onSearchClick}
         >
           <img alt="search" src="/img/search.png" />
+        </button>
+        <a
+          className="actionBar helpbtn"
+          title="Documentation"
+          href="https://dataslayer.org/documentation/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img alt="documentation" src="/img/help.png" />
         </a>
         {this.state.showModal && (
           <div>
@@ -97,7 +105,7 @@ class Settings extends Component {
               }}
             >
               <p>Clear history?</p>
-              <a id="clearbtnyes" className="pure-button" onClick={this.clearHistory} >Yes</a>
+              <button className="pure-button" onClick={this.clearHistory} >Yes</button>
             </div>
           </div>
         )}

@@ -982,6 +982,8 @@ export default {
     showArrayIndices: false,
     collapseGTMNativeEvents: false,
     showTimestamps: false,
+    showFriendlyNames: true,
+    dontDecode: false,
   },
   loading: false,
   port: {},
