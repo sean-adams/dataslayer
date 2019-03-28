@@ -163,6 +163,10 @@ class Options extends Component {
                         <td><span><a href="https://bearcla.ws?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
+                        <td></td>
+                        <td><span><a href="https://github.com/sean-adams/dataslayer/graphs/contributors" rel="noopener noreferrer" target="_blank">contributors</a></span></td>
+                      </tr>
+                      <tr>
                         <td/>
                         <td>
                           <br/>
