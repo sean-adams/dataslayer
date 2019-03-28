@@ -111,6 +111,17 @@ if (!document.querySelector('#dataslayerLaunchMonitors')) {
     dsLaunchMonitors.id = 'dataslayerLaunchMonitors';
     //dsLaunchMonitors.type = 'text/javascript';
     dsLaunchMonitors.textContent = launchMonitorScript;
-    document.head.appendChild(dsLaunchMonitors);
+    if (document.head) {
+      document.head.appendChild(dsLaunchMonitors);
+    } else {
+      var dsLaunchMonitorTimer = window.setInterval(() => {
+        if (document.head) {
+          document.head.appendChild(dsLaunchMonitors);
+          window.clearInterval(dsLaunchMonitorTimer);
+        } else if (document.readyState === 'complete') {
+          window.clearInterval(dsLaunchMonitorTimer);
+        }
+      }, 50);
+    }
   }
 }
