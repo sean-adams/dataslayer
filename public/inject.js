@@ -478,7 +478,7 @@ dataslayer.createListener = function(variable) {
 dataslayer.loadOtherLayers = function() {
   dataslayer.layers = document
     .getElementById('dataslayer_script')
-    .getAttribute('layers');
+    .getAttribute('data-layers');
   if (dataslayer.layers !== null) {
     dataslayer.layers = dataslayer.layers.split(';');
 
