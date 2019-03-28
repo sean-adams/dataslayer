@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.1.0';
+    let version = '1.1.1';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -161,6 +161,10 @@ class Options extends Component {
                       <tr>
                         <td><b>by</b></td>
                         <td><span><a href="https://bearcla.ws?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td><span><a href="https://github.com/sean-adams/dataslayer/graphs/contributors" rel="noopener noreferrer" target="_blank">contributors</a></span></td>
                       </tr>
                       <tr>
                         <td/>
