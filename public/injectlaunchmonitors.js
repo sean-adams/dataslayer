@@ -111,6 +111,6 @@ if (!document.querySelector('#dataslayerLaunchMonitors')) {
     dsLaunchMonitors.id = 'dataslayerLaunchMonitors';
     //dsLaunchMonitors.type = 'text/javascript';
     dsLaunchMonitors.textContent = launchMonitorScript;
-    document.documentElement.appendChild(dsLaunchMonitors);
+    document.head.appendChild(dsLaunchMonitors);
   }
 }
