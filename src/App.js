@@ -143,6 +143,7 @@ class Dataslayer extends Component {
       chrome.devtools.network.onNavigated.addListener(this.newPageLoad);
       chrome.devtools.network.onRequestFinished.addListener(this.newRequest);
       this.state.port.onMessage.addListener(this.messageListener);
+      chrome.webNavigation.onHistoryStateUpdated.addListener(this.newHistoryState);
 
       // WIP support for History API.
       //
@@ -249,6 +250,15 @@ class Dataslayer extends Component {
       }
     };
     reader.readAsText(file);
+  }
+
+  // newHistoryState: called onHistoryStateUpdated
+  // (webNavigation)
+  newHistoryState = ({ tabId, url }) => {
+    if (tabId === chrome.devtools.inspectedWindow.tabId) {
+      console.log(`historyState: ${url}`);
+      this.newPageLoad(url);
+    }
   }
 
   // Called when a user navigates to a new page
