@@ -37,6 +37,8 @@ class Options extends Component {
         { name: 'showFriendlyNames', description: 'show friendly names for query parameters where available', type: 'checkbox' },
         { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
         { name: 'dontDecode', description: 'don\'t decode query string values', type: 'checkbox' },
+        { name: 'showSPALoads', description: 'break out SPA navigation', type: 'checkbox' },  
+        { name: 'resetSPALayers', description: 'reset data layer on SPA navigation', type: 'checkbox', dependsOn: 'showSPALoads', dependsOnValue: true },  
       ],
       Tags: [
         { name: 'showUniversal', description: 'show Universal Analytics tags', type: 'checkbox' },

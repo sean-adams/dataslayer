@@ -50,6 +50,8 @@ else {
       showTimestamps: false,
       showFriendlyNames: true,
       dontDecode: false,
+      showSPALoads: false,
+      resetSPALayers: false
     }
   };
 }
@@ -255,26 +257,26 @@ class Dataslayer extends Component {
   // newHistoryState: called onHistoryStateUpdated
   // (webNavigation)
   newHistoryState = ({ tabId, url }) => {
-    if (tabId === chrome.devtools.inspectedWindow.tabId) {
+    if (this.state.options.showSPALoads && tabId === chrome.devtools.inspectedWindow.tabId) {
       console.log(`historyState: ${url}`);
-      this.newPageLoad(url);
+      this.newPageLoad(url, this.state.options.resetSPALayers);
     }
   }
 
   // Called when a user navigates to a new page
-  newPageLoad = (newurl) => {
+  newPageLoad = (newurl, discardState = true) => {
     console.log(newurl);
-    let newIndex = this.state.activeIndex + 1;
-    let { datalayers, GTMs, urls, timestamps, tags } = this.state;
-    datalayers[newIndex] = {};
-    GTMs[newIndex] = [];
+    let { activeIndex, datalayers, GTMs, urls, timestamps, tags } = this.state;
+    let newIndex = activeIndex + 1;
+    datalayers[newIndex] = discardState ? {} : datalayers[activeIndex];
+    GTMs[newIndex] = discardState ? [] : GTMs[activeIndex];
     urls[newIndex] = newurl;
     timestamps[newIndex] = new Date().valueOf();
     tags[newIndex] = [];
 
     this.loadSettings();
     this.setState({
-      loading: true,
+      loading: discardState,
       // activeIndex: this.state.activeIndex + 1,
       // datalayers: [...this.state.datalayers, {}],
       // GTMs: [...this.state.GTMs, []],
@@ -708,6 +710,8 @@ class Dataslayer extends Component {
       showTimestamps: false,
       showFriendlyNames: true,
       dontDecode: false,
+      showSPALoads: false,
+      resetSPALayers: false
     };
 
     try {
@@ -751,6 +755,12 @@ class Dataslayer extends Component {
     if (!options.hasOwnProperty('dontDecode')) {
       options.dontDecode = false;
     }
+    if (!options.hasOwnProperty('showSPALoads')) {
+      options.showSPALoads = false;
+    }
+    if (!options.hasOwnProperty('resetSPALayers')) {
+      options.resetSPALayers = false;
+    }
 
     this.setState({ options });
 
@@ -791,6 +801,13 @@ class Dataslayer extends Component {
         if (!options.hasOwnProperty('dontDecode')) {
           options.dontDecode = false;
         }
+        if (!options.hasOwnProperty('showSPALoads')) {
+          options.showSPALoads = false;
+        }
+        if (!options.hasOwnProperty('resetSPALayers')) {
+          options.resetSPALayers = false;
+        }
+    
         try {
           localStorage.options = JSON.stringify(options);
         } catch (error) {
