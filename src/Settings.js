@@ -42,6 +42,8 @@ class Settings extends Component {
   render() {
     let { options, loading, port, debug, ...download } = this.props.appState;
 
+    let downloadFile = encodeURIComponent(JSON.stringify(download));
+
     return (
       <div>
         <button
@@ -151,7 +153,7 @@ class Settings extends Component {
                   <a
                     className="pure-button"
                     download="dataslayer-export.json"
-                    href={`data:text;charset=utf-8,${JSON.stringify(download)}`}
+                    href={`data:text;charset=utf-8,${downloadFile}`}
                   >Export</a>
                 </div>
               </div>
