@@ -569,13 +569,17 @@ dataslayer.loadLaunchDataElements = function() {
 if (document.readyState === 'complete') {
   dataslayer.loadOtherLayers();
   dataslayer.loadLaunchDataElements();
-  // window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+  if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
+    window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+  }
 } else {
   document.addEventListener('readystatechange', function() {
     if (document.readyState === 'complete') {
       dataslayer.loadOtherLayers();
       dataslayer.loadLaunchDataElements();
-      // window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+      if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
+        window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+      }
     }
   });
 }
