@@ -78,7 +78,7 @@ function computeDataLayerState(dataLayer) {
   }
   for (let key of Object.keys(finalState).sort()) {
     sortedState[key] = finalState[key];
-}
+  }
   return sortedState;
 }
 
@@ -95,7 +95,7 @@ const SubHeader = (props) => (
           <td />
           {props.headerComponent || (
             <td>
-          {
+              {
                 <span>
                   <u>{props.mainText}</u> {props.subText}
                 </span>
@@ -454,41 +454,53 @@ class GTM extends Component {
   }
 
   render() {
-    let props = this.props;
+    let { GTMs, datalayers, page, options, searchQuery, useFor } = this.props;
 
     let header;
-    if (props.GTMs.length === 1) {
+    if (GTMs.length === 1) {
       header = (<td>
-        <u>{props.GTMs[0].id} {props.GTMs[0].iframe ? '[iframe]' : ''}</u> <span>{props.GTMs[0].name === 'dataLayer' ? '' : `(${props.GTMs[0].name})`}</span>
+        <u>{GTMs[0].id} {GTMs[0].iframe ? '[iframe]' : ''}</u> <span>{GTMs[0].name === 'dataLayer' ? '' : `(${GTMs[0].name})`}</span>
       </td>);
     } else {
       header = (<td>
         <select value={this.state.activeDatalayer} onChange={this.changeDatalayer}>
-          {props.GTMs.map((v, i) =>
+          {GTMs.map((v, i) =>
             <option key={v.name} value={v.name}>{v.id} {v.iframe ? '[iframe]' : ''} ({v.name})</option>
           )}
         </select>
       </td>);
     }
 
-    return (<ul>
-      <SubHeader headerComponent={header} />
-      {(props.datalayers[this.state.activeDatalayer] || [])
-        .slice(0)
-        .reverse()
-        .map((push, index, array) =>
-          <DataLayerBlock
-            key={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-            arrayIndex={array.length - 1 - index}
-            keyAncestor={`page${props.page}_GTM_${this.state.activeDatalayer}_${index}`}
-            data={push}
-            options={props.options}
-            searchQuery={props.searchQuery}
-            hasSibling={index !== props.datalayers[this.state.activeDatalayer].length - 1}
-          />
-        )
-      }
-    </ul>);
+    if (useFor && useFor === 'state') {
+      return (<ul>
+        <SubHeader headerComponent={header} subText="Computed state" />
+        <DataLayerBlock
+          data={computeDataLayerState(datalayers[this.state.activeDatalayer] || [])}
+          options={options}
+          searchQuery={searchQuery}
+          hasSibling={false}
+        />
+      </ul>);
+    } else {
+      return (<ul>
+        <SubHeader headerComponent={header} subText={useFor && useFor === 'rules' && 'Data layer'}/>
+        {(datalayers[this.state.activeDatalayer] || [])
+          .slice(0)
+          .reverse()
+          .map((push, index, array) =>
+            <DataLayerBlock
+              key={`page${page}_GTM_${this.state.activeDatalayer}_${index}`}
+              arrayIndex={array.length - 1 - index}
+              keyAncestor={`page${page}_GTM_${this.state.activeDatalayer}_${index}`}
+              data={push}
+              options={options}
+              searchQuery={searchQuery}
+              hasSibling={index !== datalayers[this.state.activeDatalayer].length - 1}
+            />
+          )
+        }
+      </ul>);  
+    }
   }
 }
 
@@ -497,19 +509,46 @@ GTM.propTypes = {
   GTMs: PropTypes.array,
   page: PropTypes.number,
   searchQuery: PropTypes.string,
+  useFor: PropTypes.string,
 };
 
-const DTM = props =>
-  (<ul>
-    {
-      props.data.property ?
-        <SubHeader mainText={props.data.property} subText={props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}/>
-        :
-        <SubHeader mainText="DTM load rules" subText={props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}/>
-    }
-    {
-      props.data.loadRules ?
-        props.data.loadRules.map((v, i) =>
+const DTM = (props) => {
+  let { data, useFor } = props;
+  let header, loadRules, rules, elements;
+  header = data.property ? (
+    <SubHeader
+      mainText={data.property}
+      subText={data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}
+      sub2Text={useFor && (useFor == 'state' ? 'Data elements' : 'Fired rules')}
+    />
+  ) : (
+    <SubHeader
+      mainText="DTM load rules"
+      subText={
+        props.data.buildDate ? ` (deployed ${props.data.buildDate})` : ''
+      }
+    />
+  );
+  if (props.data.loadRules) {
+    loadRules = props.data.loadRules.map((v, i) => (
+      <DataLayerBlock
+        key={`page${props.page}_DTM_${i}`}
+        arrayIndex={i}
+        keyAncestor={`page${props.page}_DTM_${i}`}
+        data={v}
+        options={props.options}
+        searchQuery={props.searchQuery}
+        hasSibling={i !== props.data.loadRules.length - 1}
+      />
+    ));
+  }
+  if (props.data.rules) {
+    rules = [
+      !props.useFor && <SubHeader mainText="Fired rules" subText="" />,
+      props.data.rules
+        .slice(0)
+        .reverse()
+        .map((v, i) => (
           <DataLayerBlock
             key={`page${props.page}_DTM_${i}`}
             arrayIndex={i}
@@ -517,55 +556,60 @@ const DTM = props =>
             data={v}
             options={props.options}
             searchQuery={props.searchQuery}
-            hasSibling={i !== props.data.loadRules.length - 1}
+            hasSibling={i !== props.data.rules.length - 1}
+            hideKeys={['id']}
           />
-        )
-        :
-        null
+        )),
+    ];
+  }
+  if (props.data.elements) {
+    elements = [
+      !props.useFor && <SubHeader mainText="Data elements" subText="" />,
+      <DataLayerBlock
+        key={`page${props.page}_DTM_${0}_elements`}
+        arrayIndex={0}
+        keyAncestor={`page${props.page}_DTM_${0}_elements`}
+        data={props.data.elements}
+        options={props.options}
+        searchQuery={props.searchQuery}
+      />,
+    ];
+  }
+
+  if (props.useFor) {
+    if (props.useFor === 'rules') {
+      return (
+        <ul>
+          {header}
+          {rules}
+        </ul>
+      );
+    } else if (props.useFor === 'state') {
+      return (
+        <ul>
+          {header}
+          {elements}
+        </ul>
+      );
     }
-    {
-      props.data.rules ?
-        [
-          <SubHeader mainText="Fired rules" subText="" />,
-          props.data.rules.slice(0).reverse().map((v, i) =>
-            <DataLayerBlock
-              key={`page${props.page}_DTM_${i}`}
-              arrayIndex={i}
-              keyAncestor={`page${props.page}_DTM_${i}`}
-              data={v}
-              options={props.options}
-              searchQuery={props.searchQuery}
-              hasSibling={i !== props.data.rules.length - 1}
-              hideKeys={['id']}
-            />
-          ),
-        ]
-        :
-        null
-    }
-    {
-      props.data.elements ?
-        [
-          <SubHeader mainText="Data elements" subText="" />,
-          <DataLayerBlock
-            key={`page${props.page}_DTM_${0}_elements`}
-            arrayIndex={0}
-            keyAncestor={`page${props.page}_DTM_${0}_elements`}
-            data={props.data.elements}
-            options={props.options}
-            searchQuery={props.searchQuery}
-          />,
-        ]
-        :
-        null
-    }
-  </ul>);
+  } else {
+    return (
+      <ul>
+        {header}
+        {loadRules}
+        {rules}
+        {elements}
+      </ul>
+    );
+  }
+};
 
 DTM.propTypes = {
   data: PropTypes.object,
   options: PropTypes.object,
   page: PropTypes.number,
   searchQuery: PropTypes.string,
+  useFor: PropTypes.string,
 };
 
 class Vars extends Component {
@@ -623,7 +667,7 @@ Vars.propTypes = {
 // Main component
 //
 const Datalayers = (props) => {
-  let { data, options, page, searchQuery } = props;
+  let { data, options, page, searchQuery, useFor } = props;
 
   if (!(data.vars && data.vars.length && data.varDatas) &&
     !(data.GTM && data.GTM.length) &&
@@ -663,6 +707,7 @@ const Datalayers = (props) => {
           options={options}
           page={page}
           searchQuery={searchQuery}
+          useFor={useFor}
         />) :
         null
       }
@@ -677,6 +722,7 @@ const Datalayers = (props) => {
           options={options}
           page={page}
           searchQuery={searchQuery}
+          useFor={useFor}
         />) :
         null
       }
@@ -711,6 +757,7 @@ Datalayers.propTypes = {
   options: PropTypes.object,
   page: PropTypes.number,
   searchQuery: PropTypes.string,
+  useFor: PropTypes.string,
 };
 
 export default Datalayers;
