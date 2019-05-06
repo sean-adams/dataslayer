@@ -303,7 +303,11 @@ class Dataslayer extends Component {
     if (request.request.method === 'GET') {
       requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
     } else if (request.request.method === 'POST') {
-      requestURI = request.request.postData.text;
+      if (request.request.postData && request.request.postData.text) {
+        requestURI = request.request.postData.text;
+      } else {
+        requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
+      }
     }
 
     // parse query string into key/value pairs
