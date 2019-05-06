@@ -70,13 +70,16 @@ function addSpaces(obj) {
 // computeDataLayerState
 // computes final object state of an array-based (GTM) data layer
 function computeDataLayerState(dataLayer) {
-  let finalState = {};
+  let finalState = {}, sortedState = {};
   for (let i = 0; i < dataLayer.length; i++) {
     for (let key of Object.keys(dataLayer[i])) {
       finalState[key] = dataLayer[i][key];
     }
   }
-  return finalState;
+  for (let key of Object.keys(finalState).sort()) {
+    sortedState[key] = finalState[key];
+}
+  return sortedState;
 }
 
 
