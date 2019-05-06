@@ -1,5 +1,8 @@
 dataslayer Changelog
 ====================
+
+**NOTE: NO LONGER UPDATED. SEE RELEASE NOTES AT https://dataslayer.org/release-notes/ **
+
 1.0.*
 -----
 + bugfixes
