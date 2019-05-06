@@ -63,7 +63,7 @@ class Page extends Component {
   render() {
     let data = this.props.data;
 
-    let { showGTMLoad, threeColumnLayout, showTimestamps } = this.props.options;
+    let { showGTMLoad, threeColumnLayout, showTimestamps, swapThreeColumnLayout } = this.props.options;
 
     let containsDTM = !!data.dtmDatas && (Object.getOwnPropertyNames(data.dtmDatas).length > 0);
     let containsGTM = data.GTM && data.GTM.length > 0;
@@ -126,7 +126,7 @@ class Page extends Component {
                 options={this.props.options}
                 page={this.props.index}
                 searchQuery={this.props.searchQuery}
-                useFor={useThreeColumnLayout && 'rules'}
+                useFor={useThreeColumnLayout && (!swapThreeColumnLayout ? 'rules' : 'state')}
               />
               {useThreeColumnLayout && (
                 <Datalayers
@@ -134,7 +134,7 @@ class Page extends Component {
                   options={this.props.options}
                   page={this.props.index}
                   searchQuery={this.props.searchQuery}
-                  useFor="state"
+                  useFor={(!swapThreeColumnLayout ? 'state' : 'rules')}
                 />
               )}
               <Tags

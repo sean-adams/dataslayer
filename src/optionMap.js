@@ -7,6 +7,13 @@ export const optionMap = {
       type: 'checkbox',
     },
     {
+      name: 'swapThreeColumnLayout',
+      description: 'swap TMS columns',
+      type: 'checkbox',
+      dependsOn: 'threeColumnLayout',
+      dependsOnValue: true
+    },
+    {
       name: 'showGTMLoad',
       description: 'show data layer presence',
       type: 'checkbox',
@@ -111,5 +118,6 @@ export const defaults = {
   showTimestamps: false,
   showFriendlyNames: true,
   dontDecode: false,
-  threeColumnLayout: false,
+  threeColumnLayout: true,
+  swapThreeColumnLayout: false,
 };
