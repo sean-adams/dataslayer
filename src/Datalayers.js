@@ -84,24 +84,42 @@ function computeDataLayerState(dataLayer) {
 // Data layer subcomponents
 //
 
-const SubHeader = (props) =>
-  (<li className="event eventbreak submenu dlheader">
+const SubHeader = (props) => (
+  <li className="event eventbreak submenu dlheader">
     <table cols="2">
       <tbody>
         <tr>
           <td />
+          {props.headerComponent || (
+            <td>
           {
-            props.headerComponent ||
-            (<td>
-              {
-                (<span><u>{props.mainText}</u> {props.subText}</span>)
+                <span>
+                  <u>{props.mainText}</u> {props.subText}
+                </span>
               }
-            </td>)
-          }
+            </td>
+          )}
         </tr>
+        {props.headerComponent && props.subText && (
+          <tr>
+            <td />
+            <td>
+              <span>{props.subText}</span>
+            </td>
+          </tr>
+        )}
+        {props.sub2Text && (
+          <tr>
+            <td />
+            <td>
+              <span>{props.sub2Text}</span>
+            </td>
+          </tr>
+        )}
       </tbody>
     </table>
-  </li>);
+  </li>
+);
 
 const DataLayerLines = (props) => {
   let data = props.data;
