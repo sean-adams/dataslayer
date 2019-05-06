@@ -202,13 +202,45 @@ button.filebtn {
 button.searchbtn {
   top:100px;
 }
-a.helpbtn img {position: fixed; top:125px; right: 6px; opacity: 0.3; -webkit-transition: opacity 0.3s; transition: opacity 0.3s; cursor: pointer;}
-a.helpbtn img:hover {opacity: 1;}
+a.helpbtn img {
+  position: fixed;
+  top:125px;
+  right: 6px;
+  opacity: 0.3;
+  -webkit-transition:
+  opacity 0.3s;
+  transition: opacity 0.3s;
+  cursor: pointer;
+}
+a.helpbtn img:hover {
+  opacity: 1;
+}
+
+.dark button.actionBar, .dark a.actionBar img {
+  opacity: 1;
+}
+
+.dark button.actionBar:hover {
+  filter: brightness(2);
+}
+
+.dark button.settings, .dark button.searchbtn, .dark a.helpbtn img {
+  filter: invert(1);
+}
+
+.dark button.settings:hover, .dark button.searchbtn:hover, .dark a.helpbtn img:hover {
+  filter: invert(1) brightness(2);
+}
+
+.dark button.filebtn {
+  filter: brightness(1.5) contrast(1.2);
+}
 
 a.toggle { padding: 0px 5px !important;}
 
 a.currentpage.newpage.options {cursor: default !important;}
 li.options { background: #eee;}
+.dark li.options { background-color: rgb(36, 36, 36); }
 
 label.pure-checkbox {
   cursor: pointer;
