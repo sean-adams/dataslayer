@@ -7,6 +7,7 @@ import Settings from './Settings';
 import Options from './Options';
 import Search from './Search';
 import demoData from './demoData';
+import { defaults } from './optionMap';
 
 // isChromeDevTools
 // Returns whether or not we're running in a Chrome DevTools instance.
@@ -35,22 +36,7 @@ else {
     activeIndex: 0,
     urls: [],
     timestamps: [],
-    options: {
-      showFloodlight: true, 
-      showUniversal: true, 
-      showClassic: true, 
-      showSitecatalyst: true, 
-      showGTMLoad: true, 
-      ignoredTags: [],
-      collapseNested: false,
-      blockTags: false,
-      hideEmpty: false,
-      showArrayIndices: false,
-      collapseGTMNativeEvents: false,
-      showTimestamps: false,
-      showFriendlyNames: true,
-      dontDecode: false,
-    }
+    options: Object.assign({}, defaults)
   };
 }
 
@@ -683,22 +669,7 @@ class Dataslayer extends Component {
   }
 
   loadSettings = () => {
-    let options = {
-      showFloodlight: true,
-      showUniversal: true,
-      showClassic: true,
-      showSitecatalyst: true,
-      showGTMLoad: true,
-      ignoredTags: [],
-      collapseNested: false,
-      blockTags: false,
-      hideEmpty: false,
-      showArrayIndices: false,
-      collapseGTMNativeEvents: false,
-      showTimestamps: false,
-      showFriendlyNames: true,
-      dontDecode: false,
-    };
+    let options = Object.assign({}, defaults);
 
     try {
       if (typeof localStorage.options !== 'undefined') {
@@ -708,38 +679,10 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
-    ['showFloodlight', 'showUniversal', 'showClassic', 'showSitecatalyst', 'showGTMLoad'].map((prop) => {
-      if (!options.hasOwnProperty(prop)) {
-        options[prop] = true;
+    for (let option of Object.keys(defaults)) {
+      if (!options.hasOwnProperty(option)) {
+        options[option] = defaults[option];
       }
-      return false;
-    });
-    if (!options.hasOwnProperty('ignoredTags')) {
-      options.ignoredTags = [];
-    }
-    if (!options.hasOwnProperty('collapseNested')) {
-      options.collapseNested = false;
-    }
-    if (!options.hasOwnProperty('hideEmpty')) {
-      options.hideEmpty = false;
-    }
-    if (!options.hasOwnProperty('blockTags')) {
-      options.blockTags = false;
-    }
-    if (!options.hasOwnProperty('showArrayIndices')) {
-      options.showArrayIndices = false;
-    }
-    if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
-      options.collapseGTMNativeEvents = false;
-    }
-    if (!options.hasOwnProperty('showTimestamps')) {
-      options.showTimestamps = false;
-    }
-    if (!options.hasOwnProperty('showFriendlyNames')) {
-      options.showFriendlyNames = true;
-    }
-    if (!options.hasOwnProperty('dontDecode')) {
-      options.dontDecode = false;
     }
 
     this.setState({ options });
@@ -747,40 +690,13 @@ class Dataslayer extends Component {
     if (isChromeDevTools()) {
       chrome.storage.sync.get(null, (items) => {
         options = items;
-        ['showFloodlight', 'showUniversal', 'showClassic', 'showSitecatalyst', 'showGTMLoad'].map((prop) => {
-          if (!options.hasOwnProperty(prop)) {
-            options[prop] = true;
-          }
 
-          return false;
-        });
-        if (!options.hasOwnProperty('ignoredTags')) {
-          options.ignoredTags = [];
-        }
-        if (!options.hasOwnProperty('collapseNested')) {
-          options.collapseNested = false;
-        }
-        if (!options.hasOwnProperty('hideEmpty')) {
-          options.hideEmpty = false;
-        }
-        if (!options.hasOwnProperty('blockTags')) {
-          options.blockTags = false;
-        }
-        if (!options.hasOwnProperty('showArrayIndices')) {
-          options.showArrayIndices = false;
-        }
-        if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
-          options.collapseGTMNativeEvents = false;
-        }
-        if (!options.hasOwnProperty('showTimestamps')) {
-          options.showTimestamps = false;
-        }
-        if (!options.hasOwnProperty('showFriendlyNames')) {
-          options.showFriendlyNames = true;
-        }
-        if (!options.hasOwnProperty('dontDecode')) {
-          options.dontDecode = false;
-        }
+        for (let option of Object.keys(defaults)) {
+          if (!options.hasOwnProperty(option)) {
+            options[option] = defaults[option].default;
+          }
+        }    
+
         try {
           localStorage.options = JSON.stringify(options);
         } catch (error) {

@@ -334,7 +334,7 @@ td.utm{
   width: auto;
 }
 
-.pure-menu > table > tbody > tr > td.dlt + td.utm {
+.pure-menu > table > tbody > tr > td.dlt + td.utm, .pure-menu > table > tbody > tr > td.dlt + td.dlt {
   border-left: 1px dashed rgb(112, 111, 111);
 }
 

@@ -1,6 +1,7 @@
 /* global chrome */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { optionMap } from './optionMap';
 
 class Options extends Component {
   constructor(props) {
@@ -26,28 +27,6 @@ class Options extends Component {
   }
 
   render() {
-    const optionMap = {
-      General: [
-        { name: 'showGTMLoad', description: 'show data layer presence', type: 'checkbox' },
-        { name: 'collapseNested', description: 'auto-collapse nested data layer variables', type: 'checkbox' },
-        { name: 'collapseGTMNativeEvents', description: 'auto-collapse gtm.* events', type: 'checkbox' },
-        { name: 'hideEmpty', description: 'hide empty data layer variables', type: 'checkbox' },
-        { name: 'showArrayIndices', description: 'show array indices', type: 'checkbox' },
-        { name: 'showTimestamps', description: 'show navigation timestamps', type: 'checkbox' },
-        { name: 'showFriendlyNames', description: 'show friendly names for query parameters where available', type: 'checkbox' },
-        { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
-        { name: 'dontDecode', description: 'don\'t decode query string values', type: 'checkbox' },
-      ],
-      Tags: [
-        { name: 'showUniversal', description: 'show Universal Analytics tags', type: 'checkbox' },
-        { name: 'showClassic', description: 'show GA Classic tags', type: 'checkbox' },
-        { name: 'showFloodlight', description: 'show Floodlight tags', type: 'checkbox' },
-        { name: 'showSitecatalyst', description: 'show Adobe Analytics tags', type: 'checkbox' },
-        { name: 'ignoredTags', description: <span><u>Ignored IDs</u> (separated by semicolons)</span>, type: 'input', placeholder: 'UA-XXX-Y;UA-AAA-B' },
-        { name: 'dataLayers', description: <span><u>Additional data layer objects</u> (separated by semicolons)</span>, type: 'input', placeholder: 'digitalData;testDataLayer' },
-      ]
-    };
-
     const versionHistory = [
       {
         version: '1.1',
@@ -316,7 +295,7 @@ class Options extends Component {
                         </tr>
                         {
                           versionHistory.map(({ version, changes }) => 
-                            (<tr>
+                            (<tr key={version}>
                               <td><b>{version}</b></td>
                               <td>
                                 {changes.map((note, i) => (<span key={`${note}i`}>{note}<br/></span>))}

@@ -63,6 +63,8 @@ class Page extends Component {
   render() {
     let data = this.props.data;
 
+    let { showGTMLoad, threeColumnLayout, showTimestamps, swapThreeColumnLayout } = this.props.options;
+
     let containsDTM = !!data.dtmDatas && (Object.getOwnPropertyNames(data.dtmDatas).length > 0);
     let containsGTM = data.GTM && data.GTM.length > 0;
     let containsTLM = data.TLM && data.utagDatas && data.TLM.id;
@@ -70,19 +72,24 @@ class Page extends Component {
 
     let containsTags = this.props.data.tags && this.props.data.tags.length > 0 ? 'containsTAG' : '';
     let containsData = containsDTM || containsGTM || containsTLM || containsTCO ? 'containsGTM' : '';
+    let containsDTMElements = containsDTM && data.dtmDatas.elements;
 
+    let useThreeColumnLayout = false;    
     let headerClass = '';
-    if (this.props.options.showGTMLoad) {
+    if (showGTMLoad) {
       if (containsGTM && !containsDTM && !containsTLM) {
         headerClass = 'hasGTM';
+        useThreeColumnLayout = threeColumnLayout;
       } else if (containsDTM && !containsGTM && !containsTLM && !containsTCO) {
         headerClass = 'hasDTM';
+        useThreeColumnLayout = containsDTMElements && threeColumnLayout;
       } else if (containsTLM && !containsGTM && !containsDTM && !containsTCO) {
         headerClass = 'hasTLM';
       } else if (containsTCO && !containsGTM && !containsDTM && !containsTLM) {
         headerClass = 'hasTCO';
       } else if (containsDTM || containsGTM || containsTLM || containsTCO) {
         headerClass = 'hasMULTI';
+        useThreeColumnLayout = (containsGTM || containsDTMElements) && threeColumnLayout;
       } else if (this.props.isCurrent && this.props.loading) {
         headerClass = 'seeking';
       } else {
@@ -90,26 +97,46 @@ class Page extends Component {
       }
     }
 
+
     let expanded = this.state.touched ? this.state.expanded : this.props.isCurrent;
 
     return (
-      <div id={`sub${this.props.index}`} className={`pure-menu pure-menu-open ${containsTags} ${containsData}`}>
+      <div
+        id={`sub${this.props.index}`}
+        className={`pure-menu pure-menu-open ${containsTags} ${containsData}`}
+      >
         <PageHeader
           url={this.props.url}
           onClick={this.toggleExpanded}
           isCurrent={this.props.isCurrent}
           className={headerClass}
-          timestamp={this.props.options.showTimestamps ? new Date(this.props.timestamp) : null}
+          timestamp={showTimestamps ? new Date(this.props.timestamp) : null}
         />
-        <table cols="2" width="100%" style={{ borderCollapse: 'unset' }}>
-          <tbody className={expanded || this.props.searchMode ? '' : 'hidden'}>
+        <table
+          cols={useThreeColumnLayout ? 3 : 2}
+          width="100%"
+          style={{ borderCollapse: 'unset' }}
+        >
+          <tbody
+            className={expanded || this.props.searchMode ? '' : 'hidden'}
+          >
             <tr>
               <Datalayers
                 data={this.props.data}
                 options={this.props.options}
                 page={this.props.index}
                 searchQuery={this.props.searchQuery}
+                useFor={useThreeColumnLayout && (!swapThreeColumnLayout ? 'rules' : 'state')}
               />
+              {useThreeColumnLayout && (
+                <Datalayers
+                  data={this.props.data}
+                  options={this.props.options}
+                  page={this.props.index}
+                  searchQuery={this.props.searchQuery}
+                  useFor={(!swapThreeColumnLayout ? 'state' : 'rules')}
+                />
+              )}
               <Tags
                 data={this.props.data.tags}
                 options={this.props.options}
