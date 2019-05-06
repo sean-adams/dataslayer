@@ -688,17 +688,6 @@ const Datalayers = (props) => {
   return (
     <td className="dlt">
       {
-        (data.vars && data.vars.length && data.varDatas) ?
-        (<Vars
-          varDatas={data.varDatas}
-          vars={data.vars}
-          options={options}
-          page={page}
-          searchQuery={searchQuery}
-        />) :
-        null
-      }
-      {
         (data.GTM && data.GTM.length) ?
         (<GTM
           datalayers={data.datalayers}
@@ -727,7 +716,7 @@ const Datalayers = (props) => {
         null
       }
       {
-        (data.TLM && data.TLM.id && data.utagDatas) ?
+        (data.TLM && data.TLM.id && data.utagDatas && useFor !== 'rules') ?
         (<TLM
           data={data.utagDatas}
           TLM={data.TLM}
@@ -738,7 +727,7 @@ const Datalayers = (props) => {
         null
       }
       {
-        (data.TCO && data.TCO.id && data.tcoDatas) ?
+        (data.TCO && data.TCO.id && data.tcoDatas && useFor !== 'rules') ?
         (<TCO
           data={data.tcoDatas}
           TCO={data.TCO}
@@ -748,6 +737,18 @@ const Datalayers = (props) => {
         />) :
         null
       }
+      {
+        (data.vars && data.vars.length && data.varDatas && useFor !== 'rules') ?
+        (<Vars
+          varDatas={data.varDatas}
+          vars={data.vars}
+          options={options}
+          page={page}
+          searchQuery={searchQuery}
+        />) :
+        null
+      }
+
     </td>
   );
 };
