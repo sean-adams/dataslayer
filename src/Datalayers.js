@@ -519,7 +519,7 @@ const DTM = (props) => {
     <SubHeader
       mainText={data.property}
       subText={data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}
-      sub2Text={useFor && (useFor == 'state' ? 'Data elements' : 'Fired rules')}
+      sub2Text={useFor && (useFor === 'state' ? 'Data elements' : 'Fired rules')}
     />
   ) : (
     <SubHeader
