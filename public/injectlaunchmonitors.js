@@ -58,38 +58,45 @@ window._satellite._monitors.push({
         }
       });
 
+      let launchElements = {};
+
       for (var i = 0; i < elementNames.length; i++) {
         var newElement = JSON.parse(
           JSON.stringify(
             window._satellite._container.dataElements[elementNames[i]]
           )
         );
-
-        try {
-          let cleanValue = window._satellite.getVar(elementNames[i]);
-          if (typeof cleanValue === 'function') {
-            cleanValue = '(function)';
-          } else if (
-            typeof cleanValue === 'object' &&
-            typeof cleanValue.then === 'function'
-          ) {
-            cleanValue = '(Promise)';
-          }
-          window.parent.postMessage(
-            {
-              type: 'dataslayer_launchdataelement',
-              data: 'found',
-              url: window == window.parent ? window.location.href : 'iframe',
-              key: elementNames[i],
-              value: cleanValue,
-              element: newElement,
-            },
-            '*'
-          );
-        } catch (e) {
-          console.warn(e);
+  
+        let cleanValue = window._satellite.getVar(elementNames[i]);
+        if (typeof cleanValue === 'function') {
+          cleanValue = '(function)';
+        } else if (
+          typeof cleanValue === 'object' &&
+          typeof cleanValue.then === 'function'
+        ) {
+          cleanValue = '(Promise)';
         }
+        launchElements[elementNames[i]] = cleanValue;
+        // launchElements.push({
+        //   key: elementNames[i],
+        //   value: cleanValue,
+        //   element: newElement,
+        // });
       }
+      try {
+        window.parent.postMessage(
+          {
+            type: 'dataslayer_launchdataelements',
+            data: 'found',
+            url: window == window.parent ? window.location.href : 'iframe',
+            elements: launchElements
+          },
+          '*'
+        );
+      } catch (e) {
+        console.warn(e);
+      }
+  
     }
   },
   ruleConditionFailed: function(e) {

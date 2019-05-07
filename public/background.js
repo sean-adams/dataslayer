@@ -77,7 +77,7 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     message.type === 'dataslayer_tco' ||
     message.type === 'dataslayer_var' ||
     message.type === 'dataslayer_dtm' ||
-    message.type === 'dataslayer_launchdataelement' ||
+    message.type === 'dataslayer_launchdataelements' ||
 	// message.type === 'dataslayer_launchruletriggered' ||
 	message.type === 'dataslayer_launchrulecompleted'
 	// message.type === 'dataslayer_launchrulefailed'
