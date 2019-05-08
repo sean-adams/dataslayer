@@ -679,10 +679,17 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
+    let needOptionSave = false;
+
     for (let option of Object.keys(defaults)) {
       if (!options.hasOwnProperty(option)) {
         options[option] = defaults[option];
+        needOptionSave = true;
       }
+    }
+
+    if (needOptionSave) {
+      chrome.storage.sync.set(options);
     }
 
     this.setState({ options });
