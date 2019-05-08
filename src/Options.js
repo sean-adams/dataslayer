@@ -114,6 +114,22 @@ class Options extends Component {
                                     <br/>
                                   </td>)
                                 }
+                                {
+                                  option.type === 'number' &&
+                                  (<td>
+                                    <br/>
+                                    {option.description}
+                                    <br/>
+                                    <input
+                                      disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
+                                      placeholder={option.placeholder}
+                                      type="number"
+                                      defaultValue={this.props.options[option.name]}
+                                      onChange={this.optionUpdater('input', option.name)}
+                                    />
+                                    <br/>
+                                  </td>)
+                                }
                             </tr>
                           </tbody>
                         </table>)
