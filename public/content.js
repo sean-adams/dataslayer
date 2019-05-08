@@ -46,6 +46,10 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
         dataslayers.setAttribute('data-layers', items.dataLayers.join(';'));
       }
 
+      if (items.hasOwnProperty('updateInterval')) {
+        dataslayers.setAttribute('data-interval', items.updateInterval);
+      }
+
       document.head.appendChild(dataslayers);
     });
   }

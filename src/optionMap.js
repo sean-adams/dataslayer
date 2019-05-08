@@ -59,6 +59,16 @@ export const optionMap = {
       description: "don't decode query string values",
       type: 'checkbox',
     },
+    {
+      name: 'updateInterval',
+      description: (
+        <span>
+          Update interval (seconds) for Adobe Launch elements<br/>(0 to disable autoupdate)
+        </span>
+      ),
+      type: 'number',
+      min: 0,
+    },
   ],
   Tags: [
     {
@@ -120,4 +130,5 @@ export const defaults = {
   dontDecode: false,
   threeColumnLayout: true,
   swapThreeColumnLayout: false,
+  updateInterval: 10,
 };
