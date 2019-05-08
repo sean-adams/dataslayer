@@ -262,14 +262,6 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://leanmodal.finelysliced.com.au/" rel="noopener noreferrer" target="_blank">leanModal</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="https://github.com/MaxArt2501/object-observe" rel="noopener noreferrer" target="_blank">O.o polyfill by MaxArt2501</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
                         <td>
                           <span>
                             <a href="http://www.google.com/fonts/specimen/Open+Sans" rel="noopener noreferrer" target="_blank">
