@@ -126,6 +126,8 @@ class Options extends Component {
                                       type="number"
                                       defaultValue={this.props.options[option.name]}
                                       onChange={this.optionUpdater('input', option.name)}
+                                      max={option.max}
+                                      min={option.min}
                                     />
                                     <br/>
                                   </td>)
