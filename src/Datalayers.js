@@ -87,7 +87,7 @@ function computeDataLayerState(dataLayer) {
 // Data layer subcomponents
 //
 
-const SubHeader = (props) => (
+const SubHeader = React.memo((props) => (
   <li className="event eventbreak submenu dlheader">
     <table cols="2">
       <tbody>
@@ -122,7 +122,7 @@ const SubHeader = (props) => (
       </tbody>
     </table>
   </li>
-);
+));
 
 const DataLayerLines = (props) => {
   let data = props.data;
