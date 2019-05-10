@@ -688,7 +688,7 @@ class Dataslayer extends Component {
       }
     }
 
-    if (needOptionSave) {
+    if (needOptionSave && isChromeDevTools()) {
       chrome.storage.sync.set(options);
     }
 
@@ -702,7 +702,7 @@ class Dataslayer extends Component {
           if (!options.hasOwnProperty(option)) {
             options[option] = defaults[option].default;
           }
-        }    
+        }
 
         try {
           localStorage.options = JSON.stringify(options);
