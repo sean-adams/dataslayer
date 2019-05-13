@@ -688,7 +688,7 @@ class Dataslayer extends Component {
       }
     }
 
-    if (needOptionSave) {
+    if (needOptionSave && isChromeDevTools()) {
       chrome.storage.sync.set(options);
     }
 
