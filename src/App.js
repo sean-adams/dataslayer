@@ -560,21 +560,17 @@ class Dataslayer extends Component {
         };
         this.setState({ dtmDatas });
       }
-    } else if ((message.type === 'dataslayer_launchdataelement') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_launchdataelements') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       if (message.data === 'found') {
         let { dtmDatas } = this.state;
         let thisDTM = dtmDatas[this.state.activeIndex];
         if (typeof thisDTM !== 'undefined') {
-          if (typeof thisDTM.elements !== 'object') {
-            thisDTM.elements = {};
-          }
-          thisDTM.elements[message.key] = message.value;
+          thisDTM.elements = message.elements;
         } else {
           dtmDatas[this.state.activeIndex] = {
-            elements: {}
+            elements: message.elements
           };
-          dtmDatas[this.state.activeIndex].elements[message.key] = message.value;
         }
         this.setState({ dtmDatas });
       }
@@ -683,10 +679,17 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
+    let needOptionSave = false;
+
     for (let option of Object.keys(defaults)) {
       if (!options.hasOwnProperty(option)) {
         options[option] = defaults[option];
+        needOptionSave = true;
       }
+    }
+
+    if (needOptionSave) {
+      chrome.storage.sync.set(options);
     }
 
     this.setState({ options });

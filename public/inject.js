@@ -233,16 +233,18 @@ dataslayer.timerID = window.setInterval(dataslayer.gtmSearch, 200);
 
 // Tealium
 dataslayer.tlmHelperListener = function(change) {
-  window.parent.postMessage(
-    {
-      type: 'dataslayer_tlm',
-      gtmID: dataslayer.utagID,
-      dLN: dataslayer.udoname,
-      url: window == window.parent ? window.location.href : 'iframe',
-      data: JSON.stringify(dataslayer.sanitize(window[dataslayer.udoname])),
-    },
-    '*'
-  );
+  if (typeof window[dataslayer.udoname] !== 'undefined') {
+    window.parent.postMessage(
+      {
+        type: 'dataslayer_tlm',
+        gtmID: dataslayer.utagID,
+        dLN: dataslayer.udoname,
+        url: window == window.parent ? window.location.href : 'iframe',
+        data: JSON.stringify(dataslayer.sanitize(window[dataslayer.udoname])),
+      },
+      '*'
+    );
+  }
 };
 
 dataslayer.tlmTimerID = window.setInterval(function() {
@@ -261,7 +263,9 @@ dataslayer.tlmTimerID = window.setInterval(function() {
       },
       '*'
     );
-    Object.observe(window[dataslayer.udoname], dataslayer.tlmHelperListener);
+    // TODO: listen for changes
+    // For 1.2 this is just moved to the same timer as Launch data elements.
+    // Object.observe(window[dataslayer.udoname], dataslayer.tlmHelperListener);
     window.clearInterval(dataslayer.tlmTimerID);
     dataslayer.tlmHelperListener();
   } else if (
@@ -282,16 +286,18 @@ dataslayer.tlmTimerID = window.setInterval(function() {
 
 // TagCommander
 dataslayer.tcoHelperListener = function(change) {
-  window.parent.postMessage(
-    {
-      type: 'dataslayer_tco',
-      gtmID: dataslayer.tcoID,
-      dLN: dataslayer.tcvname,
-      url: window == window.parent ? window.location.href : 'iframe',
-      data: JSON.stringify(dataslayer.sanitize(window[dataslayer.tcvname])),
-    },
-    '*'
-  );
+  if (typeof window[dataslayer.tcvname] !== 'undefined') {
+    window.parent.postMessage(
+      {
+        type: 'dataslayer_tco',
+        gtmID: dataslayer.tcoID,
+        dLN: dataslayer.tcvname,
+        url: window == window.parent ? window.location.href : 'iframe',
+        data: JSON.stringify(dataslayer.sanitize(window[dataslayer.tcvname])),
+      },
+      '*'
+    );
+  }
 };
 
 dataslayer.tcoTimerID = window.setInterval(function() {
@@ -309,7 +315,9 @@ dataslayer.tcoTimerID = window.setInterval(function() {
       },
       '*'
     );
-    Object.observe(window[dataslayer.tcvname], dataslayer.tcoHelperListener);
+    // TODO: listen for changes
+    // For 1.2 this is just moved to the same timer as Launch data elements.
+    // Object.observe(window[dataslayer.tcvname], dataslayer.tcoHelperListener);
     window.clearInterval(dataslayer.tcoTimerID);
     dataslayer.tcoHelperListener();
   } else if (
@@ -504,15 +512,19 @@ dataslayer.loadOtherLayers = function() {
           variable: dataslayer.layers[i],
           listener: dataslayer.createListener(dataslayer.layers[i]),
         };
-        Object.observe(
-          dataslayer.layers[i].variable.length === 1
-            ? window[dataslayer.layers[i].variable[0]]
-            : dataslayer.layers[i].variable.reduce(
-                dataslayer.reduceIndex,
-                window
-              ),
-          dataslayer.layers[i].listener
-        );
+        // TODO: observe
+        // For 1.2 this is just moved to the same timer as Launch data elements.
+        // Object.observe(
+        //   dataslayer.layers[i].variable.length === 1
+        //     ? window[dataslayer.layers[i].variable[0]]
+        //     : dataslayer.layers[i].variable.reduce(
+        //         dataslayer.reduceIndex,
+        //         window
+        //       ),
+        //   dataslayer.layers[i].listener
+        // );
+
+        // initial call
         dataslayer.layers[i].listener();
       } else if (type !== 'object' && type !== 'undefined')
         console.warn(
@@ -538,48 +550,85 @@ dataslayer.loadLaunchDataElements = function() {
       }
     });
 
-    for (var i = 0; i < elementNames.length; i++) {
-      var newElement = JSON.parse(JSON.stringify(window._satellite._container.dataElements[elementNames[i]]));
+    let launchElements = {};
 
-      try {
-        let cleanValue = window._satellite.getVar(elementNames[i]);
-        if (typeof cleanValue === 'function') {
-          cleanValue = '(function)';
-        } else if (typeof cleanValue === 'object' && typeof cleanValue.then === 'function') {
-          cleanValue = '(Promise)';
-        }
-        window.parent.postMessage(
-          {
-            type: 'dataslayer_launchdataelement',
-            data: 'found',
-            url: window == window.parent ? window.location.href : 'iframe',
-            key: elementNames[i],
-            value: cleanValue,
-            element: newElement,
-          },
-          '*'
-        );  
-      } catch(e) {
-        console.warn(e);
+    for (var i = 0; i < elementNames.length; i++) {
+      var newElement = JSON.parse(
+        JSON.stringify(
+          window._satellite._container.dataElements[elementNames[i]]
+        )
+      );
+
+      let cleanValue = window._satellite.getVar(elementNames[i]);
+      if (typeof cleanValue === 'function') {
+        cleanValue = '(function)';
+      } else if (
+        typeof cleanValue === 'object' &&
+        typeof cleanValue.then === 'function'
+      ) {
+        cleanValue = '(Promise)';
       }
-    }  
+      launchElements[elementNames[i]] = cleanValue;
+      // launchElements.push({
+      //   key: elementNames[i],
+      //   value: cleanValue,
+      //   element: newElement,
+      // });
+    }
+    try {
+      window.parent.postMessage(
+        {
+          type: 'dataslayer_launchdataelements',
+          data: 'found',
+          url: window == window.parent ? window.location.href : 'iframe',
+          elements: launchElements
+        },
+        '*'
+      );
+    } catch (e) {
+      console.warn(e);
+    }
+
   }
 };
 
-if (document.readyState === 'complete') {
+dataslayer.updateLayers = function() {
+  if (dataslayer.layers && dataslayer.layers.length) {
+    for (let i = 0; i < dataslayer.layers.length; i++) {
+      if (dataslayer.layers[i] && dataslayer.layers[i].listener) {
+        dataslayer.layers[i].listener();
+      }
+    }
+  }
+  dataslayer.tlmHelperListener();
+  dataslayer.tcoHelperListener();
+}
+
+dataslayer.initializeTimers = function() {
   dataslayer.loadOtherLayers();
   dataslayer.loadLaunchDataElements();
-  if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
-    window.setInterval(dataslayer.loadLaunchDataElements, 5000);
+
+  dataslayer.updateInterval = document
+  .getElementById('dataslayer_script')
+  .getAttribute('data-interval');
+
+  if (!dataslayer.updateInterval || isNaN(Number(dataslayer.updateInterval))) {
+    dataslayer.updateInterval = 10;
   }
+  if (dataslayer.updateInterval > 0) {
+    if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
+      window.setInterval(dataslayer.loadLaunchDataElements, dataslayer.updateInterval * 1000);
+    }
+    window.setInterval(dataslayer.updateLayers, dataslayer.updateInterval * 1000);
+  }
+}
+
+if (document.readyState === 'complete') {
+  dataslayer.initializeTimers();
 } else {
   document.addEventListener('readystatechange', function() {
     if (document.readyState === 'complete') {
-      dataslayer.loadOtherLayers();
-      dataslayer.loadLaunchDataElements();
-      if (window._satellite && window._satellite._container && window._satellite._container.dataElements) {
-        window.setInterval(dataslayer.loadLaunchDataElements, 5000);
-      }
+      dataslayer.initializeTimers();
     }
   });
 }

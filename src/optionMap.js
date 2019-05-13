@@ -59,6 +59,16 @@ export const optionMap = {
       description: "don't decode query string values",
       type: 'checkbox',
     },
+    {
+      name: 'updateInterval',
+      description: (
+        <span>
+          Update interval (seconds)<br/>(for: Launch data elements, Tealium data layer, TagCommander, additional objects)<br/>(0 to disable autoupdate)
+        </span>
+      ),
+      type: 'number',
+      min: 0,
+    },
   ],
   Tags: [
     {
@@ -120,4 +130,5 @@ export const defaults = {
   dontDecode: false,
   threeColumnLayout: true,
   swapThreeColumnLayout: false,
+  updateInterval: 10,
 };

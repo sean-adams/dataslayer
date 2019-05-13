@@ -30,12 +30,6 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
   });
 
   if (document.getElementById('dataslayer_script') === null) {
-    var oopoly = document.createElement('script');
-    oopoly.id = 'oo_poly';
-    oopoly.src = chrome.runtime.getURL('oo_poly.js');
-    oopoly.type = 'text/javascript';
-    document.head.appendChild(oopoly);
-
     var dataslayers = document.createElement('script');
     dataslayers.id = 'dataslayer_script';
     dataslayers.src = chrome.runtime.getURL('inject.js');
@@ -44,6 +38,10 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
     chrome.storage.sync.get(null, function(items) {
       if (items.hasOwnProperty('dataLayers')) {
         dataslayers.setAttribute('data-layers', items.dataLayers.join(';'));
+      }
+
+      if (items.hasOwnProperty('updateInterval')) {
+        dataslayers.setAttribute('data-interval', items.updateInterval);
       }
 
       document.head.appendChild(dataslayers);

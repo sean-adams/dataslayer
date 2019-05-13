@@ -121,6 +121,24 @@ class Options extends Component {
                                     <br/>
                                   </td>)
                                 }
+                                {
+                                  option.type === 'number' &&
+                                  (<td>
+                                    <br/>
+                                    {option.description}
+                                    <br/>
+                                    <input
+                                      disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
+                                      placeholder={option.placeholder}
+                                      type="number"
+                                      defaultValue={this.props.options[option.name]}
+                                      onChange={this.optionUpdater('input', option.name)}
+                                      max={option.max}
+                                      min={option.min}
+                                    />
+                                    <br/>
+                                  </td>)
+                                }
                             </tr>
                           </tbody>
                         </table>)
@@ -248,14 +266,6 @@ class Options extends Component {
                       <tr>
                         <td/>
                         <td><span><a href="http://github.com/google/data-layer-helper" rel="noopener noreferrer" target="_blank">data-layer-helper</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="http://leanmodal.finelysliced.com.au/" rel="noopener noreferrer" target="_blank">leanModal</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="https://github.com/MaxArt2501/object-observe" rel="noopener noreferrer" target="_blank">O.o polyfill by MaxArt2501</a></span></td>
                       </tr>
                       <tr>
                         <td/>
