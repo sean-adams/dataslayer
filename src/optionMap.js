@@ -63,7 +63,7 @@ export const optionMap = {
       name: 'updateInterval',
       description: (
         <span>
-          Update interval (seconds) for Adobe Launch elements<br/>(0 to disable autoupdate)
+          Update interval (seconds)<br/>(for: Launch data elements, Tealium data layer, TagCommander, additional objects)<br/>(0 to disable autoupdate)
         </span>
       ),
       type: 'number',

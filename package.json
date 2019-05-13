@@ -37,5 +37,8 @@
     "bracketSpacing": true,
     "jsxBracketSameLine": false,
     "arrowParens": "always"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.83"
   }
 }
