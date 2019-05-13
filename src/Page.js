@@ -126,7 +126,7 @@ class Page extends Component {
                 options={this.props.options}
                 page={this.props.index}
                 searchQuery={this.props.searchQuery}
-                useFor={useThreeColumnLayout && (!swapThreeColumnLayout ? 'rules' : 'state')}
+                useFor={!useThreeColumnLayout ? undefined : (!swapThreeColumnLayout ? 'rules' : 'state')}
               />
               {useThreeColumnLayout && (
                 <Datalayers
