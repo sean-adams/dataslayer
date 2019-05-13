@@ -33,6 +33,7 @@ class Options extends Component {
         changes: [
         'three-column view for GTM & Launch',
         'improvements to dark mode',
+        'fixes for object watching',
         ]
       },
       {
