@@ -33,8 +33,7 @@
 
   "web_accessible_resources": [
     "inject.js",
-    "injectlaunchmonitors.js",
-    "oo_poly.js"
+    "injectlaunchmonitors.js"
   ],
   
   "permissions": [
