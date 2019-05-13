@@ -7,7 +7,7 @@
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-hotkeys": "^2.0.0-pre4",
-    "react-scripts": "2.1.5",
+    "react-scripts": "3.0.0",
     "uuid": "^3.3.2"
   },
   "scripts": {
