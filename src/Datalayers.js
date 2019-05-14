@@ -151,7 +151,8 @@ const DataLayerLines = (props) => {
       </td>
     </tr>),
     isObject && showChildren && Object.keys(data).map((v, i) =>
-        DataLayerLines({
+        <DataLayerLines
+        {...{
           key: `${props.keyAncestor}_${v}`,
           keyAncestor: `${props.keyAncestor}_${v}`,
           index: v,
@@ -161,7 +162,7 @@ const DataLayerLines = (props) => {
           depth: depth + 1,
           click: props.click,
           hidden: props.hidden
-        }))];
+        }}/>)];
 };
 
 class DataLayerEntry extends Component {
@@ -363,10 +364,125 @@ class DataLayerBlock extends Component {
       </table>
     </li>);
   }
-
 }
 
 DataLayerBlock.propTypes = {
+  data: PropTypes.object,
+  options: PropTypes.object,
+  keyAncestor: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  arrayIndex: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  searchQuery: PropTypes.string,
+  hasSibling: PropTypes.bool,
+  hideKeys: PropTypes.array,
+};
+
+
+const LaunchRule = (props) => {
+    const {
+      data,
+      searchQuery,
+      keyAncestor,
+      options,
+      hasSibling,
+      hideKeys,
+    } = props;
+
+    if (searchQuery && searchQuery.length && searchQuery.length > 0) {
+      if (JSON.stringify(data).replace(/[{}"]/ig, '').toLowerCase().indexOf(searchQuery) === -1) {
+        return (<div/>);
+      }
+    }
+    let { name, events, conditions, actions } = data;
+    
+    return (<li className={`event ${hasSibling ? 'eventbreak ' : ' '}submenu datalayer`}>
+      <table cols="2">
+      <tbody>
+        <tr>
+          <td>
+            <b>Name</b>
+          </td>
+          <td>
+            <span>{name}</span>
+          </td>
+        </tr>
+        </tbody>
+        <tbody>
+        <tr>
+          <td>
+            <b>Events</b>
+          </td>
+          <td>
+            {(Array.isArray(events) && events.length === 0) ? <em>none</em> : <em>{events.length}</em>}
+          </td>
+        </tr>
+        {
+          // map events here
+        }
+        </tbody>
+        <tbody>
+        <tr>
+          <td>
+            <b>Conditions</b>
+          </td>
+          <td>
+            {(Array.isArray(conditions) && conditions.length === 0) ? <em>none</em> : <em>{conditions.length}</em>}
+          </td>
+        </tr>
+        {
+          // map conditions here
+        }
+        </tbody>
+        <tbody>
+        <tr>
+          <td>
+            <b>Actions</b>
+          </td>
+          <td>
+            {(Array.isArray(actions) && actions.length === 0) ? <em>none</em> : <em>{actions.length}</em>}
+          </td>
+        </tr>
+        {
+          // map actions here
+        }
+        </tbody>
+
+        <DataLayerEntry
+          key={`${keyAncestor}_events`}
+          keyAncestor={`${keyAncestor}_events`}
+          index="events"
+          data={events}
+          depth={0}
+          hideEmpty={options.hideEmpty}
+          collapseNested={options.collapseNested}
+        />
+        <DataLayerEntry
+          key={`${keyAncestor}_conditions`}
+          keyAncestor={`${keyAncestor}_conditions`}
+          index="conditions"
+          data={conditions}
+          depth={0}
+          hideEmpty={options.hideEmpty}
+        />
+        <DataLayerEntry
+          key={`${keyAncestor}_actions`}
+          keyAncestor={`${keyAncestor}_actions`}
+          index="actions"
+          data={actions}
+          depth={0}
+          hideEmpty={options.hideEmpty}
+          collapseNested={options.collapseNested}
+        />
+      </table>
+    </li>);
+}
+
+LaunchRule.propTypes = {
   data: PropTypes.object,
   options: PropTypes.object,
   keyAncestor: PropTypes.oneOfType([
@@ -532,6 +648,7 @@ const DTM = (props) => {
   if (props.data.loadRules) {
     loadRules = props.data.loadRules.map((v, i) => (
       <DataLayerBlock
+        type="DTM"
         key={`page${props.page}_DTM_${i}`}
         arrayIndex={i}
         keyAncestor={`page${props.page}_DTM_${i}`}
@@ -549,9 +666,20 @@ const DTM = (props) => {
         .slice(0)
         .reverse()
         .map((v, i) => (
+          v.name && v.events && v.conditions && v.actions ?
+          <LaunchRule
+            key={`page${props.page}_DTM_${i}`}
+            type="DTM-rule"
+            keyAncestor={`page${props.page}_DTM_${i}`}
+            data={v}
+            options={props.options}
+            searchQuery={props.searchQuery}
+            hasSibling={i !== props.data.rules.length - 1}
+            hideKeys={['id']}
+          /> :
           <DataLayerBlock
             key={`page${props.page}_DTM_${i}`}
-            arrayIndex={i}
+            type="DTM-rule"
             keyAncestor={`page${props.page}_DTM_${i}`}
             data={v}
             options={props.options}
@@ -582,6 +710,7 @@ const DTM = (props) => {
         <ul>
           {header}
           {rules}
+          {loadRules}
         </ul>
       );
     } else if (props.useFor === 'state') {
