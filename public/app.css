@@ -75,6 +75,9 @@ ul li table td {padding-right: 30px;}
 
 li.eventbreak { border-bottom:1px dashed lightgrey;  -webkit-transition: none !important; transition: none !important; }
 
+.dlt > ul { border-bottom:1px dashed lightgrey; }
+.dlt > ul:last-of-type { border-bottom: unset;}
+
 .pure-menu.pure-menu-open {
 width: auto !important;
 }

@@ -125,14 +125,20 @@ const SubHeader = React.memo((props) => (
 ));
 
 const DataLayerLines = (props) => {
-  let data = props.data;
-  let depth = props.depth;
+  let { data, depth, index } = props;
   let isObject = typeof data === 'object' && data != null;
   let spaces = props.spaces || '';
   let showChildren = !props.hidden.includes(`${props.parent}--${props.index}`);
+  let linkify = typeof data === 'string' && index === 'source' && /^(https?:)?\/\//i.test(data);
+  let displayValue = data;
 
   if (props.hideEmpty && (data === '' || data === {})) {
     return null;
+  }
+  if (isObject) {
+    displayValue = <i>object</i>;
+  } else if (linkify) {
+    displayValue = <a href={data} style={{ paddingLeft: '0px' }} target="_blank">{data}</a>
   }
 
   return [(
@@ -147,11 +153,11 @@ const DataLayerLines = (props) => {
         <b>{depth > 0 && addSpaces(spaces)}.{props.index}</b>
       </td>
       <td>
-        <span>{isObject ? (<i>object</i>) : data}</span>
+        <span>{displayValue}</span>
       </td>
     </tr>),
     isObject && showChildren && Object.keys(data).map((v, i) =>
-        DataLayerLines({
+        <DataLayerLines {...{
           key: `${props.keyAncestor}_${v}`,
           keyAncestor: `${props.keyAncestor}_${v}`,
           index: v,
@@ -161,7 +167,7 @@ const DataLayerLines = (props) => {
           depth: depth + 1,
           click: props.click,
           hidden: props.hidden
-        }))];
+        }}/>)];
 };
 
 class DataLayerEntry extends Component {
@@ -263,7 +269,7 @@ class DataLayerEntry extends Component {
           </td>
         </tr>
         {(isObject && this.state.expanded) && Object.keys(data).map((v, i) =>
-          DataLayerLines({
+          <DataLayerLines {...{
             keyAncestor: `${this.props.keyAncestor}_${v}`,
             key: `${this.props.keyAncestor}_${v}`,
             index: v,
@@ -274,7 +280,7 @@ class DataLayerEntry extends Component {
             hideEmpty: this.props.hideEmpty,
             hidden: this.state.hidden,
             click: this.toggleSubExpanded
-          }))}
+          }}/>)}
       </tbody>);
   }
 }

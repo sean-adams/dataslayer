@@ -6,7 +6,7 @@ import { optionMap } from './optionMap';
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.1.2';
+    let version = '1.2.0';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -28,6 +28,14 @@ class Options extends Component {
 
   render() {
     const versionHistory = [
+      {
+        version: '1.2',
+        changes: [
+        'three-column view for GTM & Launch',
+        'improvements to dark mode',
+        'fixes for object watching',
+        ]
+      },
       {
         version: '1.1',
         changes: [
