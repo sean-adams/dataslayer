@@ -125,14 +125,20 @@ const SubHeader = (props) => (
 );
 
 const DataLayerLines = (props) => {
-  let data = props.data;
-  let depth = props.depth;
+  let { data, depth, index } = props;
   let isObject = typeof data === 'object' && data != null;
   let spaces = props.spaces || '';
   let showChildren = !props.hidden.includes(`${props.parent}--${props.index}`);
+  let linkify = typeof data === 'string' && index === 'source' && /^(https?:)?\/\//i.test(data);
+  let displayValue = data;
 
   if (props.hideEmpty && (data === '' || data === {})) {
     return null;
+  }
+  if (isObject) {
+    displayValue = <i>object</i>;
+  } else if (linkify) {
+    displayValue = <a href={data} style={{ paddingLeft: '0px' }} target="_blank">{data}</a>
   }
 
   return [(
@@ -147,7 +153,7 @@ const DataLayerLines = (props) => {
         <b>{depth > 0 && addSpaces(spaces)}.{props.index}</b>
       </td>
       <td>
-        <span>{isObject ? (<i>object</i>) : data}</span>
+        <span>{displayValue}</span>
       </td>
     </tr>),
     isObject && showChildren && Object.keys(data).map((v, i) =>
