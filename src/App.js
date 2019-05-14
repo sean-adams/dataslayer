@@ -700,7 +700,7 @@ class Dataslayer extends Component {
 
         for (let option of Object.keys(defaults)) {
           if (!options.hasOwnProperty(option)) {
-            options[option] = defaults[option].default;
+            options[option] = defaults[option];
           }
         }    
 
