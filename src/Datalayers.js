@@ -126,6 +126,7 @@ const SubHeader = React.memo((props) => (
 
 const DataLayerLines = (props) => {
   let { data, depth, index } = props;
+  let isArray = Array.isArray(data) === true && data != null;
   let isObject = typeof data === 'object' && data != null;
   let spaces = props.spaces || '';
   let showChildren = !props.hidden.includes(`${props.parent}--${props.index}`);
@@ -135,7 +136,9 @@ const DataLayerLines = (props) => {
   if (props.hideEmpty && (data === '' || data === {})) {
     return null;
   }
-  if (isObject) {
+  if (isArray) {
+    displayValue = <i>array</i>;
+  } else if (isObject) {
     displayValue = <i>object</i>;
   } else if (linkify) {
     displayValue = <a href={data} style={{ paddingLeft: '0px' }} target="_blank">{data}</a>
@@ -241,6 +244,7 @@ class DataLayerEntry extends Component {
   render() {
     let data = this.props.data;
     let depth = this.props.depth;
+    let isArray = Array.isArray(data) === true && data != null;
     let isObject = typeof data === 'object' && data != null;
     let spaces = this.props.spaces || '';
 
@@ -249,7 +253,9 @@ class DataLayerEntry extends Component {
     }
 
     let rowData;
-    if (isObject) {
+    if (isArray) {
+      rowData = (<i>array</i>);
+    } else if (isObject) {
       rowData = (<i>object</i>);
     } else if (this.props.index === 'gtm.element' && data === 'element') {
       rowData = (<i>element</i>);
