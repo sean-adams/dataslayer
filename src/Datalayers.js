@@ -141,7 +141,7 @@ const DataLayerLines = (props) => {
   } else if (isObject) {
     displayValue = <i>object</i>;
   } else if (linkify) {
-    displayValue = <a href={data} style={{ paddingLeft: '0px' }} target="_blank">{data}</a>
+    displayValue = <a href={data} style={{ paddingLeft: '0px' }} rel="noopener noreferrer" target="_blank">{data}</a>
   }
 
   return [(
