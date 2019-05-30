@@ -131,7 +131,7 @@ const DataLayerLines = (props) => {
   let spaces = props.spaces || '';
   let showChildren = !props.hidden.includes(`${props.parent}--${props.index}`);
   let linkify = typeof data === 'string' && index === 'source' && /^(https?:)?\/\//i.test(data);
-  let displayValue = data;
+  let displayValue;
 
   if (props.hideEmpty && (data === '' || data === {})) {
     return null;
@@ -142,6 +142,8 @@ const DataLayerLines = (props) => {
     displayValue = <i>object</i>;
   } else if (linkify) {
     displayValue = <a href={data} style={{ paddingLeft: '0px' }} rel="noopener noreferrer" target="_blank">{data}</a>
+  } else {
+    displayValue = `${data}`;
   }
 
   return [(
