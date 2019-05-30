@@ -7,6 +7,7 @@ import Settings from './Settings';
 import Options from './Options';
 import Search from './Search';
 import demoData from './demoData';
+import { defaults } from './optionMap';
 
 // isChromeDevTools
 // Returns whether or not we're running in a Chrome DevTools instance.
@@ -35,24 +36,7 @@ else {
     activeIndex: 0,
     urls: [],
     timestamps: [],
-    options: {
-      showFloodlight: true, 
-      showUniversal: true, 
-      showClassic: true, 
-      showSitecatalyst: true, 
-      showGTMLoad: true, 
-      ignoredTags: [],
-      collapseNested: false,
-      blockTags: false,
-      hideEmpty: false,
-      showArrayIndices: false,
-      collapseGTMNativeEvents: false,
-      showTimestamps: false,
-      showFriendlyNames: true,
-      dontDecode: false,
-      showSPALoads: false,
-      resetSPALayers: false
-    }
+    options: Object.assign({}, defaults)
   };
 }
 
@@ -329,7 +313,11 @@ class Dataslayer extends Component {
     if (request.request.method === 'GET') {
       requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
     } else if (request.request.method === 'POST') {
-      requestURI = request.request.postData.text;
+      if (request.request.postData && request.request.postData.text) {
+        requestURI = request.request.postData.text;
+      } else {
+        requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
+      }
     }
 
     // parse query string into key/value pairs
@@ -582,21 +570,17 @@ class Dataslayer extends Component {
         };
         this.setState({ dtmDatas });
       }
-    } else if ((message.type === 'dataslayer_launchdataelement') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_launchdataelements') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       if (message.data === 'found') {
         let { dtmDatas } = this.state;
         let thisDTM = dtmDatas[this.state.activeIndex];
         if (typeof thisDTM !== 'undefined') {
-          if (typeof thisDTM.elements !== 'object') {
-            thisDTM.elements = {};
-          }
-          thisDTM.elements[message.key] = message.value;
+          thisDTM.elements = message.elements;
         } else {
           dtmDatas[this.state.activeIndex] = {
-            elements: {}
+            elements: message.elements
           };
-          dtmDatas[this.state.activeIndex].elements[message.key] = message.value;
         }
         this.setState({ dtmDatas });
       }
@@ -695,24 +679,7 @@ class Dataslayer extends Component {
   }
 
   loadSettings = () => {
-    let options = {
-      showFloodlight: true,
-      showUniversal: true,
-      showClassic: true,
-      showSitecatalyst: true,
-      showGTMLoad: true,
-      ignoredTags: [],
-      collapseNested: false,
-      blockTags: false,
-      hideEmpty: false,
-      showArrayIndices: false,
-      collapseGTMNativeEvents: false,
-      showTimestamps: false,
-      showFriendlyNames: true,
-      dontDecode: false,
-      showSPALoads: false,
-      resetSPALayers: false
-    };
+    let options = Object.assign({}, defaults);
 
     try {
       if (typeof localStorage.options !== 'undefined') {
@@ -722,38 +689,17 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
-    ['showFloodlight', 'showUniversal', 'showClassic', 'showSitecatalyst', 'showGTMLoad'].map((prop) => {
-      if (!options.hasOwnProperty(prop)) {
-        options[prop] = true;
+    let needOptionSave = false;
+
+    for (let option of Object.keys(defaults)) {
+      if (!options.hasOwnProperty(option)) {
+        options[option] = defaults[option];
+        needOptionSave = true;
       }
-      return false;
-    });
-    if (!options.hasOwnProperty('ignoredTags')) {
-      options.ignoredTags = [];
     }
-    if (!options.hasOwnProperty('collapseNested')) {
-      options.collapseNested = false;
-    }
-    if (!options.hasOwnProperty('hideEmpty')) {
-      options.hideEmpty = false;
-    }
-    if (!options.hasOwnProperty('blockTags')) {
-      options.blockTags = false;
-    }
-    if (!options.hasOwnProperty('showArrayIndices')) {
-      options.showArrayIndices = false;
-    }
-    if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
-      options.collapseGTMNativeEvents = false;
-    }
-    if (!options.hasOwnProperty('showTimestamps')) {
-      options.showTimestamps = false;
-    }
-    if (!options.hasOwnProperty('showFriendlyNames')) {
-      options.showFriendlyNames = true;
-    }
-    if (!options.hasOwnProperty('dontDecode')) {
-      options.dontDecode = false;
+
+    if (needOptionSave && isChromeDevTools()) {
+      chrome.storage.sync.set(options);
     }
     if (!options.hasOwnProperty('showSPALoads')) {
       options.showSPALoads = false;
@@ -767,47 +713,12 @@ class Dataslayer extends Component {
     if (isChromeDevTools()) {
       chrome.storage.sync.get(null, (items) => {
         options = items;
-        ['showFloodlight', 'showUniversal', 'showClassic', 'showSitecatalyst', 'showGTMLoad'].map((prop) => {
-          if (!options.hasOwnProperty(prop)) {
-            options[prop] = true;
-          }
 
-          return false;
-        });
-        if (!options.hasOwnProperty('ignoredTags')) {
-          options.ignoredTags = [];
+        for (let option of Object.keys(defaults)) {
+          if (!options.hasOwnProperty(option)) {
+            options[option] = defaults[option];
+          }
         }
-        if (!options.hasOwnProperty('collapseNested')) {
-          options.collapseNested = false;
-        }
-        if (!options.hasOwnProperty('hideEmpty')) {
-          options.hideEmpty = false;
-        }
-        if (!options.hasOwnProperty('blockTags')) {
-          options.blockTags = false;
-        }
-        if (!options.hasOwnProperty('showArrayIndices')) {
-          options.showArrayIndices = false;
-        }
-        if (!options.hasOwnProperty('collapseGTMNativeEvents')) {
-          options.collapseGTMNativeEvents = false;
-        }
-        if (!options.hasOwnProperty('showTimestamps')) {
-          options.showTimestamps = false;
-        }
-        if (!options.hasOwnProperty('showFriendlyNames')) {
-          options.showFriendlyNames = true;
-        }
-        if (!options.hasOwnProperty('dontDecode')) {
-          options.dontDecode = false;
-        }
-        if (!options.hasOwnProperty('showSPALoads')) {
-          options.showSPALoads = false;
-        }
-        if (!options.hasOwnProperty('resetSPALayers')) {
-          options.resetSPALayers = false;
-        }
-    
         try {
           localStorage.options = JSON.stringify(options);
         } catch (error) {

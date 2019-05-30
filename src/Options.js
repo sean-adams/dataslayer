@@ -1,11 +1,12 @@
 /* global chrome */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { optionMap } from './optionMap';
 
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.1.2';
+    let version = '1.2.1';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -26,31 +27,15 @@ class Options extends Component {
   }
 
   render() {
-    const optionMap = {
-      General: [
-        { name: 'showGTMLoad', description: 'show data layer presence', type: 'checkbox' },
-        { name: 'collapseNested', description: 'auto-collapse nested data layer variables', type: 'checkbox' },
-        { name: 'collapseGTMNativeEvents', description: 'auto-collapse gtm.* events', type: 'checkbox' },
-        { name: 'hideEmpty', description: 'hide empty data layer variables', type: 'checkbox' },
-        { name: 'showArrayIndices', description: 'show array indices', type: 'checkbox' },
-        { name: 'showTimestamps', description: 'show navigation timestamps', type: 'checkbox' },
-        { name: 'showFriendlyNames', description: 'show friendly names for query parameters where available', type: 'checkbox' },
-        { name: 'blockTags', description: 'block tags from firing (experimental, requires Chrome dev/beta channel)', type: 'checkbox' },  
-        { name: 'dontDecode', description: 'don\'t decode query string values', type: 'checkbox' },
-        { name: 'showSPALoads', description: 'break out SPA navigation', type: 'checkbox' },  
-        { name: 'resetSPALayers', description: 'reset data layer on SPA navigation', type: 'checkbox', dependsOn: 'showSPALoads', dependsOnValue: true },  
-      ],
-      Tags: [
-        { name: 'showUniversal', description: 'show Universal Analytics tags', type: 'checkbox' },
-        { name: 'showClassic', description: 'show GA Classic tags', type: 'checkbox' },
-        { name: 'showFloodlight', description: 'show Floodlight tags', type: 'checkbox' },
-        { name: 'showSitecatalyst', description: 'show Adobe Analytics tags', type: 'checkbox' },
-        { name: 'ignoredTags', description: <span><u>Ignored IDs</u> (separated by semicolons)</span>, type: 'input', placeholder: 'UA-XXX-Y;UA-AAA-B' },
-        { name: 'dataLayers', description: <span><u>Additional data layer objects</u> (separated by semicolons)</span>, type: 'input', placeholder: 'digitalData;testDataLayer' },
-      ]
-    };
-
     const versionHistory = [
+      {
+        version: '1.2',
+        changes: [
+        'three-column view for GTM & Launch',
+        'improvements to dark mode',
+        'fixes for object watching',
+        ]
+      },
       {
         version: '1.1',
         changes: [
@@ -133,6 +118,24 @@ class Options extends Component {
                                       placeholder={option.placeholder}
                                       defaultValue={(this.props.options[option.name] || []).join(';')}
                                       onChange={this.optionUpdater('input', option.name)}
+                                    />
+                                    <br/>
+                                  </td>)
+                                }
+                                {
+                                  option.type === 'number' &&
+                                  (<td>
+                                    <br/>
+                                    {option.description}
+                                    <br/>
+                                    <input
+                                      disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
+                                      placeholder={option.placeholder}
+                                      type="number"
+                                      defaultValue={this.props.options[option.name]}
+                                      onChange={this.optionUpdater('input', option.name)}
+                                      max={option.max}
+                                      min={option.min}
                                     />
                                     <br/>
                                   </td>)
@@ -267,14 +270,6 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://leanmodal.finelysliced.com.au/" rel="noopener noreferrer" target="_blank">leanModal</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="https://github.com/MaxArt2501/object-observe" rel="noopener noreferrer" target="_blank">O.o polyfill by MaxArt2501</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
                         <td>
                           <span>
                             <a href="http://www.google.com/fonts/specimen/Open+Sans" rel="noopener noreferrer" target="_blank">
@@ -318,7 +313,7 @@ class Options extends Component {
                         </tr>
                         {
                           versionHistory.map(({ version, changes }) => 
-                            (<tr>
+                            (<tr key={version}>
                               <td><b>{version}</b></td>
                               <td>
                                 {changes.map((note, i) => (<span key={`${note}i`}>{note}<br/></span>))}

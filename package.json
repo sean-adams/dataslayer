@@ -1,13 +1,13 @@
 {
   "name": "dataslayer",
-  "version": "1.1.2",
+  "version": "1.2.1",
   "private": true,
   "dependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.8.3",
     "react-dom": "^16.8.3",
     "react-hotkeys": "^2.0.0-pre4",
-    "react-scripts": "2.1.5",
+    "react-scripts": "3.0.0",
     "uuid": "^3.3.2"
   },
   "scripts": {
@@ -21,10 +21,8 @@
     "extends": "react-app"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    "last 5 Chrome versions",
+    "Firefox ESR"
   ],
   "prettier": {
     "printWidth": 80,
@@ -37,5 +35,8 @@
     "bracketSpacing": true,
     "jsxBracketSameLine": false,
     "arrowParens": "always"
+  },
+  "devDependencies": {
+    "@types/chrome": "0.0.83"
   }
 }
