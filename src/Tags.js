@@ -344,6 +344,46 @@ const parseFloodlight = (data, keyPrefix = '') =>
   Object.keys(data.allParams).map(name =>
     (<tr key={`${keyPrefix}${name}`}><td><b>{name}</b></td><td><span>{data.allParams[name]}</span></td></tr>));
 
+const parseAAProducts = (productString, keyPrefix = '') => {
+  let params = [];
+
+  const parseProduct = (attributes, prefix = '', postfix = '') => {
+    const productAttributes = attributes.split(';');
+    let params = [];
+
+    for (let i = 0; i < productAttributes.length; i++) {
+      const attributeName = [
+        'category',
+        'product',
+        'quantity',
+        'price',
+        'events',
+        'eVars',
+      ][i];
+
+      if (productAttributes[i] && productAttributes[i].length && productAttributes[i].length > 0) {
+        params.push((<tr key={`${prefix}product${postfix}${attributeName}`}><td>&nbsp;&nbsp;<i>{attributeName}</i></td><td><span>{productAttributes[i]}</span></td></tr>));
+      }
+    }
+
+    return params;
+  }
+
+  const productsArray = productString.split(',');
+  if (productsArray.length > 1) {
+    for (let productKey in productsArray) {
+      if (productsArray.hasOwnProperty(productKey)) {
+        params.push((<tr key={`${keyPrefix}product${productKey}`}><td><b>product {productKey}</b></td><td><span>{productsArray[productKey]}</span></td></tr>));
+        params = params.concat(parseProduct(productsArray[productKey], keyPrefix, productKey));
+      }
+    }
+  } else {
+    params.push((<tr key={`${keyPrefix}productonly`}><td><b>product</b></td><td><span>{productString}</span></td></tr>));
+    params = params.concat(parseProduct(productString, keyPrefix));
+  }
+  return params;
+}
+
 const parseSiteCatalyst = (data, keyPrefix = '') => {
   let params = [];
   let allParams = data.allParams;
@@ -372,16 +412,7 @@ const parseSiteCatalyst = (data, keyPrefix = '') => {
     params.push((<tr key={`${keyPrefix}events`}><td><b>events</b></td><td><span>{allParams.events}</span></td></tr>));
   }
   if (allParams.products) {
-    const productsArray = allParams.products.split(',');
-    if (productsArray.length > 1) {
-      for (let productKey in productsArray) {
-        if (productsArray.hasOwnProperty(productKey)) {
-          params.push((<tr key={`${keyPrefix}product${productKey}`}><td><b>product {productKey}</b></td><td><span>{productsArray[productKey]}</span></td></tr>));
-        }
-      }
-    } else {
-      params.push((<tr><td><b>product</b></td><td><span>{allParams.products}</span></td></tr>));
-    }
+    params = params.concat(parseAAProducts(allParams.products, keyPrefix));
   }
 
   if (allParams.vid) {
