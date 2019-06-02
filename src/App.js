@@ -8,16 +8,10 @@ import Options from './Options';
 import Search from './Search';
 import demoData from './demoData';
 import { defaults } from './optionMap';
-
-// isChromeDevTools
-// Returns whether or not we're running in a Chrome DevTools instance.
-function isChromeDevTools() {
-  return typeof chrome !== 'undefined' &&
-    typeof chrome.devtools !== 'undefined';
-}
+import { isChrome, isFirefox, isDevTools } from './helpers';
 
 let dataslayer = {};
-if (!isChromeDevTools()) {
+if (!isDevTools()) {
   dataslayer = demoData;
 }
 else {
@@ -85,13 +79,13 @@ class Dataslayer extends Component {
       showOptions: false,
       searchMode: false,
       searchQuery: '',
-      port: (isChromeDevTools() ? chrome.runtime.connect() : null),
+      port: (isDevTools() ? chrome.runtime.connect() : null),
     };
   }
 
   componentDidMount() {
     this.loadSettings();
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       if (chrome.devtools.panels.themeName === 'dark') {
         this.setState({ darkTheme: true });
       }
@@ -204,7 +198,7 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.storage.sync.set(options);
     }
 
@@ -264,7 +258,7 @@ class Dataslayer extends Component {
       tags
     });
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.runtime.sendMessage({ type: 'dataslayer_pageload', tabID: chrome.devtools.inspectedWindow.tabId });
     }
   }
@@ -688,13 +682,13 @@ class Dataslayer extends Component {
       }
     }
 
-    if (needOptionSave && isChromeDevTools()) {
+    if (needOptionSave && isDevTools()) {
       chrome.storage.sync.set(options);
     }
 
     this.setState({ options });
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.storage.sync.get(null, (items) => {
         options = items;
 
