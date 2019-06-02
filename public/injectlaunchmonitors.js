@@ -30,6 +30,12 @@ window._satellite._monitors.push({
         } else {
             if (document.readyState === 'complete') {
                 // console.log('** dataslayer: giving up on launch **');
+                window._dataslayerQueue = window._dataslayerQueue || [];
+                window._dataslayerQueue.push({
+                  type: 'dataslayer_launchrulecompleted',
+                  url: window == window.parent ? window.location.href : 'iframe',
+                  data: rule,
+                });
                 return;
             } else {
                 // console.log('** dataslayer: waiting 250ms to repost rule **');

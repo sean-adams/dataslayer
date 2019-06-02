@@ -623,11 +623,24 @@ dataslayer.initializeTimers = function() {
   }
 }
 
+dataslayer.processLaunchQueue = function () {
+  if (window._dataslayerQueue) {
+    while (window._dataslayerQueue.length) {
+      window.parent.postMessage(window._dataslayerQueue.shift());
+    }
+  }
+}
+
+
 if (document.readyState === 'complete') {
+  dataslayer.processLaunchQueue();
+  window.setTimeout(dataslayer.processLaunchQueue, 250);
   dataslayer.initializeTimers();
 } else {
   document.addEventListener('readystatechange', function() {
     if (document.readyState === 'complete') {
+      dataslayer.processLaunchQueue();
+      window.setTimeout(dataslayer.processLaunchQueue, 250);
       dataslayer.initializeTimers();
     }
   });
