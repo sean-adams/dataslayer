@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { optionMap } from './optionMap';
+import { isChrome, isFirefox } from './helpers';
 
 class Options extends Component {
   constructor(props) {
@@ -87,11 +88,18 @@ class Options extends Component {
                         </tbody>
                       </table>
                       {
-                        optionMap[section].map((option) => 
-                        (<table cols="2" key={option.name}>
-                          <tbody>
-                            <tr>
-                              <td/>
+                        optionMap[section].map((option) => {
+                          if (option.platform) {
+                            if (option.platform === 'chrome' && !isChrome()) {
+                              return null;
+                            } else if (option.platform === 'firefox' && !isFirefox()) {
+                              return null;
+                            }
+                          }
+                          return (<table cols="2" key={option.name}>
+                            <tbody>
+                              <tr>
+                                <td />
                                 {
                                   option.type === 'checkbox' &&
                                   (<td>
@@ -110,24 +118,24 @@ class Options extends Component {
                                 {
                                   option.type === 'input' &&
                                   (<td>
-                                    <br/>
+                                    <br />
                                     {option.description}
-                                    <br/>
+                                    <br />
                                     <input
                                       disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
                                       placeholder={option.placeholder}
                                       defaultValue={(this.props.options[option.name] || []).join(';')}
                                       onChange={this.optionUpdater('input', option.name)}
                                     />
-                                    <br/>
+                                    <br />
                                   </td>)
                                 }
                                 {
                                   option.type === 'number' &&
                                   (<td>
-                                    <br/>
+                                    <br />
                                     {option.description}
-                                    <br/>
+                                    <br />
                                     <input
                                       disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
                                       placeholder={option.placeholder}
@@ -137,13 +145,13 @@ class Options extends Component {
                                       max={option.max}
                                       min={option.min}
                                     />
-                                    <br/>
+                                    <br />
                                   </td>)
                                 }
-                            </tr>
-                          </tbody>
-                        </table>)
-                        )
+                              </tr>
+                            </tbody>
+                          </table>);
+                        })
                       }
                     </form>)
                   )
