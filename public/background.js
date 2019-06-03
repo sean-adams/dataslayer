@@ -149,3 +149,20 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		});
 	}
 });
+
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.frameId === 0) {
+    console.log('webNavigation onCommitted ', details);
+		devtoolsPort.forEach(function (v, i, x) {
+			try {
+				v.postMessage({
+					type: 'dataslayer_oncommitted',
+					tabID: details.tabId,
+					...details
+				});
+			} catch (e) {
+				console.warn(e);
+			}
+    });
+  }
+});

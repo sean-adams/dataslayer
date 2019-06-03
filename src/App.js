@@ -120,7 +120,13 @@ class Dataslayer extends Component {
       );
 
       // Set up listeners
-      chrome.devtools.network.onNavigated.addListener(this.newPageLoad);
+      if (isChrome()) {
+        // We only use onNavigated in Chrome because the timing is a bit off
+        // in Firefox. Until the below bug is fixed, Firefox uses
+        // webNavigation.onCommitted.
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1552686
+        chrome.devtools.network.onNavigated.addListener(this.newPageLoad);
+      }
       chrome.devtools.network.onRequestFinished.addListener(this.newRequest);
       this.state.port.onMessage.addListener(this.messageListener);
 
@@ -640,6 +646,10 @@ class Dataslayer extends Component {
         }
       }
       this.setState({ options });
+    } else if ((message.type === 'dataslayer_oncommitted') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
+      if (isFirefox()) {
+        this.newPageLoad(message.url);
+      }
     }
   }
 
