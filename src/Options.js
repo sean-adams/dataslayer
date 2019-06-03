@@ -28,6 +28,7 @@ class Options extends Component {
   }
 
   render() {
+    const platformName = isChrome() ? 'Chrome' : 'Firefox';
     const versionHistory = [
       {
         version: '1.2',
@@ -175,7 +176,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td><b>by</b></td>
-                        <td><span><a href="https://bearcla.ws?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
+                        <td><span><a href={`https://bearcla.ws?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
                         <td></td>
@@ -189,7 +190,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>documentation</td>
-                        <td><span><a href="https://dataslayer.org/documentation/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org/documentation</a></span></td>
+                        <td><span><a href={`https://dataslayer.org/documentation/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">dataslayer.org/documentation</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -239,7 +240,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>links</td>
-                        <td><span><a href="https://dataslayer.org/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
+                        <td><span><a href={`https://dataslayer.org/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -253,7 +254,7 @@ class Options extends Component {
                         <td/>
                         <td>
                           <span>
-                            <a href="https://dataslayer.org/release-notes/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">release notes</a>
+                            <a href={`https://dataslayer.org/release-notes/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">release notes</a>
                           </span>
                         </td>
                       </tr>

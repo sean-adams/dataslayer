@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { isChrome } from './helpers';
 
 class Settings extends Component {
   state = {
@@ -44,6 +45,8 @@ class Settings extends Component {
 
     let downloadFile = encodeURIComponent(JSON.stringify(download));
 
+    const platformName = isChrome() ? 'Chrome' : 'Firefox';
+
     return (
       <div>
         <button
@@ -77,7 +80,7 @@ class Settings extends Component {
         <a
           className="actionBar helpbtn"
           title="Documentation"
-          href="https://dataslayer.org/documentation/"
+          href={`https://dataslayer.org/documentation/?utm_medium=extension&utm_source=dataslayer-sidebar&utm_campaign=${platformName}`}
           target="_blank"
           rel="noopener noreferrer"
         >
