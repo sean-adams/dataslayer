@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { optionMap } from './optionMap';
+import { isChrome, isFirefox } from './helpers';
 
 class Options extends Component {
   constructor(props) {
@@ -27,6 +28,7 @@ class Options extends Component {
   }
 
   render() {
+    const platformName = isChrome() ? 'Chrome' : 'Firefox';
     const versionHistory = [
       {
         version: '1.2',
@@ -87,11 +89,18 @@ class Options extends Component {
                         </tbody>
                       </table>
                       {
-                        optionMap[section].map((option) => 
-                        (<table cols="2" key={option.name}>
-                          <tbody>
-                            <tr>
-                              <td/>
+                        optionMap[section].map((option) => {
+                          if (option.platform) {
+                            if (option.platform === 'chrome' && !isChrome()) {
+                              return null;
+                            } else if (option.platform === 'firefox' && !isFirefox()) {
+                              return null;
+                            }
+                          }
+                          return (<table cols="2" key={option.name}>
+                            <tbody>
+                              <tr>
+                                <td />
                                 {
                                   option.type === 'checkbox' &&
                                   (<td>
@@ -110,24 +119,24 @@ class Options extends Component {
                                 {
                                   option.type === 'input' &&
                                   (<td>
-                                    <br/>
+                                    <br />
                                     {option.description}
-                                    <br/>
+                                    <br />
                                     <input
                                       disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
                                       placeholder={option.placeholder}
                                       defaultValue={(this.props.options[option.name] || []).join(';')}
                                       onChange={this.optionUpdater('input', option.name)}
                                     />
-                                    <br/>
+                                    <br />
                                   </td>)
                                 }
                                 {
                                   option.type === 'number' &&
                                   (<td>
-                                    <br/>
+                                    <br />
                                     {option.description}
-                                    <br/>
+                                    <br />
                                     <input
                                       disabled={option.dependsOn && this.props.options[option.dependsOn] !== option.dependsOnValue}
                                       placeholder={option.placeholder}
@@ -137,13 +146,13 @@ class Options extends Component {
                                       max={option.max}
                                       min={option.min}
                                     />
-                                    <br/>
+                                    <br />
                                   </td>)
                                 }
-                            </tr>
-                          </tbody>
-                        </table>)
-                        )
+                              </tr>
+                            </tbody>
+                          </table>);
+                        })
                       }
                     </form>)
                   )
@@ -167,7 +176,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td><b>by</b></td>
-                        <td><span><a href="https://bearcla.ws?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
+                        <td><span><a href={`https://bearcla.ws?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
                         <td></td>
@@ -181,7 +190,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>documentation</td>
-                        <td><span><a href="https://dataslayer.org/documentation/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org/documentation</a></span></td>
+                        <td><span><a href={`https://dataslayer.org/documentation/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">dataslayer.org/documentation</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -231,7 +240,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td>links</td>
-                        <td><span><a href="https://dataslayer.org/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
+                        <td><span><a href={`https://dataslayer.org/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">dataslayer.org</a></span></td>
                       </tr>
                       <tr>
                         <td/>
@@ -245,7 +254,7 @@ class Options extends Component {
                         <td/>
                         <td>
                           <span>
-                            <a href="https://dataslayer.org/release-notes/?utm_source=dataslayer&utm_medium=extension" rel="noopener noreferrer" target="_blank">release notes</a>
+                            <a href={`https://dataslayer.org/release-notes/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">release notes</a>
                           </span>
                         </td>
                       </tr>
@@ -259,10 +268,6 @@ class Options extends Component {
                       <tr>
                         <td/>
                         <td><span><a href="http://purecss.io" rel="noopener noreferrer" target="_blank">Pure</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
-                        <td><span><a href="http://jquery.com/" rel="noopener noreferrer" target="_blank">jQuery</a></span></td>
                       </tr>
                       <tr>
                         <td/>

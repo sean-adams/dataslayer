@@ -37,6 +37,7 @@
     "arrowParens": "always"
   },
   "devDependencies": {
-    "@types/chrome": "0.0.83"
+    "@types/chrome": "0.0.83",
+    "web-ext": "^3.0.0"
   }
 }

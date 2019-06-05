@@ -8,16 +8,10 @@ import Options from './Options';
 import Search from './Search';
 import demoData from './demoData';
 import { defaults } from './optionMap';
-
-// isChromeDevTools
-// Returns whether or not we're running in a Chrome DevTools instance.
-function isChromeDevTools() {
-  return typeof chrome !== 'undefined' &&
-    typeof chrome.devtools !== 'undefined';
-}
+import { isChrome, isFirefox, isDevTools } from './helpers';
 
 let dataslayer = {};
-if (!isChromeDevTools()) {
+if (!isDevTools()) {
   dataslayer = demoData;
 }
 else {
@@ -85,20 +79,16 @@ class Dataslayer extends Component {
       showOptions: false,
       searchMode: false,
       searchQuery: '',
-      port: (isChromeDevTools() ? chrome.runtime.connect() : null),
+      port: (isDevTools() ? chrome.runtime.connect() : null),
     };
   }
 
   componentDidMount() {
     this.loadSettings();
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       if (chrome.devtools.panels.themeName === 'dark') {
         this.setState({ darkTheme: true });
       }
-
-      this.setState({
-        debug: (chrome.runtime.id !== 'ikbablmmjldhamhcldjjigniffkkjgpo')
-      });
 
       // check for existing requests
       chrome.devtools.network.getHAR((harlog) => {
@@ -126,7 +116,13 @@ class Dataslayer extends Component {
       );
 
       // Set up listeners
-      chrome.devtools.network.onNavigated.addListener(this.newPageLoad);
+      if (isChrome()) {
+        // We only use onNavigated in Chrome because the timing is a bit off
+        // in Firefox. Until the below bug is fixed, Firefox uses
+        // webNavigation.onCommitted.
+        // https://bugzilla.mozilla.org/show_bug.cgi?id=1552686
+        chrome.devtools.network.onNavigated.addListener(this.newPageLoad);
+      }
       chrome.devtools.network.onRequestFinished.addListener(this.newRequest);
       this.state.port.onMessage.addListener(this.messageListener);
 
@@ -204,7 +200,7 @@ class Dataslayer extends Component {
       console.log(error);
     }
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.storage.sync.set(options);
     }
 
@@ -264,7 +260,7 @@ class Dataslayer extends Component {
       tags
     });
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.runtime.sendMessage({ type: 'dataslayer_pageload', tabID: chrome.devtools.inspectedWindow.tabId });
     }
   }
@@ -371,21 +367,6 @@ class Dataslayer extends Component {
         }
       }
 
-      // $.each(queryParams,function(k,v){
-      //     if ($.inArray(k,utmTestParams)>=0){
-      //       utmParams[k]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cd'){
-      //       utmCD[k.substring(2)]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cm'){
-      //       utmCM[k.substring(2)]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cg'){
-      //       utmCG[k.substring(2)]=v;
-      //     }
-      //   }
-      // );
       if (utmCM !== {}) {
         utmParams.utmCM = utmCM;
       }
@@ -432,10 +413,8 @@ class Dataslayer extends Component {
   }
 
   messageListener = (message, sender, sendResponse) => {
-    // if (this.state.debug) {
     console.log(`${message.type} received: ${JSON.stringify(message)}`);
-    // console.log('state:', this.state);
-    // }
+
     if ((message.type === 'dataslayer_gtm') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
@@ -646,6 +625,10 @@ class Dataslayer extends Component {
         }
       }
       this.setState({ options });
+    } else if ((message.type === 'dataslayer_oncommitted') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
+      if (isFirefox()) {
+        this.newPageLoad(message.url);
+      }
     }
   }
 
@@ -688,13 +671,13 @@ class Dataslayer extends Component {
       }
     }
 
-    if (needOptionSave && isChromeDevTools()) {
+    if (needOptionSave && isDevTools()) {
       chrome.storage.sync.set(options);
     }
 
     this.setState({ options });
 
-    if (isChromeDevTools()) {
+    if (isDevTools()) {
       chrome.storage.sync.get(null, (items) => {
         options = items;
 

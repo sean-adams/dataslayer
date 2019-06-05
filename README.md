@@ -77,7 +77,6 @@ dataslayer was built with and thanks to the following:
 - React / create-react-app
 - [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
 - [Pure](http://purecss.io/)
-- [jQuery](http://jquery.com/)
 - [Open Sans](http://www.google.com/fonts/specimen/Open+Sans)
 - [Massimo Artizzu's O.o polyfill](https://github.com/MaxArt2501/object-observe)
 

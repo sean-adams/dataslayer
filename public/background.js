@@ -5,8 +5,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 	devtoolsPort.push(port);
 });
 
-var dsDebug = (chrome.runtime.id === 'ikbablmmjldhamhcldjjigniffkkjgpo' ? false : true);
-
 
 function addBlocking() {
 	removeBlocking();
@@ -67,9 +65,8 @@ chrome.storage.sync.get(null, function (items) {
 });
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (dsDebug) {
-	  console.log(message);
-  }
+	console.log(message);
+
   if (
     message.type === 'dataslayer_gtm_push' ||
     message.type === 'dataslayer_gtm' ||
@@ -127,14 +124,14 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 chrome.runtime.onInstalled.addListener(function (details) {
 	if (details.reason === 'install')
 		chrome.tabs.create({
-			url: 'https://dataslayer.org/documentation/',
+			url: 'https://dataslayer.org/documentation/?utm_source=dataslayer-install&utm_medium=extension',
 			active: true
 		});
-	if ((details.reason === 'update') && (!dsDebug)) {
+	if (details.reason === 'update') {
 		chrome.notifications.create('', {
 				type: 'basic',
-				title: 'dataslayer' + (dsDebug ? ' beta' : ''),
-				message: 'dataslayer' + (dsDebug ? ' beta' : '') + ' has been updated to version ' + chrome.runtime.getManifest().version + '.\n\nClick here to see what\'s new.',
+				title: 'dataslayer',
+				message: 'dataslayer has been updated to version ' + chrome.runtime.getManifest().version + '.\n\nClick here to see what\'s new.',
 				iconUrl: 'i128.png'
 			},
 			function (notificationId) {
@@ -143,9 +140,26 @@ chrome.runtime.onInstalled.addListener(function (details) {
 		);
 		chrome.notifications.onClicked.addListener(function (notificationId) {
 			if (notificationId == notifId) chrome.tabs.create({
-				url: 'https://dataslayer.org/release-notes/',
+				url: 'https://dataslayer.org/release-notes/?utm_source=dataslayer-update&utm_medium=extension',
 				active: true
 			});
 		});
 	}
+});
+
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.frameId === 0) {
+    console.log('webNavigation onCommitted ', details);
+		devtoolsPort.forEach(function (v, i, x) {
+			try {
+				v.postMessage({
+					type: 'dataslayer_oncommitted',
+					tabID: details.tabId,
+					...details
+				});
+			} catch (e) {
+				console.warn(e);
+			}
+    });
+  }
 });

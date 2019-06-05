@@ -53,6 +53,7 @@ export const optionMap = {
       description:
         'block tags from firing (experimental, requires Chrome dev/beta channel)',
       type: 'checkbox',
+      platform: 'chrome',
     },
     {
       name: 'dontDecode',
