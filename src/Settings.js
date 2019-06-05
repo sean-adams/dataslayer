@@ -41,7 +41,7 @@ class Settings extends Component {
   }
 
   render() {
-    let { options, loading, port, debug, ...download } = this.props.appState;
+    let { options, loading, port, ...download } = this.props.appState;
 
     let downloadFile = encodeURIComponent(JSON.stringify(download));
 

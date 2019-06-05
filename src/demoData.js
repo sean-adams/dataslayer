@@ -986,6 +986,5 @@ export default {
     dontDecode: false,
   },
   loading: false,
-  port: {},
-  debug: false
+  port: {}
 };

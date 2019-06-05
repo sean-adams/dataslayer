@@ -90,10 +90,6 @@ class Dataslayer extends Component {
         this.setState({ darkTheme: true });
       }
 
-      this.setState({
-        debug: (chrome.runtime.id !== 'ikbablmmjldhamhcldjjigniffkkjgpo')
-      });
-
       // check for existing requests
       chrome.devtools.network.getHAR((harlog) => {
         if (harlog && harlog.entries) {
@@ -432,10 +428,8 @@ class Dataslayer extends Component {
   }
 
   messageListener = (message, sender, sendResponse) => {
-    // if (this.state.debug) {
     console.log(`${message.type} received: ${JSON.stringify(message)}`);
-    // console.log('state:', this.state);
-    // }
+
     if ((message.type === 'dataslayer_gtm') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
