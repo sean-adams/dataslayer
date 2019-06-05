@@ -271,10 +271,6 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="http://jquery.com/" rel="noopener noreferrer" target="_blank">jQuery</a></span></td>
-                      </tr>
-                      <tr>
-                        <td/>
                         <td><span><a href="http://github.com/google/data-layer-helper" rel="noopener noreferrer" target="_blank">data-layer-helper</a></span></td>
                       </tr>
                       <tr>

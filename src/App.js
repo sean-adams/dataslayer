@@ -367,21 +367,6 @@ class Dataslayer extends Component {
         }
       }
 
-      // $.each(queryParams,function(k,v){
-      //     if ($.inArray(k,utmTestParams)>=0){
-      //       utmParams[k]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cd'){
-      //       utmCD[k.substring(2)]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cm'){
-      //       utmCM[k.substring(2)]=v;
-      //     }
-      //     else if (k.substring(0,2)=='cg'){
-      //       utmCG[k.substring(2)]=v;
-      //     }
-      //   }
-      // );
       if (utmCM !== {}) {
         utmParams.utmCM = utmCM;
       }
