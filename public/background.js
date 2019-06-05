@@ -5,8 +5,6 @@ chrome.runtime.onConnect.addListener(function (port) {
 	devtoolsPort.push(port);
 });
 
-var dsDebug = (chrome.runtime.id === 'ikbablmmjldhamhcldjjigniffkkjgpo' ? false : true);
-
 
 function addBlocking() {
 	removeBlocking();
@@ -67,9 +65,8 @@ chrome.storage.sync.get(null, function (items) {
 });
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-  if (dsDebug) {
-	  console.log(message);
-  }
+	console.log(message);
+
   if (
     message.type === 'dataslayer_gtm_push' ||
     message.type === 'dataslayer_gtm' ||
@@ -130,11 +127,11 @@ chrome.runtime.onInstalled.addListener(function (details) {
 			url: 'https://dataslayer.org/documentation/?utm_source=dataslayer-install&utm_medium=extension',
 			active: true
 		});
-	if ((details.reason === 'update') && (!dsDebug)) {
+	if (details.reason === 'update') {
 		chrome.notifications.create('', {
 				type: 'basic',
-				title: 'dataslayer' + (dsDebug ? ' beta' : ''),
-				message: 'dataslayer' + (dsDebug ? ' beta' : '') + ' has been updated to version ' + chrome.runtime.getManifest().version + '.\n\nClick here to see what\'s new.',
+				title: 'dataslayer',
+				message: 'dataslayer has been updated to version ' + chrome.runtime.getManifest().version + '.\n\nClick here to see what\'s new.',
 				iconUrl: 'i128.png'
 			},
 			function (notificationId) {
