@@ -21,7 +21,7 @@ To build and use the development version from source:
 - Firefox: *enable add-on debugging* from [about:debugging](about:debugging) and *Load Temporary Add-on* from the `manifest.json` in the **build** folder.
 - You will need to reload the extension from the same page each time you build.
 
-`npm run start` will start a local development server for working on UI only.
+`npm run start` will start a local development server for working on UI only using some dummy data.
 
 In general, data layer / tag state is managed solely in App (which is also responsible for monitoring network requests and communicating with the background / content scripts) and cascades down to a number of presentation components.
 
