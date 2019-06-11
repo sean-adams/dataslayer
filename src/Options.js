@@ -298,8 +298,7 @@ class Options extends Component {
                         <td></td>
                         <td>
                           <span>
-                            <a href="http://www.flaticon.com/authors/madebyoliver" rel="noopener noreferrer" target="_blank">Madebyoliver</a> icons
-                            from <a href="http://www.flaticon.com" rel="noopener noreferrer" target="_blank">www.flaticon.com</a>
+                            <a href="https://github.com/feathericons/react-feather" rel="noopener noreferrer" target="_blank">react-feather</a>
                           </span>
                         </td>
                       </tr>

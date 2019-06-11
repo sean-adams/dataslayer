@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import { isChrome } from './helpers';
+import { HelpCircle, Save, Search, Settings as SettingsIcon, XCircle } from 'react-feather';
+
 
 class Settings extends Component {
   state = {
@@ -54,28 +56,36 @@ class Settings extends Component {
           title="Options"
           onClick={this.props.onSettingsClick}
         >
-          <img alt="options" src="/img/settings.png" />
+          <SettingsIcon
+            alt="Options"
+          />
         </button>
         <button
           className="actionBar clearbtn"
           title="Clear History"
           onClick={this.showClearHistoryModal}
         >
-          <img alt="clear" src="/img/clearbtn.png" />
+          <XCircle
+            alt="Clear History"
+          />
         </button>
         <button
           className="actionBar filebtn"
           title="Import / Export"
           onClick={this.showFileModal}
         >
-          <img alt="import/export" src="/img/save.png" />
+          <Save
+            alt="Import / Export"
+          />
         </button>
         <button
           className="actionBar searchbtn"
           title="Toggle Search (Ctrl+Alt+F)"
           onClick={this.props.onSearchClick}
         >
-          <img alt="search" src="/img/search.png" />
+          <Search
+            alt="Toggle Search (Ctrl+Alt+F)"
+          />
         </button>
         <a
           className="actionBar helpbtn"
@@ -84,7 +94,9 @@ class Settings extends Component {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <img alt="documentation" src="/img/help.png" />
+          <HelpCircle
+            alt="Documentation"
+          />
         </a>
         {this.state.showModal && (
           <div>

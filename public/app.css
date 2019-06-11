@@ -176,7 +176,7 @@ li td {overflow: hidden; white-space: nowrap; vertical-align: top;}
 
 .event td a {display: inline;}
 
-button.actionBar {
+.actionBar {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   display: inline-block;
@@ -190,7 +190,11 @@ button.actionBar {
   cursor: pointer;
   padding: 0;
 }
-button.actionBar:hover {
+.actionBar svg {
+  height: 20px;
+  width: 20px;
+}
+.actionBar:hover {
   opacity: 1;
 }
 button.settings {
@@ -205,18 +209,14 @@ button.filebtn {
 button.searchbtn {
   top:100px;
 }
-a.helpbtn img {
+a.helpbtn {
+  color: unset;
+}
+a.helpbtn svg {
   position: fixed;
   top:125px;
   right: 6px;
-  opacity: 0.3;
-  -webkit-transition:
-  opacity 0.3s;
-  transition: opacity 0.3s;
   cursor: pointer;
-}
-a.helpbtn img:hover {
-  opacity: 1;
 }
 
 .dark button.actionBar, .dark a.actionBar img {
