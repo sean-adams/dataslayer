@@ -32,7 +32,7 @@ dataslayer was built with and thanks to the following:
 - [Google Data Layer Helper Library](https://github.com/google/data-layer-helper)
 - [Pure](http://purecss.io/)
 - [Open Sans](http://www.google.com/fonts/specimen/Open+Sans)
-- [Massimo Artizzu's O.o polyfill](https://github.com/MaxArt2501/object-observe)
+- [react-feather](https://github.com/feathericons/react-feather)
 
 dataslayer is under the MIT License. See LICENSE.md.
 
