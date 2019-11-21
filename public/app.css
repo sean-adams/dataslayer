@@ -212,31 +212,20 @@ button.searchbtn {
 a.helpbtn {
   color: unset;
 }
-a.helpbtn svg {
+a.helpbtn {
   position: fixed;
   top:125px;
   right: 6px;
   cursor: pointer;
 }
 
-.dark button.actionBar, .dark a.actionBar img {
+.dark .actionBar {
   opacity: 1;
-}
-
-.dark button.actionBar:hover {
-  filter: brightness(2);
-}
-
-.dark button.settings, .dark button.searchbtn, .dark a.helpbtn img {
   filter: invert(1);
 }
 
-.dark button.settings:hover, .dark button.searchbtn:hover, .dark a.helpbtn img:hover {
+.dark .actionBar:hover {
   filter: invert(1) brightness(2);
-}
-
-.dark button.filebtn {
-  filter: brightness(1.5) contrast(1.2);
 }
 
 a.toggle { padding: 0px 5px !important;}
