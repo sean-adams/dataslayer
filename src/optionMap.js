@@ -11,7 +11,7 @@ export const optionMap = {
       description: 'swap TMS columns',
       type: 'checkbox',
       dependsOn: 'threeColumnLayout',
-      dependsOnValue: true
+      dependsOnValue: true,
     },
     {
       name: 'showGTMLoad',
@@ -61,10 +61,20 @@ export const optionMap = {
       type: 'checkbox',
     },
     {
+      name: 'alphabetize',
+      description: 'alphabetize keys',
+      type: 'checkbox',
+    },
+    {
       name: 'updateInterval',
       description: (
         <span>
-          Update interval (seconds)<br/>(for: Launch data elements, Tealium data layer, TagCommander, additional objects)<br/>(0 to disable autoupdate)
+          Update interval (seconds)
+          <br />
+          (for: Launch data elements, Tealium data layer, TagCommander,
+          additional objects)
+          <br />
+          (0 to disable autoupdate)
         </span>
       ),
       type: 'number',
@@ -129,6 +139,7 @@ export const defaults = {
   showTimestamps: false,
   showFriendlyNames: true,
   dontDecode: false,
+  alphabetize: false,
   threeColumnLayout: true,
   swapThreeColumnLayout: false,
   updateInterval: 10,
