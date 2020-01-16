@@ -631,6 +631,25 @@ dataslayer.processLaunchQueue = function () {
   }
 }
 
+dataslayer.processAdobeTags = function () {
+  var abla=[];
+  for (var attr in window) {
+    if (((typeof window[attr]==="object")&&(window[attr]))&&("src" in window[attr])) {
+      if ((attr.substring(0,4)==="s_i_")&&(window[attr].src.indexOf("/b/ss/"))) {
+        abla.push(window[attr].src);
+      }
+    }
+  }
+  window.parent.postMessage(
+    {
+      type: 'dataslayer_adobetags',
+      url: window == window.parent ? window.location.href : 'iframe',
+      data: abla,
+    },
+    '*'
+  );
+}
+
 
 if (document.readyState === 'complete') {
   dataslayer.processLaunchQueue();
@@ -645,3 +664,5 @@ if (document.readyState === 'complete') {
     }
   });
 }
+
+dataslayer.processAdobeTags();
