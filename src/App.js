@@ -123,43 +123,11 @@ class Dataslayer extends Component {
       //   }
       // });
 
-      // Check for already injected content script
-      chrome.devtools.inspectedWindow.eval('dataslayer', (exists, error) => {
-        if (!error) {
-          // was already injected
-          let GTMs = this.state.GTMs;
-          GTMs[this.state.activeIndex] = [];
-
-          for (let i in exists.gtmID) {
-            if (exists.gtmID.hasOwnProperty(i)) {
-              GTMs[this.state.activeIndex].push({
-                id: exists.gtmID[i],
-                name: exists.dLN[i]
-              });
-            }
-          }
-
-          let TLMs = this.state.TLMs;
-          TLMs[this.state.activeIndex] = {
-            id: exists.utagID,
-            name: exists.udoname
-          };
-
-          this.setState({ TLMs, GTMs });
-
-          chrome.runtime.sendMessage({
-            type: 'dataslayer_refresh',
-            tabId: chrome.devtools.inspectedWindow.tabId
-          });
-        } else {
-          // was not already injected
-          chrome.runtime.sendMessage({
-            type: 'dataslayer_opened',
-            tabId: chrome.devtools.inspectedWindow.tabId
-          });
-        }
-      }
-      );
+      // inject content script
+      chrome.runtime.sendMessage({
+        type: 'dataslayer_opened',
+        tabId: chrome.devtools.inspectedWindow.tabId
+      });
     }
   }
 
