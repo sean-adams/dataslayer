@@ -132,8 +132,6 @@ class Dataslayer extends Component {
   }
 
   setOption = (option, value) => {
-    // TODO: save to storage
-    
     let options = this.state.options;
     if (typeof value === 'boolean') {
       options[option] = value;
