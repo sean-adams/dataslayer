@@ -7,7 +7,7 @@ import { isChrome, isFirefox } from './helpers';
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.3.5';
+    let version = '1.3.6';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
