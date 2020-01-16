@@ -76,10 +76,11 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     message.type === 'dataslayer_dtm' ||
     message.type === 'dataslayer_launchdataelements' ||
 	// message.type === 'dataslayer_launchruletriggered' ||
-	message.type === 'dataslayer_launchrulecompleted'
+	message.type === 'dataslayer_launchrulecompleted' ||
+	message.type === 'dataslayer_adobetags'
 	// message.type === 'dataslayer_launchrulefailed'
   ) {
-    message.tabID = sender.tab.id;
+    message.tabId = sender.tab.id;
     devtoolsPort.forEach(function(v, i, x) {
       try {
         v.postMessage(message);
@@ -91,17 +92,17 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     message.type === 'dataslayer_pageload' ||
     message.type === 'dataslayer_opened'
 	) {
-    chrome.tabs.executeScript(message.tabID, {
+    chrome.tabs.executeScript(message.tabId, {
       file: 'content.js',
       runAt: 'document_idle',
       allFrames: true,
 		});
   } else if (message.type === 'dataslayer_refresh') {
-    chrome.tabs.sendMessage(message.tabID, {
+    chrome.tabs.sendMessage(message.tabId, {
       ask: 'refresh',
     });
   } else if (message.type === 'dataslayer_unload')
-    chrome.tabs.executeScript(message.tabID, {
+    chrome.tabs.executeScript(message.tabId, {
       code:
         "document.head.removeChild(document.getElementById('dataslayer_script'));",
       runAt: 'document_idle',
@@ -154,7 +155,7 @@ chrome.webNavigation.onCommitted.addListener((details) => {
 			try {
 				v.postMessage({
 					type: 'dataslayer_oncommitted',
-					tabID: details.tabId,
+					tabId: details.tabId,
 					...details
 				});
 			} catch (e) {

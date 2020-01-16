@@ -99,22 +99,6 @@ class Dataslayer extends Component {
         }
       });
 
-      // look for existing SiteCatalyst tags
-      chrome.devtools.inspectedWindow.eval(
-        /* eslint-disable */
-        '(function(){ var abla=[]; for (var attr in window)if (((typeof window[attr]==="object")&&(window[attr]))&&("src" in window[attr])) if ((attr.substring(0,4)==="s_i_")&&(window[attr].src.indexOf("/b/ss/"))) abla.push(window[attr].src); return abla; })();',
-        /* eslint-enable */
-        (exists, error) => {
-          if (!error) {
-            for (let a in exists) {
-              if (exists.hasOwnProperty(a)) {
-                this.newRequest({ request: { url: exists[a], method: 'GET' } });
-              }
-            }
-          }
-        }
-      );
-
       // Set up listeners
       if (isChrome()) {
         // We only use onNavigated in Chrome because the timing is a bit off
@@ -139,49 +123,15 @@ class Dataslayer extends Component {
       //   }
       // });
 
-      // Check for already injected content script
-      chrome.devtools.inspectedWindow.eval('dataslayer', (exists, error) => {
-        if (!error) {
-          // was already injected
-          let GTMs = this.state.GTMs;
-          GTMs[this.state.activeIndex] = [];
-
-          for (let i in exists.gtmID) {
-            if (exists.gtmID.hasOwnProperty(i)) {
-              GTMs[this.state.activeIndex].push({
-                id: exists.gtmID[i],
-                name: exists.dLN[i]
-              });
-            }
-          }
-
-          let TLMs = this.state.TLMs;
-          TLMs[this.state.activeIndex] = {
-            id: exists.utagID,
-            name: exists.udoname
-          };
-
-          this.setState({ TLMs, GTMs });
-
-          chrome.runtime.sendMessage({
-            type: 'dataslayer_refresh',
-            tabID: chrome.devtools.inspectedWindow.tabId
-          });
-        } else {
-          // was not already injected
-          chrome.runtime.sendMessage({
-            type: 'dataslayer_opened',
-            tabID: chrome.devtools.inspectedWindow.tabId
-          });
-        }
-      }
-      );
+      // inject content script
+      chrome.runtime.sendMessage({
+        type: 'dataslayer_opened',
+        tabId: chrome.devtools.inspectedWindow.tabId
+      });
     }
   }
 
   setOption = (option, value) => {
-    // TODO: save to storage
-    
     let options = this.state.options;
     if (typeof value === 'boolean') {
       options[option] = value;
@@ -261,7 +211,7 @@ class Dataslayer extends Component {
     });
 
     if (isDevTools()) {
-      chrome.runtime.sendMessage({ type: 'dataslayer_pageload', tabID: chrome.devtools.inspectedWindow.tabId });
+      chrome.runtime.sendMessage({ type: 'dataslayer_pageload', tabId: chrome.devtools.inspectedWindow.tabId });
     }
   }
 
@@ -415,7 +365,7 @@ class Dataslayer extends Component {
   messageListener = (message, sender, sendResponse) => {
     console.log(`${message.type} received: ${JSON.stringify(message)}`);
 
-    if ((message.type === 'dataslayer_gtm') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    if ((message.type === 'dataslayer_gtm') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
         urls[this.state.activeIndex] = message.url;
@@ -447,7 +397,7 @@ class Dataslayer extends Component {
           this.setState({ GTMs });
         }
       }
-    } else if ((message.type === 'dataslayer_tlm') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_tlm') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
         urls[this.state.activeIndex] = message.url;
@@ -479,7 +429,7 @@ class Dataslayer extends Component {
 
         this.setState({ utagDatas, TLMs });
       }
-    } else if ((message.type === 'dataslayer_tco') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_tco') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
@@ -510,7 +460,7 @@ class Dataslayer extends Component {
 
         this.setState({ TCOs, tcoDatas });
       }
-    } else if ((message.type === 'dataslayer_dtm') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_dtm') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
@@ -539,7 +489,7 @@ class Dataslayer extends Component {
         };
         this.setState({ dtmDatas });
       }
-    } else if ((message.type === 'dataslayer_launchdataelements') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_launchdataelements') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       if (message.data === 'found') {
         let { dtmDatas } = this.state;
@@ -553,7 +503,7 @@ class Dataslayer extends Component {
         }
         this.setState({ dtmDatas });
       }
-    } else if ((message.type === 'dataslayer_launchrulecompleted') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_launchrulecompleted') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       console.log(message);
       let { dtmDatas } = this.state;
       let thisDTM = dtmDatas[this.state.activeIndex];
@@ -573,7 +523,7 @@ class Dataslayer extends Component {
         };
       }
       this.setState({ dtmDatas });
-    } else if ((message.type === 'dataslayer_var') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    } else if ((message.type === 'dataslayer_var') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       let varDatas = this.state.varDatas;
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
@@ -603,7 +553,7 @@ class Dataslayer extends Component {
         this.setState({ varDatas });
       }
     }
-    if ((message.type === 'dataslayer_gtm_push') && (message.tabID === chrome.devtools.inspectedWindow.tabId)) {
+    if ((message.type === 'dataslayer_gtm_push') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       if (message.url !== 'iframe') {
         let urls = this.state.urls;
         urls[this.state.activeIndex] = message.url;
@@ -628,6 +578,19 @@ class Dataslayer extends Component {
     } else if ((message.type === 'dataslayer_oncommitted') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
       if (isFirefox()) {
         this.newPageLoad(message.url);
+      }
+    } else if ((message.type === 'dataslayer_adobetags') && (message.tabId === chrome.devtools.inspectedWindow.tabId)) {
+      let tags = message.data;
+      if (tags && tags.length) {
+        for (let a in tags) {
+          if (tags.hasOwnProperty(a)) {
+            console.log('found existing tag');
+            this.newRequest({
+              request: { url: tags[a], method: 'GET' },
+              response: { status: 200 },
+            });
+          }
+        }
       }
     }
   }
