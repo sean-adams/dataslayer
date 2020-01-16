@@ -244,8 +244,7 @@ class DataLayerEntry extends Component {
   }
 
   render() {
-    let data = this.props.data;
-    let depth = this.props.depth;
+    let { data, depth, alphabetize } = this.props;
     let isArray = Array.isArray(data) === true && data != null;
     let isObject = typeof data === 'object' && data != null;
     let spaces = this.props.spaces || '';
@@ -276,7 +275,7 @@ class DataLayerEntry extends Component {
             <span onClick={this.props.onClick}>{rowData}</span>
           </td>
         </tr>
-        {(isObject && this.state.expanded) && Object.keys(data).map((v, i) =>
+        {(isObject && this.state.expanded) && (alphabetize ? Object.keys(data).sort() : Object.keys(data)).map((v, i) =>
           <DataLayerLines {...{
             keyAncestor: `${this.props.keyAncestor}_${v}`,
             key: `${this.props.keyAncestor}_${v}`,
@@ -311,6 +310,7 @@ DataLayerEntry.propTypes = {
   ]),
   eventToggleable: PropTypes.bool,
   onClick: PropTypes.func,
+  alphabetize: PropTypes.bool,
 };
 
 DataLayerEntry.defaultProps = {
@@ -335,6 +335,8 @@ class DataLayerBlock extends Component {
       hideKeys
     } = this.props;
 
+    const { alphabetize } = options;
+
     if (searchQuery && searchQuery.length && searchQuery.length > 0) {
       if (JSON.stringify(data).replace(/[{}"]/ig, '').toLowerCase().indexOf(searchQuery) === -1) {
         return (<div/>);
@@ -345,7 +347,7 @@ class DataLayerBlock extends Component {
       {options.showArrayIndices && arrayIndex > -1 && (<span className="arrayIndex">{arrayIndex}</span>)}
       <table cols="2">
         {
-          Object.keys(data).map((v, i) => {
+          (alphabetize ? Object.keys(data).sort() : Object.keys(data)).map((v, i) => {
             if (hideKeys && (hideKeys.indexOf(v) > -1)) {
               return null;
             } else if (v === 'event') {
@@ -355,6 +357,7 @@ class DataLayerBlock extends Component {
                 index={v}
                 data={data[v]}
                 depth={0}
+                alphabetize={alphabetize}
                 hideEmpty={options.hideEmpty}
                 collapseNested={options.collapseNested}
                 onClick={() => { this.setState({ collapsed: !this.state.collapsed }); }}
@@ -366,6 +369,7 @@ class DataLayerBlock extends Component {
                 index={v}
                 data={data[v]}
                 depth={0}
+                alphabetize={alphabetize}
                 hideEmpty={options.hideEmpty}
                 collapseNested={options.collapseNested}
               />);
