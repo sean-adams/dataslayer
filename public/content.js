@@ -22,9 +22,14 @@ if (!/addthis\.com|facebook\.com|twitter\.com/.test(document.location.host)) {
 
   chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
     if (request.ask == 'refresh') {
-      var refreshTag = document.createElement('script');
+      const refreshTag = document.createElement('script');
       refreshTag.type = 'text/javascript';
       refreshTag.innerHTML = 'dataslayer.refresh();';
+      document.head.appendChild(refreshTag);
+    } else if (request.ask == 'refreshLaunchDataElements') {
+      const refreshTag = document.createElement('script');
+      refreshTag.type = 'text/javascript';
+      refreshTag.innerHTML = 'dataslayer.loadLaunchDataElements();';
       document.head.appendChild(refreshTag);
     }
   });

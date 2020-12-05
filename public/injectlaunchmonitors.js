@@ -1,4 +1,4 @@
-var launchMonitorScript = `
+const generatelaunchMonitorScript = (onRuleCompleted) => `
 console.log('** dataslayer: injecting Launch monitors **');
 window._satellite = window._satellite || {};
 window._satellite._monitors = window._satellite._monitors || [];
@@ -47,7 +47,8 @@ window._satellite._monitors.push({
     if (
       window._satellite &&
       window._satellite._container &&
-      window._satellite._container.dataElements
+      window._satellite._container.dataElements &&
+      ${JSON.stringify(onRuleCompleted)}
     ) {
       var elementNames = Object.keys(
         window._satellite._container.dataElements
@@ -66,14 +67,14 @@ window._satellite._monitors.push({
 
       let launchElements = {};
 
-      for (var i = 0; i < elementNames.length; i++) {
+      for (const elementName of elementNames) {
         var newElement = JSON.parse(
           JSON.stringify(
-            window._satellite._container.dataElements[elementNames[i]]
+            window._satellite._container.dataElements[elementName]
           )
         );
   
-        let cleanValue = window._satellite.getVar(elementNames[i]);
+        let cleanValue = window._satellite.getVar(elementName);
         if (typeof cleanValue === 'function') {
           cleanValue = '(function)';
         } else if (
@@ -82,7 +83,7 @@ window._satellite._monitors.push({
         ) {
           cleanValue = '(Promise)';
         }
-        launchElements[elementNames[i]] = cleanValue;
+        launchElements[elementName] = cleanValue;
         // launchElements.push({
         //   key: elementNames[i],
         //   value: cleanValue,
@@ -120,21 +121,22 @@ window._satellite._monitors.push({
 
 if (!document.querySelector('#dataslayerLaunchMonitors')) {
   if (/html/i.test(document.contentType)) {
-    var dsLaunchMonitors = document.createElement('script');
-    dsLaunchMonitors.id = 'dataslayerLaunchMonitors';
-    //dsLaunchMonitors.type = 'text/javascript';
-    dsLaunchMonitors.textContent = launchMonitorScript;
-    if (document.head) {
-      document.head.appendChild(dsLaunchMonitors);
-    } else {
-      var dsLaunchMonitorTimer = window.setInterval(() => {
-        if (document.head) {
-          document.head.appendChild(dsLaunchMonitors);
-          window.clearInterval(dsLaunchMonitorTimer);
-        } else if (document.readyState === 'complete') {
-          window.clearInterval(dsLaunchMonitorTimer);
-        }
-      }, 50);
-    }
+    chrome.storage.sync.get('skipRuleCompletedUpdate', function(items) {
+      const dsLaunchMonitors = document.createElement('script');
+      dsLaunchMonitors.id = 'dataslayerLaunchMonitors';
+      dsLaunchMonitors.textContent = generatelaunchMonitorScript(!items.skipRuleCompletedUpdate);
+      if (document.head) {
+        document.head.appendChild(dsLaunchMonitors);
+      } else {
+        var dsLaunchMonitorTimer = window.setInterval(() => {
+          if (document.head) {
+            document.head.appendChild(dsLaunchMonitors);
+            window.clearInterval(dsLaunchMonitorTimer);
+          } else if (document.readyState === 'complete') {
+            window.clearInterval(dsLaunchMonitorTimer);
+          }
+        }, 50);
+      }
+    });
   }
 }

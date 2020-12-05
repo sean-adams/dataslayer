@@ -80,6 +80,12 @@ export const optionMap = {
       type: 'number',
       min: 0,
     },
+    {
+      name: 'skipRuleCompletedUpdate',
+      description: `don't update Launch elements on rules`,
+      type: 'checkbox',
+    },
+
   ],
   Tags: [
     {
