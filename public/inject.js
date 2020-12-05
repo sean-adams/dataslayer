@@ -552,14 +552,14 @@ dataslayer.loadLaunchDataElements = function() {
 
     let launchElements = {};
 
-    for (var i = 0; i < elementNames.length; i++) {
+    for (const elementName of elementNames) {
       var newElement = JSON.parse(
         JSON.stringify(
-          window._satellite._container.dataElements[elementNames[i]]
+          window._satellite._container.dataElements[elementName]
         )
       );
 
-      let cleanValue = window._satellite.getVar(elementNames[i]);
+      let cleanValue = window._satellite.getVar(elementName);
       if (typeof cleanValue === 'function') {
         cleanValue = '(function)';
       } else if (
@@ -568,9 +568,9 @@ dataslayer.loadLaunchDataElements = function() {
       ) {
         cleanValue = '(Promise)';
       }
-      launchElements[elementNames[i]] = cleanValue;
+      launchElements[elementName] = cleanValue;
       // launchElements.push({
-      //   key: elementNames[i],
+      //   key: elementName,
       //   value: cleanValue,
       //   element: newElement,
       // });

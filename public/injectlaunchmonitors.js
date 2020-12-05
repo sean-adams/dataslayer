@@ -66,14 +66,14 @@ window._satellite._monitors.push({
 
       let launchElements = {};
 
-      for (var i = 0; i < elementNames.length; i++) {
+      for (const elementName of elementNames) {
         var newElement = JSON.parse(
           JSON.stringify(
-            window._satellite._container.dataElements[elementNames[i]]
+            window._satellite._container.dataElements[elementName]
           )
         );
   
-        let cleanValue = window._satellite.getVar(elementNames[i]);
+        let cleanValue = window._satellite.getVar(elementName);
         if (typeof cleanValue === 'function') {
           cleanValue = '(function)';
         } else if (
@@ -82,7 +82,7 @@ window._satellite._monitors.push({
         ) {
           cleanValue = '(Promise)';
         }
-        launchElements[elementNames[i]] = cleanValue;
+        launchElements[elementName] = cleanValue;
         // launchElements.push({
         //   key: elementNames[i],
         //   value: cleanValue,
