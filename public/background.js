@@ -14,6 +14,13 @@ function addBlocking() {
 			conditions: [
 				new chrome.declarativeWebRequest.RequestMatcher({
 					url: {
+						hostSuffix: 'analytics.google.com',
+						pathPrefix: '/g/collect',
+						schemes: ['http', 'https']
+					},
+				}),
+				new chrome.declarativeWebRequest.RequestMatcher({
+					url: {
 						hostSuffix: 'google-analytics.com',
 						pathPrefix: '/collect',
 						schemes: ['http', 'https']

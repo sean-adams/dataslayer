@@ -2,6 +2,88 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types'
 import lookupParameter from './lookupParameter';
 
+const parseGA4 = (data, keyPrefix = '') => {
+  let params = [];
+  const { allParams } = data;
+  const keys = Object.keys(allParams).sort();
+  let eventParams = [];
+  let userParams = [];
+
+  if (allParams.en) {
+    params.push(
+      <tr key={`${keyPrefix}en`}>
+        <td>
+          <b>event name</b>
+        </td>
+        <td>
+          <span>{allParams.en}</span>
+        </td>
+      </tr>
+    );
+  }
+
+  for (const key of keys) {
+    if (/^epn?\./gi.test(key)) {
+      eventParams.push({
+        key: key.replace(/^epn?\./gi, ''),
+        value: allParams[key],
+      });
+    } else if (/^upn?\./gi.test(key)) {
+      userParams.push({
+        key: key.replace(/^upn?\./gi, ''),
+        value: allParams[key],
+      });
+    }
+  }
+
+  if (eventParams.length > 0) {
+    params.push(
+      <tr>
+        <td>
+          <b>event parameters</b>
+        </td>
+        <td />
+      </tr>
+    );
+    for (const eParam of eventParams) {
+      params.push(
+        <tr key={`${keyPrefix}${eParam.key}`}>
+          <td style={{ paddingLeft: '10px' }}>
+            <b>{eParam.key}</b>
+          </td>
+          <td>
+            <span>{eParam.value}</span>
+          </td>
+        </tr>
+      );
+    }
+  }
+  if (userParams.length > 0) {
+    params.push(
+      <tr>
+        <td>
+          <b>user parameters</b>
+        </td>
+        <td />
+      </tr>
+    );
+    for (const uParam of userParams) {
+      params.push(
+        <tr key={`${keyPrefix}${uParam.key}`}>
+          <td style={{ paddingLeft: '10px' }}>
+            <b>{uParam.key}</b>
+          </td>
+          <td>
+            <span>{uParam.value}</span>
+          </td>
+        </tr>
+      );
+    }
+  }
+
+  return params;
+};
+
 const parseUniversal = (data, keyPrefix = '') => {
   let params = [];
 
@@ -512,6 +594,14 @@ class Tag extends Component {
         propertyId = data.allParams.tid;
         specificParams = parseUniversal(data, `${this.props.keyAncestor}_shownParams_`);
         break;
+      case 'ga4':
+        tagType = '(App + Web)';
+        propertyId = data.allParams.tid;
+        specificParams = [
+          ...parseUniversal(data, `${this.props.keyAncestor}_shownParams_`),
+          ...parseGA4(data, `${this.props.keyAncestor}_shownParams_`),
+        ];
+        break;
       case 'floodlight':
         propertyId = 'Floodlight';
         specificParams = parseFloodlight(data, `${this.props.keyAncestor}_shownParams_`);
@@ -538,7 +628,7 @@ class Tag extends Component {
           {
             Object.keys(data.allParams).map(name =>
               (<tr key={`${this.props.keyAncestor}_allparams_${name}`} className={`allparams ${this.state.expanded ? '' : 'hidden'}`}>
-                <td>{(data.reqType === 'universal' && showFriendlyNames && lookupParameter(name)) || name}</td>
+                <td>{((data.reqType === 'universal' || data.reqType === 'ga4') && showFriendlyNames && lookupParameter(name)) || name}</td>
                 <td>{data.allParams[name]}</td>
               </tr>))
           }
@@ -577,6 +667,8 @@ const Tags = (props) => {
     } else if (!props.options.showClassic && (tag.reqType === 'classic' || tag.reqType === 'dc_js')) {
       showTag = false;
     } else if (!props.options.showUniversal && tag.reqType === 'universal') {
+      showTag = false;
+    } else if (!props.options.showGA4 && tag.reqType === 'ga4') {
       showTag = false;
     } else if (tag.tid && props.options.ignoredTags.includes(tag.tid)) {
       showTag = false;

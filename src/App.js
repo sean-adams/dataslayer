@@ -234,6 +234,8 @@ class Dataslayer extends Component {
       }
     } else if (/google-analytics\.com\/(.\/)?collect/i.test(request.request.url)) {
       reqType = 'universal';
+    } else if (/analytics\.google\.com\/(.\/)?collect/i.test(request.request.url)) {
+      reqType = 'ga4';
     } else if ((/\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0])) &&
       (request.response.status !== 302)) {
       reqType = 'floodlight';
@@ -258,28 +260,41 @@ class Dataslayer extends Component {
 
     // parse query string into key/value pairs
     let queryParams = {};
-    if ((reqType === 'classic') || (reqType === 'universal') || (reqType === 'dc_js') || (reqType === 'sitecatalyst')) {
-      try {
-        requestURI.split('&').forEach((pair) => {
-          pair = pair.split('=');
-          try {
-            if (this.state.options.dontDecode) {
-              queryParams[pair[0]] = pair[1] || '';
-            } else {
-              queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+    switch (reqType) {
+      case 'classic':
+      case 'universal':
+      case 'ga4':
+      case 'dc_js':
+      case 'sitecatalyst': {
+        try {
+          requestURI.split('&').forEach((pair) => {
+            pair = pair.split('=');
+            try {
+              if (this.state.options.dontDecode) {
+                queryParams[pair[0]] = pair[1] || '';
+              } else {
+                queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+              }
+            } catch (e) {
+              console.log(`${e} error with ${pair[0]} = ${pair[1]}`);
             }
-          } catch (e) {
-            console.log(`${e} error with ${pair[0]} = ${pair[1]}`);
-          }
-        });
-      } catch (e) {
-        console.log(`error ${e} with url ${request.request.url}`);
+          });
+        } catch (e) {
+          console.log(`error ${e} with url ${request.request.url}`);
+        }
+
+        break;
       }
-    } else if (reqType === 'floodlight') {
-      requestURI.split(';').slice(1).forEach((pair) => {
-        pair = pair.split('=');
-        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
-      });
+      case 'floodlight': {
+        requestURI.split(';').slice(1).forEach((pair) => {
+          pair = pair.split('=');
+          queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+        });
+  
+        break;
+      }
+      default:
+        break;
     }
 
     let utmParams = {
