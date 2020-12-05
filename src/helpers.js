@@ -1,5 +1,10 @@
 /* global chrome */
 
+export const timestamp = () => {
+  const date = new Date(); // Or the date you'd like converted.
+  return new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().replace(/\./ig, '_');
+}
+
 // isDevTools
 // Returns whether or not we're running in a DevTools instance,
 // i.e. an actual extension context.
