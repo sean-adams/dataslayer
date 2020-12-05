@@ -101,6 +101,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     chrome.tabs.sendMessage(message.tabId, {
       ask: 'refresh',
     });
+  } else if (message.type === 'dataslayer_refreshLaunchDataElements') {
+    chrome.tabs.sendMessage(message.tabId, {
+      ask: 'refreshLaunchDataElements',
+	});
   } else if (message.type === 'dataslayer_unload')
     chrome.tabs.executeScript(message.tabId, {
       code:

@@ -1,5 +1,7 @@
+/* global chrome */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
+import { isDevTools } from './helpers';
 
 //
 // Helper functions
@@ -116,6 +118,21 @@ const SubHeader = React.memo((props) => (
             <td />
             <td>
               <span>{props.sub2Text}</span>
+              {props.showRefresh && (
+              <span
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  if (isDevTools()) {
+                    chrome.runtime.sendMessage({
+                      type: 'dataslayer_refreshLaunchDataElements',
+                      tabId: chrome.devtools.inspectedWindow.tabId,
+                    });
+                  }
+                }}
+              >
+                {' '}(refresh)
+              </span>
+            )}
             </td>
           </tr>
         )}
@@ -538,6 +555,7 @@ const DTM = (props) => {
       mainText={data.property}
       subText={data.buildDate ? ` (deployed ${props.data.buildDate})` : ''}
       sub2Text={useFor && (useFor === 'state' ? 'Data elements' : 'Fired rules')}
+      showRefresh={useFor && useFor === 'state'}
     />
   ) : (
     <SubHeader
