@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types'
-import { isChrome } from './helpers';
+import { isChrome, timestamp } from './helpers';
 import { HelpCircle, Save, Search, Settings as SettingsIcon, XCircle } from 'react-feather';
 
 
@@ -167,7 +167,7 @@ class Settings extends Component {
                 <div style={{ width: '50%', float: 'left' }}>
                   <a
                     className="pure-button"
-                    download="dataslayer-export.json"
+                    download={`dataslayer-export-${timestamp()}.json`}
                     href={`data:text;charset=utf-8,${downloadFile}`}
                   >Export</a>
                 </div>
