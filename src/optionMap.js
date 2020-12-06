@@ -89,6 +89,11 @@ export const optionMap = {
   ],
   Tags: [
     {
+      name: 'showGA4',
+      description: 'show App + Web tags',
+      type: 'checkbox',
+    },
+    {
       name: 'showUniversal',
       description: 'show Universal Analytics tags',
       type: 'checkbox',
@@ -133,6 +138,7 @@ export const optionMap = {
 export const defaults = {
   showFloodlight: true,
   showUniversal: true,
+  showGA4: true,
   showClassic: true,
   showSitecatalyst: true,
   showGTMLoad: true,

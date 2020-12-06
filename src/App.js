@@ -232,8 +232,14 @@ class Dataslayer extends Component {
       } else {
         reqType = 'classic';
       }
+    } else if (/(analytics\.google)\.com\/(.\/)?collect/i.test(request.request.url)) {
+      reqType = 'ga4';
     } else if (/google-analytics\.com\/(.\/)?collect/i.test(request.request.url)) {
-      reqType = 'universal';
+      if (/v=2&/i.test(request.request.url)) {
+        reqType = 'ga4';
+      } else {
+        reqType = 'universal';
+      }
     } else if ((/\.doubleclick\.net\/activity/i.test(request.request.url.split('?')[0])) &&
       (request.response.status !== 302)) {
       reqType = 'floodlight';
@@ -250,7 +256,27 @@ class Dataslayer extends Component {
       requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
     } else if (request.request.method === 'POST') {
       if (request.request.postData && request.request.postData.text) {
-        requestURI = request.request.postData.text;
+        if (reqType === 'ga4') {
+          // Post body is individual events, one per line, but some info is in query string (e.g. tid)
+          // so join these together for each line and reissue them as a GET request, then bail on
+          // the original request.
+          // Hacky but works!
+          const batchReqs = request.request.postData.text.split(/\n/gi);
+          for (const req of batchReqs) {
+            this.newRequest({
+              response: {
+                status: request.response.status
+              },
+              request: {
+                url: request.request.url + '&' + req,
+                method: 'GET',
+              }
+            })
+          }
+          return;
+        } else {
+          requestURI = request.request.postData.text;
+        }
       } else {
         requestURI = (reqType === 'floodlight') ? request.request.url : request.request.url.split('?')[1];
       }
@@ -258,28 +284,41 @@ class Dataslayer extends Component {
 
     // parse query string into key/value pairs
     let queryParams = {};
-    if ((reqType === 'classic') || (reqType === 'universal') || (reqType === 'dc_js') || (reqType === 'sitecatalyst')) {
-      try {
-        requestURI.split('&').forEach((pair) => {
-          pair = pair.split('=');
-          try {
-            if (this.state.options.dontDecode) {
-              queryParams[pair[0]] = pair[1] || '';
-            } else {
-              queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+    switch (reqType) {
+      case 'classic':
+      case 'universal':
+      case 'ga4':
+      case 'dc_js':
+      case 'sitecatalyst': {
+        try {
+          requestURI.split('&').forEach((pair) => {
+            pair = pair.split('=');
+            try {
+              if (this.state.options.dontDecode) {
+                queryParams[pair[0]] = pair[1] || '';
+              } else {
+                queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+              }
+            } catch (e) {
+              console.log(`${e} error with ${pair[0]} = ${pair[1]}`);
             }
-          } catch (e) {
-            console.log(`${e} error with ${pair[0]} = ${pair[1]}`);
-          }
-        });
-      } catch (e) {
-        console.log(`error ${e} with url ${request.request.url}`);
+          });
+        } catch (e) {
+          console.log(`error ${e} with url ${request.request.url}`);
+        }
+
+        break;
       }
-    } else if (reqType === 'floodlight') {
-      requestURI.split(';').slice(1).forEach((pair) => {
-        pair = pair.split('=');
-        queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
-      });
+      case 'floodlight': {
+        requestURI.split(';').slice(1).forEach((pair) => {
+          pair = pair.split('=');
+          queryParams[pair[0]] = decodeURIComponent(pair[1] || '');
+        });
+  
+        break;
+      }
+      default:
+        break;
     }
 
     let utmParams = {
