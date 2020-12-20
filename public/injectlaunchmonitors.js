@@ -1,6 +1,6 @@
 /* global chrome */
 const generatelaunchMonitorScript = (onRuleCompleted) => `
-console.log('** dataslayer: injecting Launch monitors **');
+// console.log('** dataslayer: injecting Launch monitors **');
 window._satellite = window._satellite || {};
 window._satellite._monitors = window._satellite._monitors || [];
 window._satellite._monitors.push({
