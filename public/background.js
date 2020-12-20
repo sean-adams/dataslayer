@@ -151,7 +151,7 @@ chrome.runtime.onInstalled.addListener(function (details) {
 			}
 		);
 		chrome.notifications.onClicked.addListener(function (notificationId) {
-			if (notificationId == notifId) chrome.tabs.create({
+			if (notificationId === notifId) chrome.tabs.create({
 				url: 'https://dataslayer.org/release-notes/?utm_source=dataslayer-update&utm_medium=extension',
 				active: true
 			});
