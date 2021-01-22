@@ -229,7 +229,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="mailto:dataslayer@seanadams.org?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
+                        <td><span><a href="https://seanadams.org/contact" rel="noopener noreferrer" target="_blank">email</a></span></td>
                       </tr>
                       <tr>
                         <td/>
