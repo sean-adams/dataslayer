@@ -191,7 +191,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td><b>by</b></td>
-                        <td><span><a href={`https://bearcla.ws?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
+                        <td><span><a href={`https://seanadams.org/?utm_source=dataslayer-options&utm_medium=extension&utm_campaign=${platformName}`} rel="noopener noreferrer" target="_blank">Sean Adams</a></span></td>
                       </tr>
                       <tr>
                         <td></td>
@@ -229,7 +229,7 @@ class Options extends Component {
                       </tr>
                       <tr>
                         <td/>
-                        <td><span><a href="mailto:dataslayer@bearcla.ws?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
+                        <td><span><a href="mailto:dataslayer@seanadams.org?subject=dataslayer+bug" rel="noopener noreferrer" target="_blank">email</a></span></td>
                       </tr>
                       <tr>
                         <td/>
