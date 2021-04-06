@@ -31,6 +31,10 @@ class Options extends Component {
     const platformName = isChrome() ? 'Chrome' : 'Firefox';
     const versionHistory = [
       {
+        version: '1.5',
+        changes: ['re-release on Chrome Web Store']
+      },
+      {
         version: '1.4',
         changes: [
         'initial GA App + Web support',
