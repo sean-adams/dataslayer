@@ -563,6 +563,7 @@ dataslayer.loadLaunchDataElements = function() {
       if (typeof cleanValue === 'function') {
         cleanValue = '(function)';
       } else if (
+        cleanValue !== null &&
         typeof cleanValue === 'object' &&
         typeof cleanValue.then === 'function'
       ) {

@@ -7,7 +7,7 @@ import { isChrome, isFirefox } from './helpers';
 class Options extends Component {
   constructor(props) {
     super(props);
-    let version = '1.4.1';
+    let version = '1.5.0';
     if (typeof chrome !== 'undefined' && typeof chrome.runtime !== 'undefined' && typeof chrome.runtime.getManifest !== 'undefined') {
       version = chrome.runtime.getManifest().version;
     }
@@ -30,6 +30,10 @@ class Options extends Component {
   render() {
     const platformName = isChrome() ? 'Chrome' : 'Firefox';
     const versionHistory = [
+      {
+        version: '1.5',
+        changes: ['re-release on Chrome Web Store']
+      },
       {
         version: '1.4',
         changes: [
