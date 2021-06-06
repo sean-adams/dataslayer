@@ -79,6 +79,7 @@ window._satellite._monitors.push({
         if (typeof cleanValue === 'function') {
           cleanValue = '(function)';
         } else if (
+          cleanValue !== null &&
           typeof cleanValue === 'object' &&
           typeof cleanValue.then === 'function'
         ) {
