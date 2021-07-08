@@ -480,12 +480,17 @@ class GTM extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      activeIndex: 0,
       activeDatalayer: props.GTMs[0].name || 'dataLayer'
     };
   }
 
   changeDatalayer = (e) => {
-    this.setState({ activeDatalayer: e.target.value });
+    const index = e.target.value;
+    this.setState({
+      activeIndex: index,
+      activeDatalayer: this.props.GTMs[index].name || 'dataLayer'
+    });
   }
 
   render() {
@@ -498,9 +503,9 @@ class GTM extends Component {
       </td>);
     } else {
       header = (<td>
-        <select value={this.state.activeDatalayer} onChange={this.changeDatalayer}>
+        <select value={this.state.activeIndex} onChange={this.changeDatalayer}>
           {GTMs.map((v, i) =>
-            <option key={v.name} value={v.name}>{v.id} {v.iframe ? '[iframe]' : ''} ({v.name})</option>
+            <option key={v.name} value={i}>{v.id} {v.iframe ? '[iframe]' : ''} ({v.name})</option>
           )}
         </select>
       </td>);
