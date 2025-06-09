@@ -316,41 +316,6 @@ class Options extends Component {
                     </tbody>
                   </table>
                 </li>
-
-                <li className="eventbreak"></li>
-                  <li className="event submenu">
-                    <table cols="2">
-                      <tbody>
-                        <tr>
-                          <td><br/><span><u>What's New</u></span></td>
-                        </tr>
-                        <tr>
-                          <td/>
-                          <td/>
-                        </tr>
-                        <tr>
-                          <td/>
-                          <td>
-                            <i>x.x.* are bug fix releases</i>
-                          </td>
-                        </tr>
-                        {
-                          versionHistory.map(({ version, changes }) => 
-                            (<tr key={version}>
-                              <td><b>{version}</b></td>
-                              <td>
-                                {changes.map((note, i) => (<span key={`${note}i`}>{note}<br/></span>))}
-                              </td>
-                            </tr>)  
-                          )
-                        }
-                        <tr>
-                          <td/>
-                          <td/>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </li>
               </ul>
             </td>
           </tr>

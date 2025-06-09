@@ -978,7 +978,6 @@ export default {
     ignoredTags: [],
     collapseNested: true,
     hideEmpty: true,
-    blockTags: false,
     showArrayIndices: false,
     collapseGTMNativeEvents: false,
     showTimestamps: false,

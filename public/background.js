@@ -6,70 +6,8 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 
-function addBlocking() {
-	removeBlocking();
-	if (chrome.declarativeWebRequest)
-		chrome.declarativeWebRequest.onRequest.addRules([{
-			id: 'dataslayerBlocking',
-			conditions: [
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						hostSuffix: 'analytics.google.com',
-						pathPrefix: '/g/collect',
-						schemes: ['http', 'https']
-					},
-				}),
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						hostSuffix: 'google-analytics.com',
-						pathPrefix: '/collect',
-						schemes: ['http', 'https']
-					},
-				}),
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						hostSuffix: 'google-analytics.com',
-						pathPrefix: '/__utm.gif',
-						schemes: ['http', 'https']
-					},
-				}),
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						hostSuffix: 'stats.g.doubleclick.net',
-						pathPrefix: '/__utm.gif',
-						schemes: ['http', 'https']
-					},
-				}),
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						hostSuffix: 'doubleclick.net',
-						pathPrefix: '/activity',
-						schemes: ['http', 'https']
-					},
-				}),
-				new chrome.declarativeWebRequest.RequestMatcher({
-					url: {
-						pathPrefix: '/b/ss',
-						queryContains: 'AQB=1',
-						schemes: ['http', 'https']
-					},
-				})
-			],
-			actions: [
-				new chrome.declarativeWebRequest.RedirectToTransparentImage()
-			]
-		}]);
-}
-
-function removeBlocking() {
-	if (chrome.declarativeWebRequest)
-		chrome.declarativeWebRequest.onRequest.removeRules(['dataslayerBlocking']);
-}
-
-chrome.storage.sync.get(null, function (items) {
-	if (items.hasOwnProperty('blockTags') && items.blockTags === true) addBlocking();
-	else removeBlocking();
-});
+// Network request blocking functionality has been removed in Manifest v3
+// The declarativeWebRequest API is no longer available
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
 	console.log(message);
@@ -99,11 +37,10 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
     message.type === 'dataslayer_pageload' ||
     message.type === 'dataslayer_opened'
 	) {
-    chrome.tabs.executeScript(message.tabId, {
-      file: 'content.js',
-      runAt: 'document_idle',
-      allFrames: true,
-		});
+    chrome.scripting.executeScript({
+      target: { tabId: message.tabId, allFrames: true },
+      files: ['content.js']
+    });
   } else if (message.type === 'dataslayer_refresh') {
     chrome.tabs.sendMessage(message.tabId, {
       ask: 'refresh',
@@ -113,14 +50,12 @@ chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
       ask: 'refreshLaunchDataElements',
 	});
   } else if (message.type === 'dataslayer_unload')
-    chrome.tabs.executeScript(message.tabId, {
-      code:
-        "document.head.removeChild(document.getElementById('dataslayer_script'));",
-      runAt: 'document_idle',
+    chrome.scripting.executeScript({
+      target: { tabId: message.tabId },
+      code: "document.head.removeChild(document.getElementById('dataslayer_script'));"
     });
   else if (message.type === 'dataslayer_loadsettings') {
-    if (message.data.blockTags) addBlocking();
-    else removeBlocking();
+    // Block tags functionality has been removed in Manifest v3
     devtoolsPort.forEach(function(v, i, x) {
       v.postMessage(message);
     });
