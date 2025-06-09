@@ -1,6 +1,6 @@
 {
   "name": "dataslayer",
-  "version": "1.5.1",
+  "version": "2.0.0",
   "private": true,
   "dependencies": {
     "prop-types": "^15.7.2",
@@ -16,7 +16,7 @@
     "build": "INLINE_RUNTIME_CHUNK=false react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "package": "INLINE_RUNTIME_CHUNK=false react-scripts build && rm ./package.zip; cd ./build && zip -r ../package.zip *"
+    "package": "NODE_OPTIONS=--openssl-legacy-provider INLINE_RUNTIME_CHUNK=false react-scripts build && rm ./package.zip; cd ./build && zip -r ../package.zip *"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -49,13 +49,6 @@ export const optionMap = {
       type: 'checkbox',
     },
     {
-      name: 'blockTags',
-      description:
-        'block tags from firing (experimental, requires Chrome dev/beta channel)',
-      type: 'checkbox',
-      platform: 'chrome',
-    },
-    {
       name: 'dontDecode',
       description: "don't decode query string values",
       type: 'checkbox',
@@ -144,7 +137,6 @@ export const defaults = {
   showGTMLoad: true,
   ignoredTags: [],
   collapseNested: false,
-  blockTags: false,
   hideEmpty: false,
   showArrayIndices: false,
   collapseGTMNativeEvents: false,
